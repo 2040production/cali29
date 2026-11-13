@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Mon panier | CALI29</title>
+    <meta name="description" content="Retrouvez votre sélection CALI29.">
+
+    <!-- POLICE -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- FEUILLES DE STYLE -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/panier.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/panierPage.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+</head>
+
+<body>
+
+    <!-- HEADER -->
+    <header id="header" class="header">
+
+        <button id="menu-burger"
+                class="menu-burger"
+                aria-label="Ouvrir le menu">
+            ☰
+        </button>
+
+        <a href="index.html" class="logo">
+            CALI29
+        </a>
+
+        <a href="panier.html" class="bouton-panier">
+            Panier
+            <span id="nombre-articles">0</span>
+        </a>
+
+    </header>
+
+
+    <main>
+
+        <!-- TITRE DE PAGE -->
+        <section class="panier-page">
+
+            <div class="section-titre">
+                <p class="section-surtitre">VOTRE SÉLECTION</p>
+                <h1>MON PANIER</h1>
+                <p>Retrouvez tous les articles que vous avez sélectionnés.</p>
+            </div>
+
+
+            <!-- PANIER VIDE -->
+            <div id="panier-vide" class="panier-vide">
+
+                <div class="panier-vide-icone">
+                    🛒
+                </div>
+
+                <h2>Votre panier est vide</h2>
+
+                <p>
+                    Vous n'avez pas encore ajouté d'article à votre sélection.
+                </p>
+
+                <a href="index.html" class="bouton-retour-boutique">
+                    RETOURNER À LA BOUTIQUE
+                </a>
+
+            </div>
+
+
+            <!-- PANIER AVEC ARTICLES -->
+            <div id="panier-rempli" class="panier-rempli">
+
+                <!-- LISTE DES ARTICLES -->
+                <div class="panier-liste-container">
+
+                    <div class="panier-liste-titre">
+                        <h2>MES ARTICLES</h2>
+
+                        <button id="vider-panier" type="button">
+                            Vider le panier
+                        </button>
+                    </div>
+
+                    <div id="liste-panier" class="liste-panier">
+
+                        <!-- LES ARTICLES SONT AJOUTÉS PAR JAVASCRIPT -->
+
+                    </div>
+
+                </div>
+
+
+                <!-- RÉCAPITULATIF -->
+                <aside class="panier-recapitulatif">
+
+                    <h2>RÉCAPITULATIF</h2>
+
+                    <div class="panier-recap-ligne">
+                        <span>Nombre d'articles</span>
+                        <strong id="panier-nombre-total">0</strong>
+                    </div>
+
+                    <div class="panier-recap-ligne">
+                        <span>Sous-total</span>
+                        <strong id="panier-sous-total">0,00 €</strong>
+                    </div>
+
+                    <div class="panier-recap-ligne">
+                        <span>Livraison</span>
+                        <strong id="panier-livraison">À confirmer</strong>
+                    </div>
+
+                    <div class="panier-recap-total">
+                        <span>TOTAL</span>
+                        <strong id="panier-total">0,00 €</strong>
+                    </div>
+
+                    <button
+                        id="commander-panier"
+                        class="bouton-commander"
+                        type="button">
+                        PASSER COMMANDE
+                    </button>
+
+                    <a href="index.html" class="lien-continuer-achats">
+                        Continuer mes achats
+                    </a>
+
+                </aside>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <div class="footer-contenu">
+
+            <a href="index.html" class="logo">
+                CALI29
+            </a>
+
+            <nav class="footer-liens">
+                <a href="index.html">Accueil</a>
+                <a href="fleur.html">Fleurs</a>
+                <a href="resine.html">Résines</a>
+                <a href="accessoires.html">Accessoires</a>
+            </nav>
+
+        </div>
+
+        <p class="footer-bas">
+            © CALI29 - Tous droits réservés
+        </p>
+
+    </footer>
+
+
+    <!-- JAVASCRIPT -->
+    <script src="js/config.js" defer></script>
+    <script src="js/produits.js" defer></script>
+    <script src="js/panier.js" defer></script>
+    <script src="js/commande.js" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,126 @@
+/* ==========================================
+   07 - CATALOGUE PRODUITS
+========================================== */
+
+.produits {
+    padding: 42px 18px 55px;
+    background: #070419;
+}
+
+.produits-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    max-width: 1100px;
+    margin: auto;
+}
+
+/* CARTE PRODUIT */
+
+.carte-produit {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    padding: 12px;
+    border: 1px solid #C000FF;
+    border-radius: 18px;
+    background: linear-gradient(
+        145deg,
+        #15102E,
+        #08051B 75%
+    );
+    box-shadow:
+        0 0 12px #A000FF22,
+        inset 0 0 15px #A000FF11;
+    transition: 0.3s ease;
+}
+
+.carte-produit:hover {
+    border-color: var(--rose);
+    box-shadow: 0 0 20px #E900D555;
+}
+
+
+
+/* IMAGE DU PRODUIT */
+
+.carte-produit img {
+    display: block;
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: center;
+    filter: drop-shadow(0 0 12px #B000FF);
+}
+
+/* NOM DU PRODUIT */
+
+.carte-produit h3 {
+    color: white;
+    font-size: 16px;
+    font-weight: 800;
+    margin: 10px 0 5px;
+}
+
+/* DESCRIPTION */
+
+.carte-produit p {
+    color: var(--gris);
+    font-size: 13px;
+    margin: 5px 0;
+}
+
+/* PRIX */
+
+.prix-produit {
+    color: var(--rose);
+    font-size: 19px;
+    font-weight: 800;
+    margin: 8px 0 12px;
+    text-shadow: 0 0 10px #F000D955;
+}
+
+/* BOUTON AJOUTER AU PANIER */
+
+.bouton-ajouter {
+    width: 100%;
+    padding: 12px 8px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(
+        90deg,
+        #D900FF,
+        #FF009D
+    );
+    color: white;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 0 12px #E900D566;
+    transition: 0.2s ease;
+}
+
+.bouton-ajouter:hover {
+    box-shadow: 0 0 22px #F000D9;
+    transform: scale(1.02);
+}
+
+/* BOUTON FAVORIS */
+
+.bouton-favoris {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    border: none;
+    background: transparent;
+    color: white;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.lien-produit {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
