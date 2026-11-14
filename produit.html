@@ -1,270 +1,227 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-
-<head>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Produit | CALI29</title>
-    <meta name="description" content="Découvrez notre sélection CALI29.">
+    <meta name="description" content="Découvrez notre sélection CALI29." />
 
     <!-- POLICE -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- FEUILLES DE STYLE -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/produits.css">
-    <link rel="stylesheet" href="css/panier.css">
-    <link rel="stylesheet" href="css/footer.css">
-    <link rel="stylesheet" href="css/ficheProduit.css">
-    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/header.css" />
+    <link rel="stylesheet" href="css/produits.css" />
+    <link rel="stylesheet" href="css/panier.css" />
+    <link rel="stylesheet" href="css/footer.css" />
+    <link rel="stylesheet" href="css/ficheProduit.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
+  </head>
 
-</head>
-
-<body>
-
+  <body>
     <!-- HEADER -->
     <header id="header" class="header">
+      <button id="menu-burger" class="menu-burger" aria-label="Ouvrir le menu">
+        ☰
+      </button>
 
-        <button id="menu-burger"
-                class="menu-burger"
-                aria-label="Ouvrir le menu">
-            ☰
-        </button>
+      <a href="index.html" class="logo"> CALI29 </a>
 
-        <a href="index.html" class="logo">
-            CALI29
-        </a>
-
-        <a href="panier.html"
-           id="ouvrir-panier"
-           class="bouton-panier">
-            Panier
-            <span id="nombre-articles">0</span>
-        </a>
-
+      <a href="panier.html" id="ouvrir-panier" class="bouton-panier">
+        Panier
+        <span id="nombre-articles">0</span>
+      </a>
     </header>
 
-
     <main>
-
-        <!-- FICHE PRODUIT -->
-        <section class="fiche-produit">
-
-            <div class="fiche-produit-container">
-
-                <!-- GALERIE PHOTOS -->
-                <div class="fiche-produit-galerie">
-
-                    <div class="fiche-produit-image-principale">
-                        <img
-                            src="assets/images/produit-principal.png"
-                            alt="Photo du produit"
-                            id="image-produit-principale"
-                        >
-                    </div>
-
-                    <div class="fiche-produit-miniatures">
-
-                        <img src="assets/images/produit-principal.png"
-                             alt="Vue principale du produit">
-
-                        <img src="assets/images/produit-2.png"
-                             alt="Deuxième vue du produit">
-
-                        <img src="assets/images/produit-3.png"
-                             alt="Troisième vue du produit">
-
-                    </div>
-
-                </div>
-
-
-                <!-- INFORMATIONS PRODUIT -->
-                <div class="fiche-produit-informations">
-
-                    <p class="fiche-produit-surtitre">
-                        CALI29 COLLECTION
-                    </p>
-
-                    <p class="fiche-produit-categorie">
-                        FLEURS
-                    </p>
-
-                    <h1 class="fiche-produit-titre">
-                        Nom du produit
-                    </h1>
-
-                    <p class="fiche-produit-prix">
-                        15,00 €
-                    </p>
-
-                    <div class="fiche-produit-description">
-                        <h2>Description</h2>
-
-                        <p>
-                            Présentation détaillée du produit.
-                            Remplace ce texte par les informations
-                            correspondant à ton article.
-                        </p>
-                    </div>
-
-                    <!-- QUANTITÉ -->
-                    <div class="fiche-produit-quantite">
-
-                        <label for="quantite-produit">
-                            Quantité
-                        </label>
-
-                        <input
-                            type="number"
-                            id="quantite-produit"
-                            name="quantite"
-                            value="1"
-                            min="1"
-                        >
-
-                    </div>
-
-                    <!-- AJOUT PANIER -->
-                    <button
-                        type="button"
-                        class="bouton-ajouter-panier"
-                        id="ajouter-produit-panier"
-                    >
-                        AJOUTER AU PANIER +
-                    </button>
-
-                    <div class="fiche-produit-details">
-
-                        <p>Disponibilité : à renseigner</p>
-                        <p>Référence : à renseigner</p>
-
-                    </div>
-
-                </div>
-
+      <!-- FICHE PRODUIT -->
+      <section class="fiche-produit">
+        <div class="fiche-produit-container">
+          <!-- GALERIE PHOTOS -->
+          <div class="fiche-produit-galerie">
+            <div class="fiche-produit-image-principale">
+              <img
+                src="assets/images/produit-principal.png"
+                alt="Photo du produit"
+                id="image-produit-principale"
+              />
             </div>
 
-        </section>
+            <div class="fiche-produit-miniatures">
+              <img
+                src="assets/images/produit-principal.png"
+                alt="Vue principale du produit"
+              />
 
+              <img
+                src="assets/images/produit-2.png"
+                alt="Deuxième vue du produit"
+              />
 
-        <!-- INFORMATIONS COMPLEMENTAIRES -->
-        <section class="fiche-produit-complement">
+              <img
+                src="assets/images/produit-3.png"
+                alt="Troisième vue du produit"
+              />
+            </div>
+          </div>
 
-            <div class="section-titre">
-                <p class="section-surtitre">EN SAVOIR PLUS</p>
-                <h2>Informations complémentaires</h2>
+          <!-- INFORMATIONS PRODUIT -->
+          <div class="fiche-produit-informations">
+            <p class="fiche-produit-surtitre">CALI29 COLLECTION</p>
+
+            <p class="fiche-produit-categorie">FLEURS</p>
+
+            <h1 class="fiche-produit-titre">Nom du produit</h1>
+
+            <p class="fiche-produit-prix">15,00 €</p>
+
+            <!-- SÉLECTION DU GRAMMAGE -->
+
+            <!-- TEST GRAMMAGE -->
+            <div class="fiche-produit-grammage" id="bloc-grammage" hidden>
+              <label for="grammage-produit"> Choisir le grammage </label>
+                         <!-- affichage en js -->
+              <select id="grammage-produit">
+              
+              </select>
             </div>
 
-            <div class="fiche-produit-texte">
-                <p>
-                    Ajoute ici les caractéristiques et les informations
-                    complémentaires de ton produit.
-                </p>
+            <div class="fiche-produit-description">
+              <h2>Description</h2>
+
+              <p>
+                Présentation détaillée du produit. Remplace ce texte par les
+                informations correspondant à ton article.
+              </p>
             </div>
 
-        </section>
+            <!-- QUANTITÉ -->
+            <div class="fiche-produit-quantite">
+              <label for="quantite-produit"> Quantité </label>
 
-
-        <!-- PRODUITS SIMILAIRES -->
-        <section class="produits-similaires">
-
-            <div class="section-titre">
-                <p class="section-surtitre">CALI29 COLLECTION</p>
-                <h2>VOUS POURRIEZ AUSSI AIMER</h2>
+              <input
+                type="number"
+                id="quantite-produit"
+                name="quantite"
+                value="1"
+                min="1"
+              />
             </div>
 
-            <div class="produits-similaires-grille">
+            <!-- AJOUT PANIER -->
+            <button
+              type="button"
+              class="bouton-ajouter-panier"
+              id="ajouter-produit-panier"
+            >
+              AJOUTER AU PANIER +
+            </button>
 
-                <article class="carte-produit">
-                    <img src="assets/images/similaire-1.png"
-                         alt="Produit similaire 1">
-                    <h3>Nom du produit 1</h3>
-                    <p>12,00 €</p>
-                </article>
-
-                <article class="carte-produit">
-                    <img src="assets/images/similaire-2.png"
-                         alt="Produit similaire 2">
-                    <h3>Nom du produit 2</h3>
-                    <p>15,00 €</p>
-                </article>
-
-                <article class="carte-produit">
-                    <img src="assets/images/similaire-3.png"
-                         alt="Produit similaire 3">
-                    <h3>Nom du produit 3</h3>
-                    <p>18,00 €</p>
-                </article>
-
+            <div class="fiche-produit-details">
+              <p>Disponibilité : à renseigner</p>
+              <p>Référence : à renseigner</p>
             </div>
+          </div>
+        </div>
+      </section>
 
-        </section>
+      <!-- INFORMATIONS COMPLEMENTAIRES -->
+      <section class="fiche-produit-complement">
+        <div class="section-titre">
+          <p class="section-surtitre">EN SAVOIR PLUS</p>
+          <h2>Informations complémentaires</h2>
+        </div>
 
+        <div class="fiche-produit-texte">
+          <p>
+            Ajoute ici les caractéristiques et les informations complémentaires
+            de ton produit.
+          </p>
+        </div>
+      </section>
+
+      <!-- PRODUITS SIMILAIRES -->
+      <section class="produits-similaires">
+        <div class="section-titre">
+          <p class="section-surtitre">CALI29 COLLECTION</p>
+          <h2>VOUS POURRIEZ AUSSI AIMER</h2>
+        </div>
+
+        <div class="produits-similaires-grille">
+          <article class="carte-produit">
+            <img
+              src="assets/images/similaire-1.png"
+              alt="Produit similaire 1"
+            />
+            <h3>Nom du produit 1</h3>
+            <p>12,00 €</p>
+          </article>
+
+          <article class="carte-produit">
+            <img
+              src="assets/images/similaire-2.png"
+              alt="Produit similaire 2"
+            />
+            <h3>Nom du produit 2</h3>
+            <p>15,00 €</p>
+          </article>
+
+          <article class="carte-produit">
+            <img
+              src="assets/images/similaire-3.png"
+              alt="Produit similaire 3"
+            />
+            <h3>Nom du produit 3</h3>
+            <p>18,00 €</p>
+          </article>
+        </div>
+      </section>
     </main>
-
 
     <!-- PANIER FIXE -->
     <div id="panier-fixe" class="panier-fixe">
-
-        <div class="panier-contenu">
-
-            <div class="panier-resume">
-                <span class="panier-titre">PANIER</span>
-                <strong id="panier-total">0,00 €</strong>
-            </div>
-
-            <a href="panier.html"
-               id="voir-panier"
-               class="bouton-voir-panier">
-                Voir mon panier
-            </a>
-
+      <div class="panier-contenu">
+        <div class="panier-resume">
+          <span class="panier-titre">PANIER</span>
+          <strong id="panier-total">0,00 €</strong>
         </div>
 
+        <a href="panier.html" id="voir-panier" class="bouton-voir-panier">
+          Voir mon panier
+        </a>
+      </div>
     </div>
-
 
     <!-- FOOTER -->
     <footer class="footer">
+      <div class="footer-contenu">
+        <a href="index.html" class="logo"> CALI29 </a>
 
-        <div class="footer-contenu">
+        <nav class="footer-liens">
+          <a href="index.html">Accueil</a>
+          <a href="fleur.html">Fleurs</a>
+          <a href="resine.html">Résines</a>
+          <a href="accessoires.html">Accessoires</a>
+        </nav>
+      </div>
 
-            <a href="index.html" class="logo">
-                CALI29
-            </a>
-
-            <nav class="footer-liens">
-                <a href="index.html">Accueil</a>
-                <a href="fleur.html">Fleurs</a>
-                <a href="resine.html">Résines</a>
-                <a href="accessoires.html">Accessoires</a>
-            </nav>
-
-        </div>
-
-        <p class="footer-bas">
-            © CALI29 - Tous droits réservés
-        </p>
-
+      <p class="footer-bas">© CALI29 - Tous droits réservés</p>
     </footer>
 
-
     <!-- JAVASCRIPT -->
-    <script src="js/config.js" defer></script>
+   
     <script src="js/produits.js" defer></script>
+    <script src="js/produit.js" defer></script>
     <script src="js/panier.js" defer></script>
     <script src="js/commande.js" defer></script>
-    <script src="js/produit.js" defer></script>
-
-</body>
-
+    
+  </body>
 </html>

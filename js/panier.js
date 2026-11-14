@@ -17,7 +17,16 @@ function sauvegarderPanier() {
 
 
 /* ==========================================
-   SYNCHRONISER LES PRIX
+   IDENTIFIER UNE LIGNE DU PANIER
+========================================== */
+
+function obtenirCleArticle(article) {
+    return `${article.id}-${article.grammage ?? "unique"}`;
+}
+
+
+/* ==========================================
+   SYNCHRONISER LES PRODUITS
 ========================================== */
 
 function synchroniserPrixPanier() {
@@ -26,14 +35,32 @@ function synchroniserPrixPanier() {
 
         const produit = produits.find(p => p.id === article.id);
 
-        if (!produit) {
-            return article;
+        if (!produit) return article;
+
+        // Ancien article sans grammage :
+        // on conserve le prix de base
+        if (article.grammage == null) {
+
+            return {
+                ...article,
+                nom: produit.nom,
+                prix: produit.prix,
+                image: produit.image
+            };
+
         }
+
+        // Retrouver le tarif correspondant au grammage
+        const tarif = produit.tarifs?.find(
+            t => t.grammage === Number(article.grammage)
+        );
+
+        if (!tarif) return article;
 
         return {
             ...article,
             nom: produit.nom,
-            prix: produit.prix,
+            prix: tarif.prix,
             image: produit.image
         };
 
@@ -47,7 +74,12 @@ function synchroniserPrixPanier() {
    AJOUTER UN PRODUIT
 ========================================== */
 
-function ajouterAuPanier(idProduit, quantite = 1) {
+function ajouterAuPanier(
+    idProduit,
+    quantite = 1,
+    grammage = null,
+    prixSelectionne = null
+) {
 
     const produit = produits.find(p => p.id === idProduit);
 
@@ -56,28 +88,55 @@ function ajouterAuPanier(idProduit, quantite = 1) {
         return;
     }
 
-    const quantiteValide = Math.max(1, parseInt(quantite, 10) || 1);
+    const quantiteValide = Math.max(
+        1,
+        parseInt(quantite, 10) || 1
+    );
 
-    const articleExistant = panier.find(p => p.id === idProduit);
+    // Déterminer le prix et le grammage
+    let prix = produit.prix;
+
+    if (grammage !== null && produit.tarifs) {
+
+        const tarif = produit.tarifs.find(
+            t => t.grammage === Number(grammage)
+        );
+
+        if (!tarif) {
+            console.error("Grammage introuvable :", grammage);
+            return;
+        }
+
+        prix = tarif.prix;
+
+    } else if (prixSelectionne !== null) {
+
+        prix = prixSelectionne;
+
+    }
+
+    const nouvelArticle = {
+        id: produit.id,
+        nom: produit.nom,
+        image: produit.image,
+        grammage: grammage,
+        prix: prix,
+        quantite: quantiteValide
+    };
+
+    // Même produit ET même grammage = même ligne
+    const articleExistant = panier.find(
+        article =>
+            obtenirCleArticle(article) === obtenirCleArticle(nouvelArticle)
+    );
 
     if (articleExistant) {
 
         articleExistant.quantite += quantiteValide;
 
-        // Mise à jour du prix depuis produits.js
-        articleExistant.prix = produit.prix;
-        articleExistant.nom = produit.nom;
-        articleExistant.image = produit.image;
-
     } else {
 
-        panier.push({
-            id: produit.id,
-            nom: produit.nom,
-            prix: produit.prix,
-            image: produit.image,
-            quantite: quantiteValide
-        });
+        panier.push(nouvelArticle);
 
     }
 
@@ -90,16 +149,22 @@ function ajouterAuPanier(idProduit, quantite = 1) {
    MODIFIER LA QUANTITÉ
 ========================================== */
 
-function modifierQuantite(idProduit, changement) {
+function modifierQuantite(cleArticle, changement) {
 
-    const article = panier.find(p => p.id === idProduit);
+    const article = panier.find(
+        p => obtenirCleArticle(p) === cleArticle
+    );
 
     if (!article) return;
 
     article.quantite += changement;
 
     if (article.quantite <= 0) {
-        panier = panier.filter(p => p.id !== idProduit);
+
+        panier = panier.filter(
+            p => obtenirCleArticle(p) !== cleArticle
+        );
+
     }
 
     sauvegarderPanier();
@@ -111,9 +176,11 @@ function modifierQuantite(idProduit, changement) {
    SUPPRIMER UN ARTICLE
 ========================================== */
 
-function supprimerDuPanier(idProduit) {
+function supprimerDuPanier(cleArticle) {
 
-    panier = panier.filter(p => p.id !== idProduit);
+    panier = panier.filter(
+        article => obtenirCleArticle(article) !== cleArticle
+    );
 
     sauvegarderPanier();
     actualiserPanier();
@@ -169,6 +236,8 @@ function afficherArticlesPanier() {
 
     panier.forEach(article => {
 
+        const cleArticle = obtenirCleArticle(article);
+
         const ligne = document.createElement("article");
         ligne.className = "article-panier";
 
@@ -183,8 +252,22 @@ function afficherArticlesPanier() {
         titre.textContent = article.nom;
 
         const prixUnitaire = document.createElement("p");
+
         prixUnitaire.textContent =
             article.prix.toFixed(2) + " € / unité";
+
+        // Afficher le grammage si présent
+        if (article.grammage !== null) {
+
+            const grammage = document.createElement("p");
+            grammage.textContent = article.grammage + " g";
+            informations.append(titre, grammage, prixUnitaire);
+
+        } else {
+
+            informations.append(titre, prixUnitaire);
+
+        }
 
         const quantite = document.createElement("div");
         quantite.className = "article-panier-quantite";
@@ -192,10 +275,9 @@ function afficherArticlesPanier() {
         const boutonMoins = document.createElement("button");
         boutonMoins.type = "button";
         boutonMoins.textContent = "−";
-        boutonMoins.setAttribute("aria-label", "Diminuer la quantité");
 
         boutonMoins.addEventListener("click", () => {
-            modifierQuantite(article.id, -1);
+            modifierQuantite(cleArticle, -1);
         });
 
         const nombre = document.createElement("span");
@@ -204,20 +286,20 @@ function afficherArticlesPanier() {
         const boutonPlus = document.createElement("button");
         boutonPlus.type = "button";
         boutonPlus.textContent = "+";
-        boutonPlus.setAttribute("aria-label", "Augmenter la quantité");
 
         boutonPlus.addEventListener("click", () => {
-            modifierQuantite(article.id, 1);
+            modifierQuantite(cleArticle, 1);
         });
 
         quantite.append(boutonMoins, nombre, boutonPlus);
 
-        informations.append(titre, prixUnitaire, quantite);
+        informations.append(quantite);
 
         const actions = document.createElement("div");
 
         const prixTotal = document.createElement("div");
         prixTotal.className = "article-panier-prix";
+
         prixTotal.textContent =
             (article.prix * article.quantite).toFixed(2) + " €";
 
@@ -227,7 +309,7 @@ function afficherArticlesPanier() {
         supprimer.textContent = "Supprimer";
 
         supprimer.addEventListener("click", () => {
-            supprimerDuPanier(article.id);
+            supprimerDuPanier(cleArticle);
         });
 
         actions.append(prixTotal, supprimer);
@@ -241,7 +323,7 @@ function afficherArticlesPanier() {
 
 
 /* ==========================================
-   ACTUALISER LES TOTAUX ET L'AFFICHAGE
+   ACTUALISER LES TOTAUX
 ========================================== */
 
 function actualiserPanier() {
@@ -257,21 +339,13 @@ function actualiserPanier() {
     const sousTotal = document.getElementById("panier-sous-total");
     const totalElement = document.getElementById("panier-total");
 
-    if (compteur) {
-        compteur.textContent = nombreArticles;
-    }
+    if (compteur) compteur.textContent = nombreArticles;
 
-    if (nombreTotal) {
-        nombreTotal.textContent = nombreArticles;
-    }
+    if (nombreTotal) nombreTotal.textContent = nombreArticles;
 
-    if (sousTotal) {
-        sousTotal.textContent = total.toFixed(2) + " €";
-    }
+    if (sousTotal) sousTotal.textContent = total.toFixed(2) + " €";
 
-    if (totalElement) {
-        totalElement.textContent = total.toFixed(2) + " €";
-    }
+    if (totalElement) totalElement.textContent = total.toFixed(2) + " €";
 
     if (panierVide && panierRempli) {
 
@@ -295,14 +369,9 @@ function actualiserPanier() {
 
 document.addEventListener("DOMContentLoaded", () => {
 
-    // Corriger les anciens prix enregistrés
     synchroniserPrixPanier();
-
-    // Actualiser le panier
     actualiserPanier();
 
-
-    // VIDER LE PANIER
     const boutonVider = document.getElementById("vider-panier");
 
     if (boutonVider) {
@@ -310,7 +379,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
 
-    // BOUTONS AJOUTER AU PANIER DES CATALOGUES
+    // AJOUT DEPUIS LE CATALOGUE
+
     const boutonsCatalogue = document.querySelectorAll(
         ".carte-produit .bouton-ajouter"
     );
@@ -322,10 +392,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const carte = bouton.closest(".carte-produit");
             const lienProduit = carte.querySelector(".lien-produit");
 
-            if (!lienProduit) {
-                console.error("Lien produit introuvable.");
-                return;
-            }
+            if (!lienProduit) return;
 
             const url = new URL(lienProduit.href);
             const idProduit = url.searchParams.get("id");
@@ -339,7 +406,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-    // BOUTON AJOUTER AU PANIER DE LA FICHE PRODUIT
+    // AJOUT DEPUIS LA FICHE PRODUIT
+
     const boutonFiche = document.getElementById("ajouter-produit-panier");
 
     if (boutonFiche) {
@@ -355,9 +423,31 @@ document.addEventListener("DOMContentLoaded", () => {
                 ? Math.max(1, parseInt(champQuantite.value, 10) || 1)
                 : 1;
 
-            if (idProduit) {
-                ajouterAuPanier(idProduit, quantite);
+            if (!idProduit) return;
+
+            // Récupérer le grammage sélectionné
+            const selectGrammage = document.getElementById("grammage-produit");
+
+            let grammage = null;
+            let prix = null;
+
+            if (selectGrammage && !selectGrammage.closest("[hidden]")) {
+
+                grammage = Number(selectGrammage.value);
+
+                const produit = produits.find(p => p.id === idProduit);
+
+                const tarif = produit?.tarifs?.find(
+                    t => t.grammage === grammage
+                );
+
+                if (!tarif) return;
+
+                prix = tarif.prix;
+
             }
+
+            ajouterAuPanier(idProduit, quantite, grammage, prix);
 
         });
 
