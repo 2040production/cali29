@@ -19,7 +19,15 @@ const prixProduit = document.querySelector(".fiche-produit-prix");
 const categorieProduit = document.querySelector(".fiche-produit-categorie");
 const descriptionProduit = document.querySelector(".fiche-produit-description p");
 
-// Afficher les informations
+const blocGrammage = document.getElementById("bloc-grammage");
+const selectGrammage = document.getElementById("grammage-produit");
+
+// Formater les prix en euros
+const formaterPrixFicheProduit = prix => {
+    return prix.toFixed(2).replace(".", ",") + " €";
+};
+
+// Afficher les informations du produit
 if (produitSelectionne) {
 
     document.title = produitSelectionne.nom + " | CALI29";
@@ -28,12 +36,56 @@ if (produitSelectionne) {
     imageProduit.alt = produitSelectionne.nom;
 
     titreProduit.textContent = produitSelectionne.nom;
-
-    prixProduit.textContent = produitSelectionne.prix.toFixed(2) + " €";
-
     categorieProduit.textContent = produitSelectionne.categorie;
-
     descriptionProduit.textContent = produitSelectionne.description;
+
+    // Vérifier si le produit possède des tarifs dégressifs
+    if (produitSelectionne.tarifs && produitSelectionne.tarifs.length > 0) {
+
+        // Afficher le sélecteur de grammage
+        blocGrammage.hidden = false;
+
+        // Générer les options automatiquement
+        produitSelectionne.tarifs.forEach(tarif => {
+
+            const option = document.createElement("option");
+
+            option.value = tarif.grammage;
+            option.textContent =
+                tarif.grammage + " g — " + formaterPrixFicheProduit(tarif.prix);
+
+            selectGrammage.appendChild(option);
+
+        });
+
+        // Afficher le prix du premier grammage
+        prixProduit.textContent = formaterPrixFicheProduit(
+            produitSelectionne.tarifs[0].prix
+        );
+
+        // Actualiser le prix lorsque le grammage change
+        selectGrammage.addEventListener("change", () => {
+
+            const tarifSelectionne = produitSelectionne.tarifs.find(
+                tarif => tarif.grammage === Number(selectGrammage.value)
+            );
+
+            if (tarifSelectionne) {
+                prixProduit.textContent =
+                    formaterPrixFicheProduit(tarifSelectionne.prix);
+            }
+
+        });
+
+    } else {
+
+        // Produit sans tarif dégressif : prix unique
+        blocGrammage.hidden = true;
+
+        prixProduit.textContent =
+            formaterPrixFicheProduit(produitSelectionne.prix);
+
+    }
 
 } else {
 
@@ -41,4 +93,3 @@ if (produitSelectionne) {
         "<p>Produit introuvable. Retournez au catalogue.</p>";
 
 }
-
