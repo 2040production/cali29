@@ -32,19 +32,24 @@ function genererRecapitulatifCommande() {
     let message = "Bonjour, je souhaite passer commande chez CALI29.\n\n";
     message += "🛒 MA COMMANDE\n\n";
 
-    panier.forEach(article => {
+ panier.forEach(article => {
 
-        const prixLigne = article.prix * article.quantite;
+    const prixLigne = article.prix * article.quantite;
 
-        total += prixLigne;
+    total += prixLigne;
 
-        message +=
-            "• " + article.nom + "\n" +
-            "  Quantité : " + article.quantite + "\n" +
-            "  Prix unitaire : " + formaterPrix(article.prix) + "\n" +
-            "  Sous-total : " + formaterPrix(prixLigne) + "\n\n";
+    message += "• " + article.nom + "\n";
 
-    });
+    if (article.grammage !== null && article.grammage !== undefined) {
+        message += "  Grammage : " + article.grammage + " g\n";
+    }
+
+    message +=
+        "  Quantité : " + article.quantite + "\n" +
+        "  Prix unitaire : " + formaterPrix(article.prix) + "\n" +
+        "  Sous-total : " + formaterPrix(prixLigne) + "\n\n";
+
+});
 
     message += "--------------------------\n";
     message += "TOTAL : " + formaterPrix(total) + "\n\n";
