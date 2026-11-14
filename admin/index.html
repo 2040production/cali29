@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Administration | CALI29</title>
+
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <!-- =================================
+         ADMINISTRATION CALI29
+    ================================== -->
+
+    <div class="admin-container">
+
+        <!-- SIDEBAR -->
+
+        <aside class="admin-sidebar">
+
+            <div class="admin-logo">
+                <h1>CALI<span>29</span></h1>
+                <p>ADMINISTRATION</p>
+            </div>
+
+            <nav class="admin-navigation">
+
+                <a href="#" class="admin-nav-link active">
+                    <span>▦</span>
+                    Produits
+                </a>
+
+            </nav>
+
+            <div class="admin-sidebar-footer">
+                <a href="../index.html">
+                    ← Retour au site
+                </a>
+            </div>
+
+        </aside>
+
+
+        <!-- CONTENU PRINCIPAL -->
+
+        <main class="admin-main">
+
+            <!-- HEADER -->
+
+            <header class="admin-header">
+
+                <div>
+                    <h2>Gestion des produits</h2>
+                    <p>Gérez votre catalogue CALI29</p>
+                </div>
+
+                <button id="bouton-ajouter" class="bouton-principal">
+                    + Ajouter un produit
+                </button>
+
+            </header>
+
+
+            <!-- STATISTIQUES -->
+
+            <section class="admin-statistiques">
+
+                <div class="statistique-card">
+                    <span>Produits au catalogue</span>
+                    <strong id="nombre-produits">0</strong>
+                </div>
+
+                <div class="statistique-card">
+                    <span>Catégories</span>
+                    <strong id="nombre-categories">0</strong>
+                </div>
+
+            </section>
+
+
+            <!-- LISTE DES PRODUITS -->
+
+            <section class="admin-produits">
+
+                <div class="admin-section-header">
+
+                    <div>
+                        <h3>Catalogue</h3>
+                        <p>Liste des produits enregistrés</p>
+                    </div>
+
+                    <input
+                        type="search"
+                        id="recherche-produit"
+                        placeholder="Rechercher un produit..."
+                    >
+
+                </div>
+
+                <div class="table-responsive">
+
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Produit</th>
+                                <th>Catégorie</th>
+                                <th>Prix de base</th>
+                                <th>Tarifs</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="liste-produits">
+
+                            <!-- Produits générés par JavaScript -->
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </section>
+
+
+            <!-- FORMULAIRE PRODUIT -->
+
+            <section id="formulaire-produit" class="formulaire-produit" hidden>
+
+                <div class="formulaire-header">
+
+                    <div>
+                        <h3 id="titre-formulaire">Ajouter un produit</h3>
+                        <p>Renseignez les informations du produit</p>
+                    </div>
+
+                    <button id="bouton-fermer" type="button">
+                        ✕
+                    </button>
+
+                </div>
+
+                <form id="form-produit">
+
+                    <input type="hidden" id="produit-id">
+
+                    <div class="form-grid">
+
+                        <div class="champ">
+                            <label for="nom-produit">Nom du produit</label>
+                            <input type="text" id="nom-produit" required>
+                        </div>
+
+                        <div class="champ">
+                            <label for="categorie-produit">Catégorie</label>
+
+                            <select id="categorie-produit" required>
+                                <option value="fleurs">Fleurs</option>
+                                <option value="resines">Résines</option>
+                                <option value="accessoires">Accessoires</option>
+                            </select>
+                        </div>
+
+                        <div class="champ">
+                            <label for="prix-produit">Prix de base (€)</label>
+                            <input type="number" id="prix-produit" min="0" step="0.01" required>
+                        </div>
+
+                        <div class="champ">
+                            <label for="image-produit">Chemin de l'image</label>
+                            <input type="text" id="image-produit" placeholder="assets/images/image.jpg">
+                        </div>
+
+                        <div class="champ champ-complet">
+                            <label for="description-produit">Description</label>
+                            <textarea id="description-produit" rows="4"></textarea>
+                        </div>
+
+                    </div>
+
+
+                    <!-- TARIFS DEGRESSIFS -->
+
+                    <div class="bloc-tarifs">
+
+                        <label class="label-checkbox">
+                            <input type="checkbox" id="activer-tarifs">
+                            Activer les tarifs dégressifs
+                        </label>
+
+                        <div id="liste-tarifs" hidden>
+
+                            <div id="lignes-tarifs"></div>
+
+                            <button type="button" id="ajouter-tarif">
+                                + Ajouter un grammage
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="formulaire-actions">
+
+                        <button type="button" id="annuler-formulaire">
+                            Annuler
+                        </button>
+
+                        <button type="submit" class="bouton-principal">
+                            Enregistrer le produit
+                        </button>
+
+                    </div>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <script src="../js/produits.js"></script>
+    <script src="admin.js"></script>
+
+</body>
+
+</html>
