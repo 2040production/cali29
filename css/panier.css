@@ -1,0 +1,66 @@
+/* ==========================================
+   10 - PANIER FIXE EN BAS DE PAGE
+========================================== */
+
+.panier-fixe {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 14px 18px;
+    padding-bottom: calc(14px + env(safe-area-inset-bottom));
+
+    background: rgba(9, 5, 30, 0.96);
+    border: 1px solid #9C00FF;
+    border-radius: 20px 20px 0 0;
+
+    box-shadow:
+        0 -5px 25px #A000FF55,
+        inset 0 0 15px #A000FF22;
+
+    backdrop-filter: blur(15px);
+}
+
+.panier-informations {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.panier-informations span {
+    color: #C6BBDD;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.panier-informations strong {
+    color: white;
+    font-size: 19px;
+    font-weight: 800;
+}
+
+.bouton-commander {
+    padding: 14px 18px;
+    border: none;
+    border-radius: 40px;
+    background: linear-gradient(
+        90deg,
+        #D900FF,
+        #FF009D
+    );
+    color: white;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
+    cursor: pointer;
+    box-shadow: 0 0 15px #F000D966;
+}

@@ -1,0 +1,311 @@
+/* ==========================================
+   02 - HERO / BANNIÈRE PRINCIPALE
+========================================== */
+
+.hero {
+    position: relative;
+
+    width: 100%;
+    min-height: 580px;
+
+    display: flex;
+    align-items: center;
+
+    overflow: hidden;
+    isolation: isolate;
+
+    background: #08051B;
+}
+
+/* IMAGE EN ARRIÈRE-PLAN */
+
+.hero-image {
+    position: absolute;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    z-index: -2;
+}
+
+.hero-image img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+    object-position: center;
+}
+
+/* DÉGRADÉ POUR LE TEXTE */
+
+.hero::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    z-index: -1;
+
+    background: linear-gradient(
+        90deg,
+        rgba(5, 3, 22, 0.96) 0%,
+        rgba(5, 3, 22, 0.75) 30%,
+        rgba(5, 3, 22, 0.15) 65%,
+        transparent 100%
+    );
+}
+
+/* CONTENU DU HERO */
+
+.hero-contenu {
+    position: relative;
+    z-index: 2;
+
+    width: 48%;
+    max-width: 650px;
+
+    padding: 40px 35px;
+
+    color: white;
+}
+
+/* PETIT TITRE */
+
+.hero-surtitre {
+    color: #FFFFFF;
+
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 5px;
+
+    margin-bottom: 20px;
+
+    text-shadow: 0 0 12px #F000D9;
+}
+
+/* GRAND TITRE */
+
+.hero-contenu h1 {
+    color: white;
+
+    font-size: clamp(38px, 5vw, 68px);
+    font-weight: 800;
+
+    line-height: 1.05;
+    letter-spacing: -2px;
+
+    margin: 0 0 20px;
+
+    text-shadow: 0 0 20px #006CFF66;
+}
+
+/* DESCRIPTION */
+
+.hero-description {
+    color: #E3DDF0;
+
+    font-size: 16px;
+    line-height: 1.6;
+
+    margin-bottom: 28px;
+}
+
+/* BOUTON PRINCIPAL */
+
+.bouton-principal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 16px 28px;
+
+    background: linear-gradient(
+        90deg,
+        #D900FF,
+        #FF009D
+    );
+
+    border-radius: 40px;
+
+    color: white;
+    font-size: 15px;
+    font-weight: 800;
+
+    text-decoration: none;
+
+    box-shadow: 0 0 22px #F000D977;
+
+    transition: 0.3s ease;
+}
+
+.bouton-principal:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 30px #F000D9;
+}
+
+/* ==========================================
+   05 - BANDEAU AVANTAGES
+========================================== */
+
+.avantages {
+    padding: 22px 15px;
+    background: linear-gradient(
+        90deg,
+        #100727,
+        #09051B,
+        #100727
+    );
+    border-top: 1px solid #8D00FF;
+    border-bottom: 1px solid #8D00FF;
+    box-shadow:
+        0 0 15px #8D00FF55,
+        inset 0 0 15px #8D00FF22;
+}
+
+.avantages-container {
+    max-width: 1100px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.avantage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+    padding: 12px 5px;
+}
+
+.avantage-icone {
+    color: var(--rose);
+    font-size: 27px;
+    text-shadow: 0 0 12px var(--rose);
+}
+
+.avantage p {
+    color: #E8E2F5;
+    font-size: 12px;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* ==========================================
+   06 - CATÉGORIES
+========================================== */
+
+.categories {
+    padding: 40px 18px;
+    background:
+        radial-gradient(
+            ellipse at center,
+            #19083A 0%,
+            #08051B 75%
+        );
+}
+
+.categories-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.categorie {
+    position: relative;
+    min-height: 150px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    border: 1px solid #A000FF;
+    border-radius: 14px;
+    padding: 10px;
+    text-decoration: none;
+    background: #100923;
+    box-shadow: 0 0 12px #8500FF33;
+    transition: 0.3s ease;
+}
+
+.categorie img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px #D000FF);
+    transition: transform 0.3s ease;
+}
+
+.categorie h3 {
+    color: white;
+    font-size: 14px;
+    font-weight: 800;
+    margin: 8px 0 2px;
+    text-align: center;
+}
+
+.categorie:hover {
+    border-color: var(--rose);
+    box-shadow: 0 0 22px #F000D977;
+    transform: translateY(-4px);
+}
+
+.categorie:hover img {
+    transform: scale(1.08);
+}
+
+/* ==========================================
+   08 - UNIVERS CALI29
+========================================== */
+
+.univers {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    max-width: 1100px;
+    margin: auto;
+    padding: 50px 25px;
+    background: radial-gradient(
+        ellipse at center,
+        #19083A,
+        #08051B 75%
+    );
+}
+
+.univers-image {
+    flex: 1;
+    min-width: 0;
+}
+
+.univers-image img {
+    display: block;
+    width: 100%;
+    max-height: 350px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 18px #A000FF66);
+}
+
+.univers-contenu {
+    flex: 1;
+}
+
+.univers-contenu h2 {
+    color: white;
+    font-size: clamp(24px, 4vw, 38px);
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+.univers-contenu p:last-child {
+    color: var(--gris);
+    font-size: 15px;
+    line-height: 1.7;
+}

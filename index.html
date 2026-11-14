@@ -1,0 +1,310 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <!-- =================================
+         01 - CONFIGURATION DU DOCUMENT
+    ================================== -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CALI29 | Boutique</title>
+
+    <meta name="description" content="Bienvenue dans l'univers CALI29.">
+
+    <!-- POLICE MANROPE -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- FEUILLES DE STYLE -->
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/accueil.css">
+    <link rel="stylesheet" href="css/categories.css">
+    <link rel="stylesheet" href="css/produits.css">
+    <link rel="stylesheet" href="css/panier.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+</head>
+
+
+<body>
+
+    <!-- =================================
+         02 - HEADER / NAVIGATION
+    ================================== -->
+
+    <header id="header" class="header">
+
+        <button id="menu-burger"
+                class="menu-burger"
+                aria-label="Ouvrir le menu">
+            ☰
+        </button>
+
+        <a href="index.html" class="logo">
+            CALI29
+        </a>
+
+        <a href="panier.html"
+           id="ouvrir-panier"
+           class="bouton-panier">
+            Panier
+            <span id="nombre-articles">0</span>
+        </a>
+
+    </header>
+
+
+    <!-- =================================
+         03 - CONTENU PRINCIPAL
+    ================================== -->
+
+    <main id="contenu-principal">
+
+
+        <!-- =================================
+             04 - HERO / BANNIÈRE
+        ================================== -->
+
+        <section id="hero" class="hero">
+
+            <div class="hero-contenu">
+
+                <p class="hero-surtitre">
+                    SMART COFFEE
+                </p>
+
+                <h1>
+                    SOYEZ LIVRES CHEZ VOUS
+                </h1>
+
+                <p class="hero-description">
+                    Bienvenue dans l'univers CALI29.
+                </p>
+
+                <a href="#produits" class="bouton-principal">
+                    DÉCOUVRIR NOS OFFRES →
+                </a>
+
+            </div>
+
+            <!-- IMAGE DES MASCOTTES -->
+
+            <div class="hero-image">
+
+                <img
+                    src="assets/images/hero-cali29.png"
+                    alt="Illustration de l'univers CALI29"
+                >
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================
+             05 - AVANTAGES
+        ================================== -->
+
+        <section id="avantages" class="avantages">
+
+            <div class="avantages-container">
+
+                <article class="avantage">
+                    <span class="avantage-icone">✦</span>
+                    <p>Informations produits</p>
+                </article>
+
+                <article class="avantage">
+                    <span class="avantage-icone">◇</span>
+                    <p>Informations de paiement</p>
+                </article>
+
+                <article class="avantage">
+                    <span class="avantage-icone">✧</span>
+                    <p>Service client</p>
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================
+             06 - CATÉGORIES
+        ================================== -->
+
+        <section id="categories" class="categories">
+
+            <div class="section-titre">
+
+                <p class="section-surtitre">
+                    EXPLORER
+                </p>
+
+                <h2>NOS CATÉGORIES</h2>
+
+            </div>
+
+            <div class="categories-container">
+
+                <a href="fleur.html" class="categorie">
+                    <img src="assets/images/weed.png" alt="Fleurs">
+                    <h3>Fleurs</h3>
+                </a>
+
+                <a href="resine.html" class="categorie">
+                    <img src="assets/images/resine.png" alt="Résines">
+                    <h3>Résines</h3>
+                </a>
+
+                <a href="accessoires.html" class="categorie">
+                    <img src="assets/images/accessoires.png" alt="Accessoires">
+                    <h3>Accessoires</h3>
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================
+             07 - CATALOGUE PRODUITS
+        ================================== -->
+
+        <section id="produits" class="produits">
+
+            <div class="section-titre">
+
+                <p class="section-surtitre">
+                    LA SÉLECTION CALI29
+                </p>
+
+                <h2>NOS PRODUITS</h2>
+
+            </div>
+
+            <!-- CONTENU GÉNÉRÉ PAR JAVASCRIPT -->
+
+            <div id="catalogue-produits"
+                 class="produits-container">
+
+                <!-- Les cartes produits apparaîtront ici -->
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================
+             08 - UNIVERS CALI29
+        ================================== -->
+
+        <section id="univers" class="univers">
+
+            <div class="univers-image">
+
+                <img
+                    src="assets/images/persoFooter.png"
+                    alt="Illustration des mascottes CALI29"
+                >
+
+            </div>
+
+            <div class="univers-contenu">
+
+                <p class="section-surtitre">
+                    NOTRE IDENTITÉ
+                </p>
+
+                <h2>L'UNIVERS CALI29</h2>
+
+                <p>
+                    Une identité, une communauté, un univers.
+                </p>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =================================
+         09 - FOOTER
+    ================================== -->
+
+    <footer id="footer" class="footer">
+
+        <div class="footer-logo">
+            CALI29
+        </div>
+
+        <nav class="footer-liens">
+
+            <a href="index.html">Accueil</a>
+            <a href="fleur.html">Fleurs</a>
+            <a href="resine.html">Résines</a>
+            <a href="accessoires.html">Accessoires</a>
+            <a href="#">Contact</a>
+            <a href="#">Mentions légales</a>
+            <a href="#">Politique de confidentialité</a>
+
+        </nav>
+
+        <p class="footer-copyright">
+            © CALI29 - Tous droits réservés
+        </p>
+
+    </footer>
+
+
+    <!-- =================================
+         10 - PANIER FIXE MOBILE
+    ================================== -->
+
+    <div id="panier-fixe" class="panier-fixe">
+
+        <div class="panier-informations">
+
+            <span>MON PANIER</span>
+
+            <strong id="panier-total">
+                0,00 €
+            </strong>
+
+        </div>
+
+        <a href="panier.html"
+           id="commander"
+           class="bouton-commander">
+            VOIR MON PANIER →
+        </a>
+
+    </div>
+
+
+    <!-- =================================
+         11 - FICHIERS JAVASCRIPT
+    ================================== -->
+
+    <script src="js/config.js" defer></script>
+    <script src="js/produits.js" defer></script>
+    <script src="js/catalogue.js" defer></script>
+    <script src="js/panier.js" defer></script>
+    <script src="js/commande.js" defer></script>
+
+</body>
+
+</html>

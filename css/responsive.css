@@ -1,0 +1,260 @@
+/* ==========================================
+   11 - ADAPTATION MOBILE
+========================================== */
+
+@media screen and (max-width: 768px) {
+
+    /* AVANTAGES */
+
+    .avantages {
+        padding: 12px 5px;
+    }
+
+    .avantages-container {
+        gap: 2px;
+    }
+
+    .avantage {
+        padding: 8px 2px;
+    }
+
+    .avantage-icone {
+        font-size: 23px;
+    }
+
+    .avantage p {
+        font-size: 9px;
+        line-height: 1.4;
+    }
+
+    /* TITRES */
+
+    .section-titre {
+        margin-bottom: 22px;
+    }
+
+    .section-titre h2 {
+        font-size: 25px;
+    }
+
+    /* CATÉGORIES */
+
+    .categories {
+        padding: 30px 12px;
+    }
+
+    .categories-container {
+        display: flex;
+        gap: 10px;
+        overflow-x: auto;
+        padding: 5px 2px 15px;
+        scroll-snap-type: x mandatory;
+        scrollbar-width: none;
+    }
+
+    .categories-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .categorie {
+        flex: 0 0 105px;
+        min-height: 125px;
+        scroll-snap-align: start;
+        padding: 8px;
+    }
+
+    .categorie img {
+        height: 80px;
+    }
+
+    .categorie h3 {
+        font-size: 12px;
+    }
+
+    /* PRODUITS */
+
+    .produits {
+        padding: 30px 12px 45px;
+    }
+
+    .produits-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+    }
+
+    .carte-produit {
+        padding: 9px;
+        border-radius: 15px;
+    }
+
+    .carte-produit img {
+        height: 115px;
+    }
+
+    .carte-produit h3 {
+        font-size: 14px;
+    }
+
+    .carte-produit p {
+        font-size: 11px;
+    }
+
+    .prix-produit {
+        font-size: 17px;
+    }
+
+    .bouton-ajouter {
+        font-size: 11px;
+        padding: 11px 5px;
+    }
+
+    /* UNIVERS */
+
+    .univers {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+        padding: 35px 20px;
+    }
+
+    .univers-image img {
+        max-height: 240px;
+    }
+
+    .univers-contenu h2 {
+        font-size: 25px;
+    }
+
+    /* FOOTER */
+
+    .footer {
+        padding: 35px 15px 110px;
+    }
+
+    .footer-liens {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    /* PANIER FIXE */
+
+    .panier-fixe {
+        padding: 12px 14px;
+        padding-bottom: calc(12px + env(safe-area-inset-bottom));
+        gap: 8px;
+    }
+
+    .panier-informations strong {
+        font-size: 16px;
+    }
+
+    .bouton-commander {
+        padding: 13px 15px;
+        font-size: 11px;
+    }
+
+}
+
+/* ==========================================
+   03 - HERO VERSION MOBILE
+========================================== */
+
+@media screen and (max-width: 768px) {
+
+    .header {
+        height: 70px;
+        padding: 0 15px;
+    }
+
+    .logo {
+        font-size: 29px;
+    }
+
+    .menu-burger {
+        font-size: 26px;
+    }
+
+    .bouton-panier {
+        padding: 8px 11px;
+        font-size: 11px;
+    }
+
+    .hero {
+        min-height: 560px;
+        align-items: flex-end;
+    }
+
+    .hero-image img {
+        object-position: 58% center;
+    }
+
+    .hero::before {
+        background: linear-gradient(
+            0deg,
+            rgba(5, 3, 22, 0.98) 0%,
+            rgba(5, 3, 22, 0.80) 38%,
+            rgba(5, 3, 22, 0.05) 100%
+        );
+    }
+
+    .hero-contenu {
+        width: 100%;
+        max-width: 100%;
+        padding: 25px 20px 35px;
+    }
+
+    .hero-surtitre {
+        font-size: 11px;
+        letter-spacing: 4px;
+        margin-bottom: 12px;
+    }
+
+    .hero-contenu h1 {
+        font-size: 35px;
+        max-width: 330px;
+        letter-spacing: -1px;
+    }
+
+    .hero-description {
+        font-size: 14px;
+    }
+
+    .bouton-principal {
+        width: 100%;
+        padding: 15px;
+        font-size: 14px;
+    }
+}
+
+/* ==========================================
+   12 - PETITS ÉCRANS
+========================================== */
+
+@media screen and (max-width: 380px) {
+
+    .produits-container {
+        gap: 8px;
+    }
+
+    .carte-produit {
+        padding: 7px;
+    }
+
+    .carte-produit img {
+        height: 95px;
+    }
+
+    .carte-produit h3 {
+        font-size: 12px;
+    }
+
+    .prix-produit {
+        font-size: 15px;
+    }
+
+    .bouton-commander {
+        font-size: 10px;
+        padding: 12px 10px;
+    }
+
+}

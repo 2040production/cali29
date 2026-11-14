@@ -1,0 +1,391 @@
+
+/* ==========================================
+   PAGE PANIER - CALI29
+========================================== */
+
+.panier-page {
+    min-height: 70vh;
+    padding: 55px 20px 90px;
+    background: #070419;
+}
+
+/* TITRE */
+
+.panier-page > .section-titre {
+    text-align: center;
+    margin-bottom: 45px;
+}
+
+.panier-page .section-titre h1 {
+    color: white;
+    font-size: 32px;
+    font-weight: 800;
+    text-shadow: 0 0 15px #A000FF55;
+}
+
+.panier-page .section-titre > p:last-child {
+    color: var(--gris);
+    font-size: 14px;
+}
+
+/* ==========================================
+   PANIER VIDE
+========================================== */
+
+.panier-vide {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 45px 25px;
+    text-align: center;
+    border: 1px solid #C000FF;
+    border-radius: 20px;
+    background: linear-gradient(145deg, #15102E, #08051B 75%);
+    box-shadow: 0 0 15px #A000FF22;
+}
+
+.panier-vide-icone {
+    font-size: 45px;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 10px #B000FF);
+}
+
+.panier-vide h2 {
+    color: white;
+    font-size: 21px;
+    font-weight: 800;
+}
+
+.panier-vide p {
+    color: var(--gris);
+    font-size: 13px;
+    line-height: 1.7;
+    margin-bottom: 25px;
+}
+
+.bouton-retour-boutique {
+    display: inline-block;
+    padding: 14px 22px;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #D900FF, #FF009D);
+    color: white;
+    font-size: 12px;
+    font-weight: 800;
+    text-decoration: none;
+    box-shadow: 0 0 12px #E900D566;
+}
+
+/* ==========================================
+   PANIER REMPLI
+========================================== */
+
+.panier-rempli {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    align-items: start;
+    gap: 25px;
+    max-width: 1100px;
+    margin: auto;
+}
+
+.panier-liste-container {
+    min-width: 0;
+    padding: 22px;
+    border: 1px solid #C000FF;
+    border-radius: 18px;
+    background: linear-gradient(145deg, #15102E, #08051B 75%);
+    box-shadow: 0 0 12px #A000FF22;
+}
+
+/* TITRE DES ARTICLES */
+
+.panier-liste-titre {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #A000FF55;
+}
+
+.panier-liste-titre h2 {
+    color: white;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+#vider-panier {
+    border: none;
+    background: transparent;
+    color: #FF009D;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* LISTE DES ARTICLES */
+
+.liste-panier {
+    display: flex;
+    flex-direction: column;
+}
+
+/* CARTE ARTICLE GÉNÉRÉE PAR JAVASCRIPT */
+
+.article-panier {
+    display: grid;
+    grid-template-columns: 95px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 18px;
+    padding: 20px 0;
+    border-bottom: 1px solid #A000FF33;
+}
+
+.article-panier img {
+    width: 95px;
+    height: 95px;
+    object-fit: contain;
+    padding: 5px;
+    border: 1px solid #C000FF;
+    border-radius: 12px;
+    background: #100A25;
+}
+
+.article-panier-informations {
+    min-width: 0;
+}
+
+.article-panier-informations h3 {
+    color: white;
+    font-size: 15px;
+    font-weight: 800;
+    margin: 0 0 8px;
+}
+
+.article-panier-informations p {
+    color: var(--gris);
+    font-size: 12px;
+    margin: 5px 0;
+}
+
+.article-panier-prix {
+    color: var(--rose);
+    font-size: 16px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+/* QUANTITÉ */
+
+.article-panier-quantite {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.article-panier-quantite button {
+    width: 27px;
+    height: 27px;
+    border: 1px solid #A000FF;
+    border-radius: 7px;
+    background: #160B30;
+    color: white;
+    cursor: pointer;
+}
+
+.article-panier-quantite span {
+    color: white;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+/* SUPPRESSION */
+
+.article-panier-supprimer {
+    border: none;
+    background: transparent;
+    color: #FF009D;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+/* ==========================================
+   RÉCAPITULATIF
+========================================== */
+
+.panier-recapitulatif {
+    position: sticky;
+    top: 20px;
+    padding: 25px;
+    border: 1px solid #C000FF;
+    border-radius: 18px;
+    background: linear-gradient(145deg, #15102E, #08051B 75%);
+    box-shadow: 0 0 15px #A000FF33;
+}
+
+.panier-recapitulatif h2 {
+    color: white;
+    font-size: 17px;
+    font-weight: 800;
+    margin: 0 0 25px;
+}
+
+.panier-recap-ligne {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 17px 0;
+}
+
+.panier-recap-ligne span {
+    color: var(--gris);
+    font-size: 12px;
+}
+
+.panier-recap-ligne strong {
+    color: white;
+    font-size: 13px;
+}
+
+.panier-recap-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #A000FF66;
+}
+
+.panier-recap-total span {
+    color: white;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.panier-recap-total strong {
+    color: var(--rose);
+    font-size: 23px;
+    font-weight: 800;
+    text-shadow: 0 0 10px #F000D955;
+}
+
+/* BOUTON COMMANDER */
+
+.panier-recapitulatif .bouton-commander {
+    width: 100%;
+    margin-top: 25px;
+    padding: 15px 10px;
+    border: none;
+    border-radius: 30px;
+    background: linear-gradient(90deg, #D900FF, #FF009D);
+    color: white;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 0 12px #E900D566;
+    transition: 0.2s ease;
+}
+
+.panier-recapitulatif .bouton-commander:hover {
+    box-shadow: 0 0 22px #F000D9;
+    transform: scale(1.02);
+}
+
+.lien-continuer-achats {
+    display: block;
+    margin-top: 18px;
+    color: var(--gris);
+    font-size: 12px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.lien-continuer-achats:hover {
+    color: white;
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media (max-width: 768px) {
+
+    .panier-page {
+        padding: 35px 15px 65px;
+    }
+
+    .panier-page .section-titre h1 {
+        font-size: 26px;
+    }
+
+    .panier-rempli {
+        grid-template-columns: 1fr;
+    }
+
+    .panier-recapitulatif {
+        position: static;
+    }
+
+    .panier-liste-container {
+        padding: 15px;
+    }
+
+    .article-panier {
+        grid-template-columns: 75px minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .article-panier img {
+        width: 75px;
+        height: 75px;
+    }
+
+    .article-panier-prix {
+        grid-column: 2;
+    }
+
+    .article-panier-supprimer {
+        grid-column: 2;
+        justify-self: start;
+    }
+}
+
+
+/* ==========================================
+   PETITS ÉCRANS
+========================================== */
+
+@media (max-width: 380px) {
+
+    .panier-vide {
+        padding: 30px 15px;
+    }
+
+    .panier-liste-titre h2 {
+        font-size: 14px;
+    }
+
+    .article-panier-informations h3 {
+        font-size: 13px;
+    }
+
+    .panier-recapitulatif {
+        padding: 18px;
+    }
+}
+
+
+/* ==========================================
+   AFFICHAGE INITIAL DU PANIER
+========================================== */
+
+#panier-rempli,
+#panier-vide {
+    display: none;
+}

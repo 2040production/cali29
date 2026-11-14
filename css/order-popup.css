@@ -1,0 +1,280 @@
+
+/* ==========================================
+   ORDER POPUP - CALI29
+========================================== */
+
+.order-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition: opacity .25s ease, visibility .25s ease;
+}
+
+.order-popup.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.order-popup-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, .72);
+    backdrop-filter: blur(5px);
+}
+
+.order-popup-content {
+    position: relative;
+    z-index: 1;
+
+    width: 100%;
+    max-width: 440px;
+    max-height: 90vh;
+    max-height: 90dvh;
+
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    padding: 32px;
+    border-radius: 18px;
+
+    background: #fff;
+    color: #242424;
+
+    box-shadow: 0 20px 70px rgba(0, 0, 0, .25);
+
+    transform: translateY(15px);
+    transition: transform .25s ease;
+}
+
+.order-popup.active .order-popup-content {
+    transform: translateY(0);
+}
+
+/* FERMETURE */
+
+.order-popup-close {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+
+    width: 35px;
+    height: 35px;
+
+    border: none;
+    background: transparent;
+
+    font-size: 28px;
+    color: #777;
+    cursor: pointer;
+}
+
+/* TITRE */
+
+.order-popup-label {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #999;
+}
+
+.order-popup-content h2 {
+    font-size: 25px;
+    margin: 12px 0 8px;
+}
+
+.order-popup-description {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #777;
+    margin-bottom: 22px;
+}
+
+/* RÉCAPITULATIF */
+
+.order-popup-summary {
+    padding: 18px;
+    border-radius: 12px;
+    background: #f6f6f4;
+}
+
+.order-popup-summary h3 {
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin: 0 0 14px;
+}
+
+.order-popup-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+
+    font-size: 12px;
+    line-height: 1.5;
+
+    margin-bottom: 10px;
+}
+
+.order-popup-item-name {
+    color: #555;
+}
+
+.order-popup-item-price {
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.order-popup-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-top: 1px solid #ddd;
+    padding-top: 14px;
+    margin-top: 12px;
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.order-popup-total strong {
+    font-size: 19px;
+}
+
+/* MOYENS DE CONTACT */
+
+.order-popup-choice {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #999;
+    margin: 24px 0 12px;
+}
+
+.order-popup-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.order-contact-btn {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    width: 100%;
+    min-height: 65px;
+
+    padding: 12px 15px;
+    border: none;
+    border-radius: 11px;
+
+    color: white;
+    text-align: left;
+    cursor: pointer;
+
+    transition: transform .2s, opacity .2s;
+}
+
+.order-contact-btn:hover {
+    transform: translateY(-2px);
+    opacity: .9;
+}
+
+.order-contact-btn:focus-visible,
+.order-popup-close:focus-visible {
+    outline: 3px solid #b58a50;
+    outline-offset: 3px;
+}
+
+.whatsapp {
+    background: #159D60;
+}
+
+.telegram {
+    background: #2586CB;
+}
+
+.signal {
+    background: #3A5998;
+}
+
+.contact-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+
+    border: 1px solid rgba(255,255,255,.4);
+    border-radius: 50%;
+
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.contact-info strong {
+    font-size: 14px;
+}
+
+.contact-info small {
+    font-size: 11px;
+    opacity: .85;
+}
+
+.contact-arrow {
+    font-size: 20px;
+}
+
+/* BAS DE POPUP */
+
+.order-popup-footer {
+    font-size: 10px;
+    line-height: 1.6;
+    color: #999;
+    text-align: center;
+    margin: 20px 0 0;
+}
+
+/* MOBILE */
+
+@media (max-width: 480px) {
+
+    .order-popup {
+        padding: 12px;
+        align-items: center;
+    }
+
+    .order-popup-content {
+        padding: 25px 20px;
+        border-radius: 16px;
+        max-height: 88vh;
+        max-height: 88dvh;
+    }
+
+    .order-popup-content h2 {
+        font-size: 22px;
+    }
+
+    .order-contact-btn {
+        min-height: 62px;
+    }
+
+}

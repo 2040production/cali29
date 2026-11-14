@@ -1,0 +1,283 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <!-- =================================
+         01 - CONFIGURATION DU DOCUMENT
+    ================================== -->
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="Découvrez la sélection d'accessoires CALI29.">
+
+    <title>Accessoires | CALI29</title>
+
+    <!-- POLICE MANROPE -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <!-- FEUILLES DE STYLE -->
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/categories.css">
+    <link rel="stylesheet" href="css/produits.css">
+    <link rel="stylesheet" href="css/panier.css">
+    <link rel="stylesheet" href="css/footer.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+</head>
+
+<body>
+
+    <!-- =================================
+         02 - HEADER
+    ================================== -->
+
+    <header id="header" class="header">
+
+        <button id="menu-burger"
+                class="menu-burger"
+                aria-label="Ouvrir le menu">
+            ☰
+        </button>
+
+        <a href="index.html" class="logo">
+            CALI29
+        </a>
+
+        <a href="panier.html" id="ouvrir-panier" class="bouton-panier">
+            Panier
+            <span id="nombre-articles">0</span>
+        </a>
+
+    </header>
+
+
+    <main>
+
+        <!-- =================================
+             03 - TITRE DE LA CATÉGORIE
+        ================================== -->
+
+        <section class="page-categorie"
+                 id="categorie-accessoires"
+                 data-categorie="accessoires">
+
+            <div class="section-titre">
+
+                <p class="section-surtitre">
+                    CALI29 COLLECTION
+                </p>
+
+                <h1 class="titre-categorie">
+                    ACCESSOIRES
+                </h1>
+
+            </div>
+
+
+            <!-- =================================
+                 04 - TRI DES PRODUITS
+            ================================== -->
+
+            <div class="tri-produits">
+
+                <label for="tri-produits">
+                    Trier par :
+                </label>
+
+                <select id="tri-produits">
+
+                    <option value="popularite">Popularité</option>
+                    <option value="prix-croissant">Prix croissant</option>
+                    <option value="prix-decroissant">Prix décroissant</option>
+                    <option value="nom">Nom</option>
+
+                </select>
+
+            </div>
+
+
+            <!-- =================================
+                 05 - CATALOGUE PRODUITS
+            ================================== -->
+
+            <div id="catalogue-produits"
+                 class="produits-container">
+
+
+                <!-- PRODUIT 1 -->
+
+                <article class="carte-produit">
+
+                    <button class="bouton-favoris" type="button">
+                        ♡
+                    </button>
+
+                    <a href="produit.html?id=accessoire-001"
+                       class="lien-produit">
+
+                        <img src="assets/images/a-remplacer-1.png"
+                             alt="Produit 1">
+
+                        <h3>Nom du produit 1</h3>
+
+                        <p>Description du produit.</p>
+
+                        <div class="prix-produit">
+                            12,00 €
+                        </div>
+
+                    </a>
+
+                    <button class="bouton-ajouter" type="button">
+                        AJOUTER AU PANIER +
+                    </button>
+
+                </article>
+
+
+                <!-- PRODUIT 2 -->
+
+                <article class="carte-produit">
+
+                    <button class="bouton-favoris" type="button">
+                        ♡
+                    </button>
+
+                    <a href="produit.html?id=accessoire-002"
+                       class="lien-produit">
+
+                        <img src="assets/images/a-remplacer-2.png"
+                             alt="Produit 2">
+
+                        <h3>Nom du produit 2</h3>
+
+                        <p>Description du produit.</p>
+
+                        <div class="prix-produit">
+                            15,00 €
+                        </div>
+
+                    </a>
+
+                    <button class="bouton-ajouter" type="button">
+                        AJOUTER AU PANIER +
+                    </button>
+
+                </article>
+
+
+                <!-- PRODUIT 3 -->
+
+                <article class="carte-produit">
+
+                    <button class="bouton-favoris" type="button">
+                        ♡
+                    </button>
+
+                    <a href="produit.html?id=accessoire-003"
+                       class="lien-produit">
+
+                        <img src="assets/images/a-remplacer-3.png"
+                             alt="Produit 3">
+
+                        <h3>Nom du produit 3</h3>
+
+                        <p>Description du produit.</p>
+
+                        <div class="prix-produit">
+                            18,00 €
+                        </div>
+
+                    </a>
+
+                    <button class="bouton-ajouter" type="button">
+                        AJOUTER AU PANIER +
+                    </button>
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =================================
+         06 - PANIER FIXE
+    ================================== -->
+
+    <div id="panier-fixe" class="panier-fixe">
+
+        <div class="panier-informations">
+
+            <span>MON PANIER</span>
+
+            <strong id="panier-total">
+                0,00 €
+            </strong>
+
+        </div>
+
+        <a href="panier.html"
+           id="commander"
+           class="bouton-commander">
+            Voir mon panier
+        </a>
+
+    </div>
+
+
+    <!-- =================================
+         07 - FOOTER
+    ================================== -->
+
+    <footer class="footer">
+
+        <div class="footer-logo">
+            CALI29
+        </div>
+
+        <nav class="footer-liens">
+
+            <a href="index.html">Accueil</a>
+            <a href="fleur.html">Fleurs</a>
+            <a href="resine.html">Résines</a>
+            <a href="accessoires.html">Accessoires</a>
+            <a href="#">Contact</a>
+
+        </nav>
+
+        <p class="footer-copyright">
+            © 2026 CALI29 - Tous droits réservés.
+        </p>
+
+    </footer>
+
+
+    <!-- =================================
+         08 - JAVASCRIPT
+    ================================== -->
+
+    <script src="js/config.js" defer></script>
+    <script src="js/produits.js" defer></script>
+    <script src="js/tarifs.js" defer></script>
+    <script src="js/catalogue.js" defer></script>
+    <script src="js/panier.js" defer></script>
+    <script src="js/commande.js" defer></script>
+
+</body>
+
+</html>

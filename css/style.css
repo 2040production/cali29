@@ -1,0 +1,88 @@
+
+
+/* ==========================================
+   00 - BASE GÉNÉRALE
+========================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: #050316;
+    color: #FFFFFF;
+    font-family: 'Manrope', sans-serif;
+    overflow-x: hidden;
+}
+
+button, a {
+    font-family: inherit;
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 2px solid #FFFFFF;
+    outline-offset: 3px;
+}
+
+
+/* ==========================================
+   IDENTITÉ GÉNÉRALE DES SECTIONS
+========================================== */
+
+:root {
+    --fond: #050316;
+    --fond-carte: #0D0925;
+    --rose: #F000D9;
+    --violet: #9200FF;
+    --bleu: #006CFF;
+    --blanc: #FFFFFF;
+    --gris: #B9B5CC;
+}
+
+main {
+    width: 100%;
+}
+
+section {
+    position: relative;
+}
+
+
+/* ==========================================
+   TITRES COMMUNS DES SECTIONS
+========================================== */
+
+.section-titre {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.section-surtitre {
+    color: var(--rose);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.section-titre h2 {
+    position: relative;
+    display: inline-block;
+    color: white;
+    font-size: clamp(25px, 5vw, 38px);
+    font-weight: 800;
+    margin: 0;
+    text-transform: uppercase;
+    text-shadow: 0 0 18px #7B00FF66;
+}
+
+
+
