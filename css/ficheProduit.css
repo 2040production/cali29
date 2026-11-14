@@ -275,6 +275,51 @@
     font-weight: 800;
 }
 
+
+/* ==========================================
+   CHOIX DU GRAMMAGE
+========================================== */
+
+.fiche-produit-grammage {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0 0 25px;
+}
+
+.fiche-produit-grammage label {
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.fiche-produit-grammage select {
+    width: 100%;
+    padding: 13px 15px;
+    border: 1px solid #C000FF;
+    border-radius: 10px;
+    background: #100A25;
+    color: white;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.fiche-produit-grammage select:focus {
+    border-color: var(--rose);
+    box-shadow: 0 0 10px #E900D555;
+}
+
+.fiche-produit-grammage select option {
+    background: #100A25;
+    color: white;
+}
+
+
+
 /* ==========================================
    RESPONSIVE
 ========================================== */
