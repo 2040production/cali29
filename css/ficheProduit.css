@@ -20,55 +20,64 @@
 }
 
 /* ==========================================
-   GALERIE PHOTOS
+   GALERIE VIDÉO
 ========================================== */
 
 .fiche-produit-galerie {
     min-width: 0;
+    width: 100%;
 }
 
 .fiche-produit-image-principale {
     width: 100%;
     height: 430px;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     overflow: hidden;
-    padding: 15px;
+    padding: 0;
+
     border: 1px solid #C000FF;
     border-radius: 20px;
-    background: linear-gradient(145deg, #15102E, #08051B 75%);
-    box-shadow: 0 0 12px #A000FF22, inset 0 0 15px #A000FF11;
+
+    background: #000;
+
+    box-shadow:
+        0 0 12px #A000FF22,
+        inset 0 0 15px #A000FF11;
 }
 
-.fiche-produit-image-principale img {
+/* VIDÉO PLEIN CADRE */
+
+#video-produit {
+    display: block;
+
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    filter: drop-shadow(0 0 12px #B000FF);
+
+    max-width: none;
+    aspect-ratio: auto;
+
+    object-fit: cover;
+
+    border: none;
+    border-radius: 19px;
+
+    background: #000;
 }
+
+/* Respecter l'attribut hidden */
+
+#video-produit[hidden] {
+    display: none !important;
+}
+
+/* MINIATURES */
 
 .fiche-produit-miniatures {
-    display: flex;
-    gap: 12px;
-    margin-top: 15px;
-}
-
-.fiche-produit-miniatures img {
-    width: 85px;
-    height: 85px;
-    object-fit: contain;
-    padding: 5px;
-    border: 1px solid #C000FF;
-    border-radius: 12px;
-    background: #100A25;
-    cursor: pointer;
-    transition: 0.3s ease;
-}
-
-.fiche-produit-miniatures img:hover {
-    border-color: var(--rose);
-    box-shadow: 0 0 15px #E900D555;
+    display: none;
 }
 
 /* ==========================================
@@ -78,10 +87,15 @@
 .fiche-produit-informations {
     min-width: 0;
     padding: 25px;
+
     border: 1px solid #C000FF;
     border-radius: 20px;
+
     background: linear-gradient(145deg, #15102E, #08051B 75%);
-    box-shadow: 0 0 12px #A000FF22, inset 0 0 15px #A000FF11;
+
+    box-shadow:
+        0 0 12px #A000FF22,
+        inset 0 0 15px #A000FF11;
 }
 
 .fiche-produit-surtitre {
@@ -158,10 +172,13 @@
 .fiche-produit-quantite input {
     width: 75px;
     padding: 10px;
+
     border: 1px solid #C000FF;
     border-radius: 10px;
+
     background: #100A25;
     color: white;
+
     font-family: inherit;
     font-size: 15px;
     text-align: center;
@@ -180,14 +197,19 @@
 .bouton-ajouter-panier {
     width: 100%;
     padding: 16px 12px;
+
     border: none;
     border-radius: 30px;
+
     background: linear-gradient(90deg, #D900FF, #FF009D);
+
     color: white;
     font-family: inherit;
     font-size: 13px;
     font-weight: 800;
+
     cursor: pointer;
+
     box-shadow: 0 0 12px #E900D566;
     transition: 0.2s ease;
 }
@@ -224,8 +246,10 @@
 
 .fiche-produit-texte {
     padding: 25px;
+
     border: 1px solid #C000FF;
     border-radius: 18px;
+
     background: linear-gradient(145deg, #15102E, #08051B 75%);
 }
 
@@ -248,6 +272,7 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 18px;
+
     max-width: 1100px;
     margin: 30px auto 0;
 }
@@ -275,7 +300,6 @@
     font-weight: 800;
 }
 
-
 /* ==========================================
    CHOIX DU GRAMMAGE
 ========================================== */
@@ -296,13 +320,17 @@
 .fiche-produit-grammage select {
     width: 100%;
     padding: 13px 15px;
+
     border: 1px solid #C000FF;
     border-radius: 10px;
+
     background: #100A25;
     color: white;
+
     font-family: inherit;
     font-size: 14px;
     font-weight: 600;
+
     cursor: pointer;
     outline: none;
     transition: 0.2s ease;
@@ -317,8 +345,6 @@
     background: #100A25;
     color: white;
 }
-
-
 
 /* ==========================================
    RESPONSIVE
@@ -336,7 +362,7 @@
     }
 
     .fiche-produit-image-principale {
-        height: 330px;
+        height: 400px;
     }
 
     .fiche-produit-informations {
@@ -364,7 +390,7 @@
 @media (max-width: 380px) {
 
     .fiche-produit-image-principale {
-        height: 260px;
+        height: 330px;
     }
 
     .fiche-produit-informations {
