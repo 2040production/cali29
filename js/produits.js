@@ -19,7 +19,7 @@ const produits = [
         { grammage: 50, prix: 350.00 }
     ],
     image: "assets/images/diamond.jpg",
-    video: "assets/videos/diamondVid.MP4",
+    video: "assets/videos/diamondVid.mp4",
     description: "Description de la fleur à compléter.",
     popularite: 10
 },
@@ -37,7 +37,7 @@ const produits = [
         { grammage: 50, prix: 360.00 }
     ],
     image: "assets/images/majesty.jpg",
-    video: "assets/videos/purpleVid.MP4",
+    video: "assets/videos/purpleVid.mp4",
     description: "Une variété au profil aromatique intense",
     popularite: 8
 },
@@ -55,7 +55,7 @@ const produits = [
         { grammage: 100, prix: 250.00 },
     ],
     image: "assets/images/resine-1.png",
-    video: "assets/videos/royalVid.MP4",
+    video: "assets/videos/royalVid.mp4",
     description: "Description de la résine à compléter.",
     popularite: 10
 },
