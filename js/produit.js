@@ -13,7 +13,8 @@ const produitSelectionne = produits.find(
 );
 
 // Récupérer les éléments HTML
-const imageProduit = document.getElementById("image-produit-principale");
+const videoProduit = document.getElementById("video-produit");
+
 const titreProduit = document.querySelector(".fiche-produit-titre");
 const prixProduit = document.querySelector(".fiche-produit-prix");
 const categorieProduit = document.querySelector(".fiche-produit-categorie");
@@ -24,7 +25,7 @@ const selectGrammage = document.getElementById("grammage-produit");
 
 // Formater les prix en euros
 const formaterPrixFicheProduit = prix => {
-    return prix.toFixed(2).replace(".", ",") + " €";
+    return Number(prix).toFixed(2).replace(".", ",") + " €";
 };
 
 // Afficher les informations du produit
@@ -32,18 +33,43 @@ if (produitSelectionne) {
 
     document.title = produitSelectionne.nom + " | CALI29";
 
-    imageProduit.src = produitSelectionne.image;
-    imageProduit.alt = produitSelectionne.nom;
+    // ==========================================
+    // AFFICHAGE DE LA VIDÉO
+    // ==========================================
+
+    if (videoProduit && produitSelectionne.video) {
+
+        videoProduit.src = produitSelectionne.video;
+        videoProduit.hidden = false;
+        videoProduit.load();
+
+    } else if (videoProduit) {
+
+        videoProduit.pause();
+        videoProduit.removeAttribute("src");
+        videoProduit.hidden = true;
+
+    }
+
+    // ==========================================
+    // INFORMATIONS TEXTUELLES
+    // ==========================================
 
     titreProduit.textContent = produitSelectionne.nom;
     categorieProduit.textContent = produitSelectionne.categorie;
     descriptionProduit.textContent = produitSelectionne.description;
 
-    // Vérifier si le produit possède des tarifs dégressifs
+    // ==========================================
+    // PRIX DÉGRESSIFS
+    // ==========================================
+
     if (produitSelectionne.tarifs && produitSelectionne.tarifs.length > 0) {
 
         // Afficher le sélecteur de grammage
         blocGrammage.hidden = false;
+
+        // Réinitialiser les options
+        selectGrammage.innerHTML = "";
 
         // Générer les options automatiquement
         produitSelectionne.tarifs.forEach(tarif => {
@@ -51,8 +77,10 @@ if (produitSelectionne) {
             const option = document.createElement("option");
 
             option.value = tarif.grammage;
+
             option.textContent =
-                tarif.grammage + " g — " + formaterPrixFicheProduit(tarif.prix);
+                tarif.grammage + " g — " +
+                formaterPrixFicheProduit(tarif.prix);
 
             selectGrammage.appendChild(option);
 
@@ -71,15 +99,17 @@ if (produitSelectionne) {
             );
 
             if (tarifSelectionne) {
+
                 prixProduit.textContent =
                     formaterPrixFicheProduit(tarifSelectionne.prix);
+
             }
 
         });
 
     } else {
 
-        // Produit sans tarif dégressif : prix unique
+        // Produit sans tarif dégressif
         blocGrammage.hidden = true;
 
         prixProduit.textContent =

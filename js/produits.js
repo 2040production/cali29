@@ -12,12 +12,14 @@ const produits = [
     categorie: "fleurs",
     prix: 15.00,
     tarifs: [
-        { grammage: 1, prix: 15.00 },
-        { grammage: 5, prix: 60.00 },
-        { grammage: 10, prix: 100.00 },
-        { grammage: 20, prix: 180.00 }
+        { grammage: 2, prix: 30.00 },
+        { grammage: 5, prix: 50.00 },
+        { grammage: 10, prix: 80.00 },
+        { grammage: 20, prix: 150.00 },
+        { grammage: 50, prix: 350.00 }
     ],
     image: "assets/images/diamond.jpg",
+    video: "assets/videos/purpleVid.MP4",
     description: "Description de la fleur à compléter.",
     popularite: 10
 },
@@ -26,80 +28,51 @@ const produits = [
     id: "fleur-002",
     nom: "Purple Majesty",
     categorie: "fleurs",
-    prix: 18.00,
+    prix: 15.00,
     tarifs: [
-        { grammage: 1, prix: 18.00 },
-        { grammage: 5, prix: 75.00 },
-        { grammage: 10, prix: 130.00 },
-        { grammage: 20, prix: 230.00 }
+        { grammage: 2, prix: 30.00 },
+        { grammage: 5, prix: 60.00 },
+        { grammage: 10, prix: 90.00 },
+        { grammage: 20, prix: 160.00 },
+        { grammage: 50, prix: 360.00 }
     ],
     image: "assets/images/majesty.jpg",
-    description: "Description de la fleur à compléter.",
+    video: "assets/videos/purpleVid.MP4",
+    description: "Une variété au profil aromatique intense",
     popularite: 8
 },
 
-{
-    id: "fleur-003",
-    nom: "Lemon Haze",
-    categorie: "fleurs",
-    prix: 12.00,
-    tarifs: [
-        { grammage: 1, prix: 12.00 },
-        { grammage: 5, prix: 50.00 },
-        { grammage: 10, prix: 85.00 },
-        { grammage: 20, prix: 150.00 }
-    ],
-    image: "assets/images/lemon.jpg",
-    description: "Description de la fleur à compléter.",
-    popularite: 6
-},
 
 {
     id: "resine-001",
-    nom: "Résine Premium",
+    nom: "Royal mousse",
     categorie: "resines",
-    prix: 15.00,
+    prix: 4.00,
     tarifs: [
-        { grammage: 1, prix: 15.00 },
-        { grammage: 5, prix: 65.00 },
-        { grammage: 10, prix: 110.00 },
-        { grammage: 20, prix: 190.00 }
+        { grammage: 10, prix: 40.00 },
+        { grammage: 20, prix: 80.00 },
+        { grammage: 50, prix: 150.00 },
+        { grammage: 100, prix: 250.00 },
     ],
     image: "assets/images/resine-1.png",
+    video: "assets/videos/royalVid.MP4",
     description: "Description de la résine à compléter.",
     popularite: 10
 },
 
 {
     id: "resine-002",
-    nom: "Royal Mousse",
+    nom: "Filtré 73u",
     categorie: "resines",
-    prix: 18.00,
+    prix: 10.00,
     tarifs: [
-        { grammage: 1, prix: 18.00 },
-        { grammage: 5, prix: 75.00 },
-        { grammage: 10, prix: 130.00 },
-        { grammage: 20, prix: 230.00 }
+        { grammage: 5, prix: 50.00 },
+        { grammage: 10, prix: 80.00 },
+        { grammage: 20, prix: 150.00 }
     ],
     image: "assets/images/resine-2.png",
     description: "Description de la résine à compléter.",
     popularite: 8
-},
-
-{
-    id: "resine-003",
-    nom: "Gorilla 73u",
-    categorie: "resines",
-    prix: 12.00,
-    tarifs: [
-        { grammage: 1, prix: 12.00 },
-        { grammage: 5, prix: 50.00 },
-        { grammage: 10, prix: 85.00 },
-        { grammage: 20, prix: 150.00 }
-    ],
-    image: "assets/images/resine-3.png",
-    description: "Description de la résine à compléter.",
-    popularite: 6
 },
 
 
