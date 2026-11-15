@@ -19,7 +19,7 @@ const produits = [
         { grammage: 50, prix: 350.00 }
     ],
     image: "assets/images/diamond.jpg",
-    video: "assets/videos/purpleVid.MP4",
+    video: "assets/videos/diamondVid.MP4",
     description: "Description de la fleur à compléter.",
     popularite: 10
 },
