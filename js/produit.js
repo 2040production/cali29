@@ -23,6 +23,15 @@ const descriptionProduit = document.querySelector(".fiche-produit-description p"
 const blocGrammage = document.getElementById("bloc-grammage");
 const selectGrammage = document.getElementById("grammage-produit");
 
+// Éléments tarifaires
+const infosTarifs = document.getElementById("infos-tarifs");
+const prixAuGramme = document.getElementById("prix-au-gramme");
+const prixTotalTarif = document.getElementById("prix-total-tarif");
+
+const blocEconomie = document.getElementById("bloc-economie");
+const economieRealisee = document.getElementById("economie-realisee");
+const pourcentageEconomie = document.getElementById("pourcentage-economie");
+
 // Formater les prix en euros
 const formaterPrixFicheProduit = prix => {
     return Number(prix).toFixed(2).replace(".", ",") + " €";
@@ -65,8 +74,9 @@ if (produitSelectionne) {
 
     if (produitSelectionne.tarifs && produitSelectionne.tarifs.length > 0) {
 
-        // Afficher le sélecteur de grammage
+        // Afficher le sélecteur et les informations tarifaires
         blocGrammage.hidden = false;
+        infosTarifs.hidden = false;
 
         // Réinitialiser les options
         selectGrammage.innerHTML = "";
@@ -86,31 +96,87 @@ if (produitSelectionne) {
 
         });
 
-        // Afficher le prix du premier grammage
-        prixProduit.textContent = formaterPrixFicheProduit(
-            produitSelectionne.tarifs[0].prix
-        );
+        // ==========================================
+        // ACTUALISER LES INFORMATIONS TARIFAIRES
+        // ==========================================
 
-        // Actualiser le prix lorsque le grammage change
-        selectGrammage.addEventListener("change", () => {
+        const actualiserTarifs = () => {
 
             const tarifSelectionne = produitSelectionne.tarifs.find(
                 tarif => tarif.grammage === Number(selectGrammage.value)
             );
 
-            if (tarifSelectionne) {
+            if (!tarifSelectionne) return;
 
-                prixProduit.textContent =
-                    formaterPrixFicheProduit(tarifSelectionne.prix);
+            const grammage = Number(tarifSelectionne.grammage);
+            const prixTotal = Number(tarifSelectionne.prix);
+
+            // Éviter les divisions invalides
+            if (grammage <= 0 || prixTotal < 0) return;
+
+            // Prix au gramme
+            const prixGramme = prixTotal / grammage;
+
+            // Prix de référence sans dégressivité
+            const prixReference = Number(produitSelectionne.prix) * grammage;
+
+            // Économie réalisée
+            const economie = prixReference - prixTotal;
+
+            // Pourcentage de réduction
+            const pourcentage = prixReference > 0
+                ? (economie / prixReference) * 100
+                : 0;
+
+            // ==========================================
+            // AFFICHAGE DES PRIX
+            // ==========================================
+
+            prixProduit.textContent =
+                formaterPrixFicheProduit(prixTotal);
+
+            prixAuGramme.textContent =
+                formaterPrixFicheProduit(prixGramme) + "/g";
+
+            prixTotalTarif.textContent =
+                formaterPrixFicheProduit(prixTotal);
+
+            // ==========================================
+            // AFFICHAGE DE L'ÉCONOMIE
+            // ==========================================
+
+            if (economie > 0.005 && pourcentage > 0) {
+
+                blocEconomie.hidden = false;
+
+                economieRealisee.textContent =
+                    formaterPrixFicheProduit(economie);
+
+                pourcentageEconomie.textContent =
+                    "-" + pourcentage.toFixed(1).replace(".", ",") + " %";
+
+            } else {
+
+                blocEconomie.hidden = true;
 
             }
 
-        });
+        };
+
+        // Afficher les tarifs initiaux
+        actualiserTarifs();
+
+        // Actualiser lors du changement de grammage
+        selectGrammage.addEventListener("change", actualiserTarifs);
 
     } else {
 
-        // Produit sans tarif dégressif
+        // ==========================================
+        // PRODUIT SANS TARIF DÉGRESSIF
+        // ==========================================
+
         blocGrammage.hidden = true;
+        infosTarifs.hidden = true;
 
         prixProduit.textContent =
             formaterPrixFicheProduit(produitSelectionne.prix);
@@ -118,6 +184,10 @@ if (produitSelectionne) {
     }
 
 } else {
+
+    // ==========================================
+    // PRODUIT INTROUVABLE
+    // ==========================================
 
     document.querySelector(".fiche-produit-container").innerHTML =
         "<p>Produit introuvable. Retournez au catalogue.</p>";
