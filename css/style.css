@@ -88,5 +88,14 @@ section {
     font-size: 16px;
 }
 
+/* ==========================================
+   BOUTON VOIR MON PANIER
+========================================== */
 
+.bouton-commander {
+    text-decoration: none;
+}
 
+.bouton-commander:hover {
+    text-decoration: none;
+}

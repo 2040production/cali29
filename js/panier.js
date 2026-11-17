@@ -37,8 +37,6 @@ function synchroniserPrixPanier() {
 
         if (!produit) return article;
 
-        // Ancien article sans grammage :
-        // on conserve le prix de base
         if (article.grammage == null) {
 
             return {
@@ -50,7 +48,6 @@ function synchroniserPrixPanier() {
 
         }
 
-        // Retrouver le tarif correspondant au grammage
         const tarif = produit.tarifs?.find(
             t => t.grammage === Number(article.grammage)
         );
@@ -93,7 +90,6 @@ function ajouterAuPanier(
         parseInt(quantite, 10) || 1
     );
 
-    // Déterminer le prix et le grammage
     let prix = produit.prix;
 
     if (grammage !== null && produit.tarifs) {
@@ -124,7 +120,6 @@ function ajouterAuPanier(
         quantite: quantiteValide
     };
 
-    // Même produit ET même grammage = même ligne
     const articleExistant = panier.find(
         article =>
             obtenirCleArticle(article) === obtenirCleArticle(nouvelArticle)
@@ -241,15 +236,40 @@ function afficherArticlesPanier() {
         const ligne = document.createElement("article");
         ligne.className = "article-panier";
 
+        // URL de la fiche produit correspondante
+        const urlProduit = `produit.html?id=${encodeURIComponent(article.id)}`;
+
+        // ==========================================
+        // IMAGE CLIQUABLE
+        // ==========================================
+
+        const lienImage = document.createElement("a");
+        lienImage.href = urlProduit;
+        lienImage.className = "article-panier-lien-image";
+        lienImage.setAttribute("aria-label", `Voir ${article.nom}`);
+
         const image = document.createElement("img");
         image.src = article.image;
         image.alt = article.nom;
 
+        lienImage.appendChild(image);
+
+        // ==========================================
+        // INFORMATIONS PRODUIT
+        // ==========================================
+
         const informations = document.createElement("div");
         informations.className = "article-panier-informations";
 
+        // Nom cliquable
         const titre = document.createElement("h3");
-        titre.textContent = article.nom;
+
+        const lienTitre = document.createElement("a");
+        lienTitre.href = urlProduit;
+        lienTitre.textContent = article.nom;
+        lienTitre.className = "article-panier-lien-titre";
+
+        titre.appendChild(lienTitre);
 
         const prixUnitaire = document.createElement("p");
 
@@ -261,6 +281,7 @@ function afficherArticlesPanier() {
 
             const grammage = document.createElement("p");
             grammage.textContent = article.grammage + " g";
+
             informations.append(titre, grammage, prixUnitaire);
 
         } else {
@@ -268,6 +289,10 @@ function afficherArticlesPanier() {
             informations.append(titre, prixUnitaire);
 
         }
+
+        // ==========================================
+        // QUANTITÉ
+        // ==========================================
 
         const quantite = document.createElement("div");
         quantite.className = "article-panier-quantite";
@@ -295,6 +320,10 @@ function afficherArticlesPanier() {
 
         informations.append(quantite);
 
+        // ==========================================
+        // ACTIONS ET PRIX TOTAL
+        // ==========================================
+
         const actions = document.createElement("div");
 
         const prixTotal = document.createElement("div");
@@ -314,7 +343,11 @@ function afficherArticlesPanier() {
 
         actions.append(prixTotal, supprimer);
 
-        ligne.append(image, informations, actions);
+        // ==========================================
+        // ASSEMBLAGE DE LA LIGNE
+        // ==========================================
+
+        ligne.append(lienImage, informations, actions);
 
         liste.appendChild(ligne);
 
