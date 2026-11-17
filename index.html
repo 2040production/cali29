@@ -40,6 +40,37 @@
 <body>
 
     <!-- =================================
+     01 - ÉCRAN D'ACCÈS CALI29
+================================== -->
+
+<div id="ecran-acces" class="ecran-acces">
+
+    <div class="acces-contenu">
+
+        <div class="acces-logo">CALI29</div>
+
+        <p>ACCÈS RÉSERVÉ</p>
+
+        <h1>Bienvenue</h1>
+
+        <input
+            type="password"
+            id="code-acces"
+            placeholder="Votre code d'accès"
+            autocomplete="off"
+        >
+
+        <button id="valider-acces">
+            ENTRER →
+        </button>
+
+        <p id="message-erreur"></p>
+
+    </div>
+
+</div>
+
+    <!-- =================================
          02 - HEADER / NAVIGATION
     ================================== -->
 
@@ -92,7 +123,7 @@
                     Bienvenue dans l'univers CALI29.
                 </p>
 
-                <a href="#produits" class="bouton-principal">
+                <a href="#categories" class="bouton-principal">
                     DÉCOUVRIR NOS OFFRES →
                 </a>
 
@@ -120,22 +151,22 @@
 
             <div class="avantages-container">
 
-                <article class="avantage">
-                    <span class="avantage-icone">✦</span>
-                    <p>Informations produits</p>
-                </article>
+    <article class="avantage">
+        <span class="avantage-icone">✦</span>
+        <p>Paiement en main propre</p>
+    </article>
 
-                <article class="avantage">
-                    <span class="avantage-icone">◇</span>
-                    <p>Informations de paiement</p>
-                </article>
+    <article class="avantage">
+        <span class="avantage-icone">◇</span>
+        <p>Offres dégressives</p>
+    </article>
 
-                <article class="avantage">
-                    <span class="avantage-icone">✧</span>
-                    <p>Service client</p>
-                </article>
+    <article class="avantage">
+        <span class="avantage-icone">✧</span>
+        <p>Commande simplifiée</p>
+    </article>
 
-            </div>
+</div>
 
         </section>
 
@@ -170,7 +201,7 @@
 
                 <a href="accessoires.html" class="categorie">
                     <img src="assets/images/accessoires.png" alt="Accessoires">
-                    <h3>Accessoires</h3>
+                    <h3>Produits</h3>
                 </a>
 
             </div>
@@ -180,7 +211,7 @@
 
         <!-- =================================
              07 - CATALOGUE PRODUITS
-        ================================== -->
+        ================================== 
 
         <section id="produits" class="produits">
 
@@ -194,16 +225,16 @@
 
             </div>
 
-            <!-- CONTENU GÉNÉRÉ PAR JAVASCRIPT -->
+             CONTENU GÉNÉRÉ PAR JAVASCRIPT -->
 
-            <div id="catalogue-produits"
-                 class="produits-container">
+             <!--<div id="catalogue-produits"
+                 class="produits-container"> -->
 
                 <!-- Les cartes produits apparaîtront ici -->
 
-            </div>
+           <!-- </div>
 
-        </section>
+        </section> -->
 
 
         <!-- =================================
@@ -256,7 +287,7 @@
             <a href="index.html">Accueil</a>
             <a href="fleur.html">Fleurs</a>
             <a href="resine.html">Résines</a>
-            <a href="accessoires.html">Accessoires</a>
+            <a href="accessoires.html">Produits</a>
             <a href="#">Contact</a>
             <a href="#">Mentions légales</a>
             <a href="#">Politique de confidentialité</a>
@@ -287,7 +318,7 @@
         </div>
 
         <a href="panier.html"
-           id="commander"
+           id="#"
            class="bouton-commander">
             VOIR MON PANIER →
         </a>
@@ -298,12 +329,14 @@
     <!-- =================================
          11 - FICHIERS JAVASCRIPT
     ================================== -->
-
+    <script src="js/acces.js" defer></script>
     <script src="js/produits.js" defer></script>
     <script src="js/catalogue.js" defer></script>
     <script src="js/panier.js" defer></script>
     <script src="js/commande.js" defer></script>
 
 </body>
+
+    
 
 </html>

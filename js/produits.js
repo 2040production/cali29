@@ -18,9 +18,9 @@ const produits = [
         { grammage: 20, prix: 150.00 },
         { grammage: 50, prix: 350.00 }
     ],
-    image: "assets/images/diamond.jpg",
+    image: "assets/images/diamond.png",
     video: "assets/videos/diamondVid.mp4",
-    description: "Description de la fleur à compléter.",
+    description: "Découvrez la Diamond OG, une variété au caractère affirmé et à l'identité remarquable. Elle séduit par ses magnifiques nuances, ses arômes intenses et son profil aromatique complexe, où se mêlent des notes terreuses, boisées et légèrement citronnées.",
     popularite: 10
 },
 
@@ -36,9 +36,9 @@ const produits = [
         { grammage: 20, prix: 160.00 },
         { grammage: 50, prix: 360.00 }
     ],
-    image: "assets/images/majesty.jpg",
+    image: "assets/images/purple.png",
     video: "assets/videos/purpleVid.mp4",
-    description: "Une variété au profil aromatique intense",
+    description: "La Purple Majesty se distingue par son allure élégante et ses magnifiques nuances violacées. Son profil aromatique dévoile des notes douces et fruitées, accompagnées d'une légère touche florale.",
     popularite: 8
 },
 
@@ -54,7 +54,7 @@ const produits = [
         { grammage: 50, prix: 150.00 },
         { grammage: 100, prix: 250.00 },
     ],
-    image: "assets/images/resine-1.png",
+    image: "assets/images/mousse.png",
     video: "assets/videos/royalVid.mp4",
     description: "Description de la résine à compléter.",
     popularite: 10
@@ -62,15 +62,17 @@ const produits = [
 
 {
     id: "resine-002",
-    nom: "Filtré 73u",
+    nom: "RMF 73u",
     categorie: "resines",
     prix: 10.00,
     tarifs: [
-        { grammage: 5, prix: 50.00 },
-        { grammage: 10, prix: 80.00 },
-        { grammage: 20, prix: 150.00 }
+        { grammage: 5, prix: 40.00 },
+        { grammage: 10, prix: 70.00 },
+        { grammage: 20, prix: 130.00 },
+        { grammage: 50, prix: 230.00 }
     ],
-    image: "assets/images/resine-2.png",
+    image: "assets/images/filtre.png",
+    video: "assets/videos/rmfVid.mov",
     description: "Description de la résine à compléter.",
     popularite: 8
 },
@@ -78,32 +80,20 @@ const produits = [
 
     {
         id: "accessoire-001",
-        nom: "Accessoire Premium",
+        nom: "Zip",
         categorie: "accessoires",
-        prix: 15.00,
-        image: "assets/images/a-remplacer-1.png",
+        prix: 35.00,
+        tarifs: [
+        { grammage: 0.5, prix: 30.00 },
+        { grammage: 1, prix: 50.00 },
+        { grammage: 5, prix: 200.00 },
+        { grammage: 10, prix: 350.00 },
+        { grammage: 20, prix: 630.00 }
+    ],
+        image: "assets/images/zip.png",
+        video: "assets/videos/zipVid.mp4",
         description: "Description de l'accessoire à compléter.",
         popularite: 10
     },
-
-    {
-        id: "accessoire-002",
-        nom: "Accessoire Selection",
-        categorie: "accessoires",
-        prix: 18.00,
-        image: "assets/images/a-remplacer-2.png",
-        description: "Description de l'accessoire à compléter.",
-        popularite: 8
-    },
-
-    {
-        id: "accessoire-003",
-        nom: "Accessoire Classic",
-        categorie: "accessoires",
-        prix: 12.00,
-        image: "assets/images/a-remplacer-3.png",
-        description: "Description de l'accessoire à compléter.",
-        popularite: 6
-    }
 
 ];
