@@ -309,3 +309,76 @@
     font-size: 15px;
     line-height: 1.7;
 }
+
+.ecran-acces {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: #050316;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.acces-contenu {
+    width: 90%;
+    max-width: 360px;
+    text-align: center;
+}
+
+.acces-logo {
+    font-size: 38px;
+    font-weight: 800;
+    color: #A000FF;
+    margin-bottom: 35px;
+}
+
+.acces-contenu h1 {
+    color: white;
+    font-size: 28px;
+    margin: 15px 0 25px;
+}
+
+.acces-contenu > p {
+    color: #A000FF;
+    font-size: 12px;
+    letter-spacing: 3px;
+}
+
+#code-acces {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #A000FF;
+    border-radius: 8px;
+    background: #100C25;
+    color: white;
+    text-align: center;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+#valider-acces {
+    width: 100%;
+    margin-top: 15px;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #A000FF;
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+#message-erreur {
+    color: #ff5555;
+    font-size: 13px;
+    letter-spacing: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+#categories {
+    scroll-margin-top: 90px;
+}
