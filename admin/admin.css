@@ -298,6 +298,42 @@ tr:hover td {
 
 
 /* ==========================================
+   ACTIONS DU TABLEAU CRUD
+========================================== */
+
+.btn-modifier,
+.btn-supprimer {
+    border-radius: 7px;
+    padding: 8px 11px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: 0.2s ease;
+    margin-right: 6px;
+}
+
+.btn-modifier {
+    background: #C000FF18;
+    border: 1px solid var(--violet);
+    color: white;
+}
+
+.btn-modifier:hover {
+    background: var(--violet);
+}
+
+.btn-supprimer {
+    background: #FF456715;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+}
+
+.btn-supprimer:hover {
+    background: var(--danger);
+    color: white;
+}
+
+
+/* ==========================================
    FORMULAIRE PRODUIT
 ========================================== */
 
@@ -327,6 +363,10 @@ tr:hover td {
     border: none;
     color: white;
     font-size: 22px;
+}
+
+#bouton-fermer:hover {
+    color: var(--rose);
 }
 
 .form-grid {
@@ -390,13 +430,17 @@ tr:hover td {
     font-size: 14px;
     font-weight: 700;
     margin-bottom: 20px;
+    cursor: pointer;
 }
 
 .label-checkbox input {
     accent-color: var(--violet);
     width: 17px;
     height: 17px;
+    cursor: pointer;
 }
+
+/* Conteneur des lignes */
 
 #lignes-tarifs {
     display: flex;
@@ -405,12 +449,65 @@ tr:hover td {
     margin-bottom: 15px;
 }
 
+/* Une ligne de tarif */
+
+.ligne-tarif {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: var(--fond-secondaire);
+    border: 1px solid var(--bordure);
+    border-radius: 9px;
+}
+
+/* Champs grammage et prix */
+
+.tarif-grammage,
+.tarif-prix {
+    width: 100%;
+    min-width: 0;
+    padding: 12px;
+    background: var(--fond);
+    border: 1px solid var(--bordure);
+    border-radius: 7px;
+    color: white;
+    outline: none;
+}
+
+.tarif-grammage:focus,
+.tarif-prix:focus {
+    border-color: var(--violet);
+}
+
+/* Bouton supprimer un tarif */
+
+.supprimer-tarif {
+    background: #FF456715;
+    border: 1px solid var(--danger);
+    color: var(--danger);
+    border-radius: 7px;
+    padding: 11px 13px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.supprimer-tarif:hover {
+    background: var(--danger);
+    color: white;
+}
+
+/* Bouton ajouter un grammage */
+
 #ajouter-tarif {
     background: transparent;
     border: 1px solid var(--violet);
     color: white;
     border-radius: 8px;
     padding: 10px 15px;
+    transition: 0.2s ease;
 }
 
 #ajouter-tarif:hover {
@@ -437,11 +534,17 @@ tr:hover td {
     border: 1px solid var(--bordure);
     border-radius: 9px;
     padding: 13px 20px;
+    transition: 0.2s ease;
+}
+
+.formulaire-actions button:first-child:hover {
+    border-color: var(--rose);
+    color: var(--rose);
 }
 
 
 /* ==========================================
-   RESPONSIVE
+   RESPONSIVE TABLETTE
 ========================================== */
 
 @media (max-width: 900px) {
@@ -456,6 +559,11 @@ tr:hover td {
     }
 
 }
+
+
+/* ==========================================
+   RESPONSIVE MOBILE
+========================================== */
 
 @media (max-width: 650px) {
 
@@ -489,8 +597,16 @@ tr:hover td {
         flex-direction: column;
     }
 
+    .admin-header h2 {
+        font-size: 22px;
+    }
+
     .admin-statistiques {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .admin-produits {
+        padding: 15px;
     }
 
     .form-grid {
@@ -502,6 +618,27 @@ tr:hover td {
     }
 
     #recherche-produit {
+        width: 100%;
+    }
+
+    .formulaire-produit {
+        padding: 18px;
+    }
+
+    .ligne-tarif {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .supprimer-tarif {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .formulaire-actions {
+        flex-direction: column-reverse;
+    }
+
+    .formulaire-actions button {
         width: 100%;
     }
 

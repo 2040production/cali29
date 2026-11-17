@@ -1,66 +1,146 @@
 
 /* ==========================================
    ADMIN CALI29
+   GESTION DU CATALOGUE - CRUD
 ========================================== */
 
 
 /* ==========================================
-   RECUPERATION DES DONNEES
+   1. RÉCUPÉRATION DES DONNÉES
 ========================================== */
 
-// Récupérer les produits enregistrés dans le navigateur
-let catalogue = JSON.parse(
-    localStorage.getItem("catalogueCali29")
-) || [...produits];
+const CLE_CATALOGUE = "catalogueCali29";
+
+function chargerCatalogue() {
+
+    try {
+
+        const donnees = localStorage.getItem(CLE_CATALOGUE);
+
+        if (donnees !== null) {
+
+            const catalogueSauvegarde = JSON.parse(donnees);
+
+            if (Array.isArray(catalogueSauvegarde)) {
+                return catalogueSauvegarde;
+            }
+
+        }
+
+    } catch (erreur) {
+
+        console.error("Erreur de lecture :", erreur);
+
+    }
+
+    return [...produits];
+
+}
+
+let catalogue = chargerCatalogue();
 
 
 /* ==========================================
-   SAUVEGARDE
+   2. SAUVEGARDE
 ========================================== */
 
 function sauvegarderCatalogue() {
 
-    localStorage.setItem(
-        "catalogueCali29",
-        JSON.stringify(catalogue)
-    );
+    try {
+
+        localStorage.setItem(
+            CLE_CATALOGUE,
+            JSON.stringify(catalogue)
+        );
+
+        return true;
+
+    } catch (erreur) {
+
+        console.error("Erreur de sauvegarde :", erreur);
+
+        alert("Impossible de sauvegarder le catalogue.");
+
+        return false;
+
+    }
 
 }
 
 
 /* ==========================================
-   AFFICHER LES PRODUITS
+   3. AFFICHAGE DES PRODUITS
 ========================================== */
 
 function afficherProduits(listeProduits = catalogue) {
 
     const liste = document.getElementById("liste-produits");
 
+    if (!liste) return;
+
     liste.innerHTML = "";
+
+    if (listeProduits.length === 0) {
+
+        const ligne = document.createElement("tr");
+        const cellule = document.createElement("td");
+
+        cellule.colSpan = 5;
+        cellule.textContent = "Aucun produit trouvé.";
+
+        ligne.appendChild(cellule);
+        liste.appendChild(ligne);
+
+        return;
+
+    }
 
     listeProduits.forEach(produit => {
 
         const ligne = document.createElement("tr");
 
+        // Nom
         const celluleNom = document.createElement("td");
         celluleNom.textContent = produit.nom;
 
+        // Catégorie
         const celluleCategorie = document.createElement("td");
         celluleCategorie.textContent = produit.categorie;
 
+        // Prix
         const cellulePrix = document.createElement("td");
-        cellulePrix.textContent = produit.prix.toFixed(2) + " €";
+        cellulePrix.textContent =
+            Number(produit.prix).toFixed(2) + " €";
 
+        // Tarifs
         const celluleTarifs = document.createElement("td");
 
         celluleTarifs.textContent =
-            produit.tarifs && produit.tarifs.length > 0
+            produit.tarifs && produit.tarifs.length
                 ? produit.tarifs.length + " tarifs"
                 : "Prix unique";
 
+        // Actions
         const celluleActions = document.createElement("td");
 
-        celluleActions.textContent = "Actions";
+        const boutonModifier = document.createElement("button");
+
+        boutonModifier.type = "button";
+        boutonModifier.textContent = "Modifier";
+        boutonModifier.className = "btn-modifier";
+        boutonModifier.dataset.id = produit.id;
+
+        const boutonSupprimer = document.createElement("button");
+
+        boutonSupprimer.type = "button";
+        boutonSupprimer.textContent = "Supprimer";
+        boutonSupprimer.className = "btn-supprimer";
+        boutonSupprimer.dataset.id = produit.id;
+
+        celluleActions.append(
+            boutonModifier,
+            boutonSupprimer
+        );
 
         ligne.append(
             celluleNom,
@@ -78,26 +158,34 @@ function afficherProduits(listeProduits = catalogue) {
 
 
 /* ==========================================
-   STATISTIQUES
+   4. STATISTIQUES
 ========================================== */
 
 function actualiserStatistiques() {
 
-    const nombreProduits = document.getElementById("nombre-produits");
-    const nombreCategories = document.getElementById("nombre-categories");
+    const nombreProduits =
+        document.getElementById("nombre-produits");
+
+    const nombreCategories =
+        document.getElementById("nombre-categories");
 
     const categories = new Set(
         catalogue.map(produit => produit.categorie)
     );
 
-    nombreProduits.textContent = catalogue.length;
-    nombreCategories.textContent = categories.size;
+    if (nombreProduits) {
+        nombreProduits.textContent = catalogue.length;
+    }
+
+    if (nombreCategories) {
+        nombreCategories.textContent = categories.size;
+    }
 
 }
 
 
 /* ==========================================
-   RECHERCHE
+   5. RECHERCHE
 ========================================== */
 
 function rechercherProduit() {
@@ -123,21 +211,29 @@ function rechercherProduit() {
 
 
 /* ==========================================
-   GESTION DU FORMULAIRE
+   6. GESTION DU FORMULAIRE
 ========================================== */
 
 function ouvrirFormulaire() {
 
-    const formulaire = document.getElementById("formulaire-produit");
+    const formulaire =
+        document.getElementById("formulaire-produit");
 
-    formulaire.hidden = false;
+    const form = document.getElementById("form-produit");
+
+    form.reset();
+
+    document.getElementById("produit-id").value = "";
 
     document.getElementById("titre-formulaire").textContent =
         "Ajouter un produit";
 
-    document.getElementById("form-produit").reset();
+    // Réinitialiser les tarifs
+    document.getElementById("lignes-tarifs").innerHTML = "";
 
-    document.getElementById("produit-id").value = "";
+    document.getElementById("liste-tarifs").hidden = true;
+
+    formulaire.hidden = false;
 
     formulaire.scrollIntoView({
         behavior: "smooth",
@@ -149,58 +245,286 @@ function ouvrirFormulaire() {
 
 function fermerFormulaire() {
 
-    const formulaire = document.getElementById("formulaire-produit");
+    const formulaire =
+        document.getElementById("formulaire-produit");
 
     formulaire.hidden = true;
 
     document.getElementById("form-produit").reset();
 
+    document.getElementById("produit-id").value = "";
+
+    document.getElementById("lignes-tarifs").innerHTML = "";
+
+    document.getElementById("liste-tarifs").hidden = true;
+
 }
 
 
 /* ==========================================
-   AJOUTER UN PRODUIT
+   7. GESTION DES TARIFS DÉGRESSIFS
+========================================== */
+
+// Ajouter une ligne de tarif
+
+function ajouterLigneTarif(grammage = "", prix = "") {
+
+    const conteneur =
+        document.getElementById("lignes-tarifs");
+
+    const ligne = document.createElement("div");
+
+    ligne.className = "ligne-tarif";
+
+    const champGrammage = document.createElement("input");
+
+    champGrammage.type = "number";
+    champGrammage.className = "tarif-grammage";
+    champGrammage.placeholder = "Grammage";
+    champGrammage.min = "0.01";
+    champGrammage.step = "any";
+    champGrammage.value = grammage;
+    champGrammage.required = true;
+
+    const champPrix = document.createElement("input");
+
+    champPrix.type = "number";
+    champPrix.className = "tarif-prix";
+    champPrix.placeholder = "Prix (€)";
+    champPrix.min = "0.01";
+    champPrix.step = "0.01";
+    champPrix.value = prix;
+    champPrix.required = true;
+
+    const boutonSupprimer = document.createElement("button");
+
+    boutonSupprimer.type = "button";
+    boutonSupprimer.textContent = "Supprimer";
+    boutonSupprimer.className = "supprimer-tarif";
+
+    boutonSupprimer.addEventListener("click", () => {
+
+        ligne.remove();
+
+    });
+
+    ligne.append(
+        champGrammage,
+        champPrix,
+        boutonSupprimer
+    );
+
+    conteneur.appendChild(ligne);
+
+}
+
+
+// Afficher ou masquer les tarifs
+
+function gererAffichageTarifs() {
+
+    const checkbox =
+        document.getElementById("activer-tarifs");
+
+    const liste =
+        document.getElementById("liste-tarifs");
+
+    liste.hidden = !checkbox.checked;
+
+}
+
+
+// Récupérer les tarifs du formulaire
+
+function recupererTarifs() {
+
+    const checkbox =
+        document.getElementById("activer-tarifs");
+
+    if (!checkbox.checked) {
+        return [];
+    }
+
+    const lignes = document.querySelectorAll(".ligne-tarif");
+
+    if (lignes.length === 0) {
+
+        alert("Ajoute au moins un tarif dégressif.");
+
+        return null;
+
+    }
+
+    const tarifs = [];
+
+    for (const ligne of lignes) {
+
+        const grammage = Number(
+            ligne.querySelector(".tarif-grammage").value
+        );
+
+        const prix = Number(
+            ligne.querySelector(".tarif-prix").value
+        );
+
+        if (
+            !Number.isFinite(grammage) ||
+            grammage <= 0 ||
+            !Number.isFinite(prix) ||
+            prix <= 0
+        ) {
+
+            alert("Vérifie les grammages et les prix.");
+
+            return null;
+
+        }
+
+        tarifs.push({
+            grammage: grammage,
+            prix: prix
+        });
+
+    }
+
+    tarifs.sort((a, b) => a.grammage - b.grammage);
+
+    return tarifs;
+
+}
+
+
+/* ==========================================
+   8. RÉCUPÉRATION DU FORMULAIRE
+========================================== */
+
+function recupererDonneesFormulaire() {
+
+    return {
+
+        nom: document
+            .getElementById("nom-produit")
+            .value
+            .trim(),
+
+        categorie: document
+            .getElementById("categorie-produit")
+            .value,
+
+        prix: Number(
+            document.getElementById("prix-produit").value
+        ),
+
+        image: document
+            .getElementById("image-produit")
+            .value
+            .trim(),
+
+        description: document
+            .getElementById("description-produit")
+            .value
+            .trim(),
+
+        tarifs: recupererTarifs()
+
+    };
+
+}
+
+
+/* ==========================================
+   9. VALIDATION
+========================================== */
+
+function produitValide(produit) {
+
+    if (!produit.nom) {
+
+        alert("Le nom du produit est obligatoire.");
+
+        return false;
+
+    }
+
+    if (!produit.categorie) {
+
+        alert("Choisis une catégorie.");
+
+        return false;
+
+    }
+
+    if (!Number.isFinite(produit.prix) || produit.prix <= 0) {
+
+        alert("Le prix doit être supérieur à zéro.");
+
+        return false;
+
+    }
+
+    if (produit.tarifs === null) {
+        return false;
+    }
+
+    return true;
+
+}
+
+
+/* ==========================================
+   10. CRÉER UN PRODUIT
 ========================================== */
 
 function ajouterProduit() {
 
-    const nom = document.getElementById("nom-produit").value.trim();
-    const categorie = document.getElementById("categorie-produit").value;
-    const prix = Number(document.getElementById("prix-produit").value);
-    const image = document.getElementById("image-produit").value.trim();
-    const description = document.getElementById("description-produit").value.trim();
+    const donnees = recupererDonneesFormulaire();
 
-    // Vérification des informations
-    if (!nom || !Number.isFinite(prix) || prix <= 0) {
-        alert("Vérifie le nom et le prix du produit.");
-        return;
-    }
+    if (!produitValide(donnees)) return;
 
-    // Création de l'identifiant
-    const id = categorie.slice(0, -1) + "-" + Date.now();
-
-    // Création du nouvel objet produit
-    const nouveauProduit = {
-        id: id,
-        nom: nom,
-        categorie: categorie,
-        prix: prix,
-        image: image,
-        description: description,
-        popularite: 0
+    const prefixes = {
+        fleurs: "fleur",
+        resines: "resine",
+        accessoires: "accessoire"
     };
 
-    // Ajouter le produit au catalogue
+    const prefixe = prefixes[donnees.categorie] || "produit";
+
+    const id = prefixe + "-" + Date.now();
+
+    const nouveauProduit = {
+
+        id: id,
+
+        nom: donnees.nom,
+
+        categorie: donnees.categorie,
+
+        prix: donnees.prix,
+
+        tarifs: donnees.tarifs,
+
+        image: donnees.image,
+
+        video: "",
+
+        description: donnees.description,
+
+        popularite: 0
+
+    };
+
     catalogue.push(nouveauProduit);
 
-    // Sauvegarder
-    sauvegarderCatalogue();
+    if (!sauvegarderCatalogue()) {
 
-    // Actualiser l'affichage
-    afficherProduits();
-    actualiserStatistiques();
+        catalogue.pop();
 
-    // Fermer le formulaire
+        return;
+
+    }
+
+    actualiserAffichage();
+
     fermerFormulaire();
 
     alert("Produit ajouté au catalogue.");
@@ -208,16 +532,209 @@ function ajouterProduit() {
 }
 
 
+/* ==========================================
+   11. MODIFIER UN PRODUIT
+========================================== */
+
+function modifierProduit(id) {
+
+    const produit = catalogue.find(
+        item => item.id === id
+    );
+
+    if (!produit) {
+
+        alert("Produit introuvable.");
+
+        return;
+
+    }
+
+    const formulaire =
+        document.getElementById("formulaire-produit");
+
+    formulaire.hidden = false;
+
+    document.getElementById("titre-formulaire").textContent =
+        "Modifier un produit";
+
+    document.getElementById("produit-id").value = produit.id;
+
+    document.getElementById("nom-produit").value =
+        produit.nom;
+
+    document.getElementById("categorie-produit").value =
+        produit.categorie;
+
+    document.getElementById("prix-produit").value =
+        produit.prix;
+
+    document.getElementById("image-produit").value =
+        produit.image || "";
+
+    document.getElementById("description-produit").value =
+        produit.description || "";
+
+    // Restaurer les tarifs
+    const tarifs = produit.tarifs || [];
+
+    const checkbox =
+        document.getElementById("activer-tarifs");
+
+    const liste =
+        document.getElementById("liste-tarifs");
+
+    const conteneur =
+        document.getElementById("lignes-tarifs");
+
+    conteneur.innerHTML = "";
+
+    checkbox.checked = tarifs.length > 0;
+
+    liste.hidden = tarifs.length === 0;
+
+    tarifs.forEach(tarif => {
+
+        ajouterLigneTarif(
+            tarif.grammage,
+            tarif.prix
+        );
+
+    });
+
+    formulaire.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
+}
+
 
 /* ==========================================
-   INITIALISATION
+   12. ENREGISTRER UNE MODIFICATION
+========================================== */
+
+function enregistrerModification(id) {
+
+    const index = catalogue.findIndex(
+        produit => produit.id === id
+    );
+
+    if (index === -1) {
+
+        alert("Produit introuvable.");
+
+        return;
+
+    }
+
+    const donnees = recupererDonneesFormulaire();
+
+    if (!produitValide(donnees)) return;
+
+    const ancienProduit = catalogue[index];
+
+    const produitModifie = {
+
+        ...ancienProduit,
+
+        nom: donnees.nom,
+
+        categorie: donnees.categorie,
+
+        prix: donnees.prix,
+
+        tarifs: donnees.tarifs,
+
+        image: donnees.image,
+
+        description: donnees.description
+
+    };
+
+    catalogue[index] = produitModifie;
+
+    if (!sauvegarderCatalogue()) {
+
+        catalogue[index] = ancienProduit;
+
+        return;
+
+    }
+
+    actualiserAffichage();
+
+    fermerFormulaire();
+
+    alert("Produit modifié avec succès.");
+
+}
+
+
+/* ==========================================
+   13. SUPPRIMER UN PRODUIT
+========================================== */
+
+function supprimerProduit(id) {
+
+    const index = catalogue.findIndex(
+        produit => produit.id === id
+    );
+
+    if (index === -1) {
+
+        alert("Produit introuvable.");
+
+        return;
+
+    }
+
+    const produit = catalogue[index];
+
+    const confirmation = confirm(
+        `Voulez-vous vraiment supprimer "${produit.nom}" ?`
+    );
+
+    if (!confirmation) return;
+
+    catalogue.splice(index, 1);
+
+    if (!sauvegarderCatalogue()) {
+
+        catalogue.splice(index, 0, produit);
+
+        return;
+
+    }
+
+    actualiserAffichage();
+
+    alert("Produit supprimé.");
+
+}
+
+
+/* ==========================================
+   14. ACTUALISER L'AFFICHAGE
+========================================== */
+
+function actualiserAffichage() {
+
+    afficherProduits();
+
+    actualiserStatistiques();
+
+}
+
+
+/* ==========================================
+   15. INITIALISATION
 ========================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
 
     // Affichage initial
-    afficherProduits();
-    actualiserStatistiques();
+    actualiserAffichage();
 
     // Recherche
     document
@@ -234,18 +751,69 @@ document.addEventListener("DOMContentLoaded", () => {
         .getElementById("bouton-fermer")
         .addEventListener("click", fermerFormulaire);
 
+    // Annuler
     document
         .getElementById("annuler-formulaire")
         .addEventListener("click", fermerFormulaire);
 
-    // Enregistrer le produit
+    // Activer les tarifs
+    document
+        .getElementById("activer-tarifs")
+        .addEventListener("change", gererAffichageTarifs);
+
+    // Ajouter un grammage
+    document
+        .getElementById("ajouter-tarif")
+        .addEventListener("click", () => {
+
+            ajouterLigneTarif();
+
+        });
+
+    // Soumission du formulaire
     document
         .getElementById("form-produit")
         .addEventListener("submit", event => {
 
             event.preventDefault();
 
-            ajouterProduit();
+            const id =
+                document.getElementById("produit-id").value;
+
+            if (id) {
+
+                enregistrerModification(id);
+
+            } else {
+
+                ajouterProduit();
+
+            }
+
+        });
+
+    // Actions sur les produits
+    document
+        .getElementById("liste-produits")
+        .addEventListener("click", event => {
+
+            const bouton = event.target.closest("button");
+
+            if (!bouton) return;
+
+            const id = bouton.dataset.id;
+
+            if (bouton.classList.contains("btn-modifier")) {
+
+                modifierProduit(id);
+
+            }
+
+            if (bouton.classList.contains("btn-supprimer")) {
+
+                supprimerProduit(id);
+
+            }
 
         });
 
