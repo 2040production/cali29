@@ -60,6 +60,12 @@
     transform: translateY(0);
 }
 
+/* ÉLÉMENTS MASQUÉS */
+
+.order-popup [hidden] {
+    display: none !important;
+}
+
 /* FERMETURE */
 
 .order-popup-close {
@@ -99,7 +105,128 @@
     margin-bottom: 22px;
 }
 
-/* RÉCAPITULATIF */
+/* ==========================================
+   FORMULAIRE DE LIVRAISON
+========================================== */
+
+.delivery-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.delivery-form h3 {
+    font-size: 11px;
+    letter-spacing: 1px;
+    margin: 5px 0 2px;
+}
+
+.delivery-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.delivery-field label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #555;
+}
+
+.delivery-field input {
+    width: 100%;
+    min-height: 45px;
+    box-sizing: border-box;
+
+    padding: 11px 13px;
+
+    border: 1px solid #dedede;
+    border-radius: 9px;
+
+    background: #fafafa;
+    color: #242424;
+
+    font-family: inherit;
+    font-size: 13px;
+
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.delivery-field input:focus {
+    border-color: #A000FF;
+    box-shadow: 0 0 0 3px rgba(160, 0, 255, .1);
+}
+
+.delivery-field input::placeholder {
+    color: #aaa;
+}
+
+/* CODE POSTAL + VILLE */
+
+.delivery-fields-row {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 12px;
+}
+
+/* BOUTON CONTINUER */
+
+.delivery-continue {
+    width: 100%;
+    min-height: 48px;
+
+    margin-top: 8px;
+    padding: 13px 18px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: #A000FF;
+    color: #fff;
+
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+
+    cursor: pointer;
+    transition: background .2s, transform .2s;
+}
+
+.delivery-continue:hover {
+    background: #8500d6;
+    transform: translateY(-1px);
+}
+
+/* RETOUR AUX COORDONNÉES */
+
+.delivery-back {
+    width: 100%;
+
+    margin-bottom: 8px;
+    padding: 10px;
+
+    border: none;
+    background: transparent;
+
+    color: #888;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+
+    text-align: left;
+    cursor: pointer;
+}
+
+.delivery-back:hover {
+    color: #A000FF;
+}
+
+/* ==========================================
+   RÉCAPITULATIF
+========================================== */
 
 .order-popup-summary {
     padding: 18px;
@@ -150,7 +277,9 @@
     font-size: 19px;
 }
 
-/* MOYENS DE CONTACT */
+/* ==========================================
+   MOYENS DE CONTACT
+========================================== */
 
 .order-popup-choice {
     font-size: 10px;
@@ -243,7 +372,9 @@
     font-size: 20px;
 }
 
-/* BAS DE POPUP */
+/* ==========================================
+   BAS DE POPUP
+========================================== */
 
 .order-popup-footer {
     font-size: 10px;
@@ -253,7 +384,9 @@
     margin: 20px 0 0;
 }
 
-/* MOBILE */
+/* ==========================================
+   MOBILE
+========================================== */
 
 @media (max-width: 480px) {
 
@@ -275,6 +408,15 @@
 
     .order-contact-btn {
         min-height: 62px;
+    }
+
+    .delivery-fields-row {
+        grid-template-columns: 1fr 1.2fr;
+        gap: 9px;
+    }
+
+    .delivery-field input {
+        font-size: 16px;
     }
 
 }

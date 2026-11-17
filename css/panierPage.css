@@ -410,14 +410,4 @@
     color: #A000FF;
 }
 
-/* ==========================================
-   BOUTON VOIR MON PANIER
-========================================== */
 
-.bouton-commander {
-    text-decoration: none;
-}
-
-.bouton-commander:hover {
-    text-decoration: none;
-}

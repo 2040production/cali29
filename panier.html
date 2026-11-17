@@ -36,9 +36,7 @@
             ☰
         </button>
 
-        <a href="index.html" class="logo">
-            CALI29
-        </a>
+        <a href="index.html" class="logo">CALI29</a>
 
         <a href="panier.html" class="bouton-panier">
             Panier
@@ -47,10 +45,8 @@
 
     </header>
 
-
     <main>
 
-        <!-- TITRE DE PAGE -->
         <section class="panier-page">
 
             <div class="section-titre">
@@ -59,13 +55,10 @@
                 <p>Retrouvez tous les articles que vous avez sélectionnés.</p>
             </div>
 
-
             <!-- PANIER VIDE -->
             <div id="panier-vide" class="panier-vide">
 
-                <div class="panier-vide-icone">
-                    🛒
-                </div>
+                <div class="panier-vide-icone">🛒</div>
 
                 <h2>Votre panier est vide</h2>
 
@@ -79,11 +72,9 @@
 
             </div>
 
-
             <!-- PANIER AVEC ARTICLES -->
             <div id="panier-rempli" class="panier-rempli">
 
-                <!-- LISTE DES ARTICLES -->
                 <div class="panier-liste-container">
 
                     <div class="panier-liste-titre">
@@ -95,11 +86,10 @@
                     </div>
 
                     <div id="liste-panier" class="liste-panier">
-                        <!-- LES ARTICLES SONT AJOUTÉS PAR JAVASCRIPT -->
+                        <!-- ARTICLES GÉNÉRÉS PAR JAVASCRIPT -->
                     </div>
 
                 </div>
-
 
                 <!-- RÉCAPITULATIF -->
                 <aside class="panier-recapitulatif">
@@ -146,13 +136,14 @@
     </main>
 
 
-    <!-- POPUP DE COMMANDE -->
+    <!-- ==========================================
+         POPUP DE COMMANDE
+    =========================================== -->
+
     <div id="order-popup" class="order-popup" aria-hidden="true">
 
-        <!-- FOND SOMBRE -->
         <div class="order-popup-overlay" data-close-popup></div>
 
-        <!-- CONTENU -->
         <div
             class="order-popup-content"
             role="dialog"
@@ -175,18 +166,70 @@
                 Finaliser ma commande
             </h2>
 
-            <p class="order-popup-description">
-                Choisissez votre moyen de communication pour transmettre votre commande.
+            <p class="order-popup-description" id="order-popup-description">
+                Renseignez votre adresse pour préparer votre commande.
             </p>
 
 
-            <!-- RÉCAPITULATIF DE LA COMMANDE -->
-            <div class="order-popup-summary">
+            <!-- ÉTAPE 1 : LIVRAISON -->
+
+            <form id="delivery-form" class="delivery-form">
+
+                <h3>COORDONNÉES DE LIVRAISON</h3>
+
+                <div class="delivery-field">
+                    <label for="delivery-address">Adresse</label>
+                    <input
+                        type="text"
+                        id="delivery-address"
+                        name="adresse"
+                        required
+                        autocomplete="street-address">
+                </div>
+
+                <div class="delivery-fields-row">
+
+                    <div class="delivery-field">
+                        <label for="delivery-postcode">Code postal</label>
+                        <input
+                            type="text"
+                            id="delivery-postcode"
+                            name="codePostal"
+                            required
+                            autocomplete="postal-code"
+                            inputmode="numeric">
+                    </div>
+
+                    <div class="delivery-field">
+                        <label for="delivery-city">Ville</label>
+                        <input
+                            type="text"
+                            id="delivery-city"
+                            name="ville"
+                            required
+                            autocomplete="address-level2">
+                    </div>
+
+                </div>
+
+                <button type="submit" class="delivery-continue">
+                    CONTINUER
+                </button>
+
+            </form>
+
+
+            <!-- ÉTAPE 2 : RÉCAPITULATIF -->
+
+            <div
+                class="order-popup-summary"
+                id="order-popup-summary"
+                hidden>
 
                 <h3>RÉCAPITULATIF</h3>
 
                 <div id="order-popup-items">
-                    <!-- ARTICLES AJOUTÉS PAR JAVASCRIPT -->
+                    <!-- ARTICLES ET COORDONNÉES GÉNÉRÉS PAR JS -->
                 </div>
 
                 <div class="order-popup-total">
@@ -197,8 +240,19 @@
             </div>
 
 
-            <!-- MOYENS DE CONTACT -->
-            <div class="order-popup-options">
+            <!-- ÉTAPE 3 : MOYENS DE CONTACT -->
+
+            <div
+                class="order-popup-options"
+                id="order-popup-options"
+                hidden>
+
+                <button
+                    type="button"
+                    id="delivery-back"
+                    class="delivery-back">
+                    ← Modifier mes coordonnées
+                </button>
 
                 <p class="order-popup-choice">
                     CHOISIR UN MOYEN DE CONTACT
@@ -220,7 +274,6 @@
 
                 </button>
 
-
                 <button
                     type="button"
                     class="order-contact-btn telegram"
@@ -236,7 +289,6 @@
                     <span class="contact-arrow">›</span>
 
                 </button>
-
 
                 <button
                     type="button"
@@ -256,7 +308,6 @@
 
             </div>
 
-
             <p class="order-popup-footer">
                 Votre récapitulatif sera préparé automatiquement.
             </p>
@@ -267,6 +318,7 @@
 
 
     <!-- FOOTER -->
+
     <footer class="footer">
 
         <div class="footer-contenu">
@@ -292,6 +344,7 @@
 
 
     <!-- JAVASCRIPT -->
+
     <script src="js/produits.js" defer></script>
     <script src="js/panier.js" defer></script>
     <script src="js/commande.js" defer></script>
