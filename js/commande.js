@@ -1,6 +1,7 @@
 
 /* ==========================================
-   COMMANDE CALI29 - TELEGRAM
+   COMMANDE CALI29
+   GÉNÉRATION DU MESSAGE
 ========================================== */
 
 // Identifiant Telegram
@@ -12,7 +13,7 @@ const TELEGRAM_USERNAME = "brestdrive";
 ========================================== */
 
 function formaterPrix(prix) {
-    return prix.toFixed(2).replace(".", ",") + " €";
+    return Number(prix).toFixed(2).replace(".", ",") + " €";
 }
 
 
@@ -20,9 +21,9 @@ function formaterPrix(prix) {
    CRÉER LE RÉCAPITULATIF
 ========================================== */
 
-function genererRecapitulatifCommande() {
+function genererRecapitulatifCommande(livraison = null) {
 
-    if (typeof panier === "undefined" || panier.length === 0) {
+    if (typeof panier === "undefined" || !Array.isArray(panier) || panier.length === 0) {
         alert("Ton panier est vide.");
         return null;
     }
@@ -30,46 +31,59 @@ function genererRecapitulatifCommande() {
     let total = 0;
 
     let message = "Bonjour, je souhaite passer commande chez CALI29.\n\n";
-    message += "🛒 MA COMMANDE\n\n";
+    message += "MA COMMANDE\n\n";
 
- panier.forEach(article => {
+    panier.forEach(article => {
 
-    const prixLigne = article.prix * article.quantite;
+        const prixLigne = Number(article.prix) * Number(article.quantite);
 
-    total += prixLigne;
+        total += prixLigne;
 
-    message += "• " + article.nom + "\n";
+        message += "• " + article.nom + "\n";
 
-    if (article.grammage !== null && article.grammage !== undefined) {
-        message += "  Grammage : " + article.grammage + " g\n";
-    }
+        if (article.grammage !== null && article.grammage !== undefined) {
+            message += "  Grammage : " + article.grammage + " g\n";
+        }
 
-    message +=
-        "  Quantité : " + article.quantite + "\n" +
-        "  Prix unitaire : " + formaterPrix(article.prix) + "\n" +
-        "  Sous-total : " + formaterPrix(prixLigne) + "\n\n";
+        message +=
+            "  Quantité : " + article.quantite + "\n" +
+            "  Prix unitaire : " + formaterPrix(article.prix) + "\n" +
+            "  Sous-total : " + formaterPrix(prixLigne) + "\n\n";
 
-});
+    });
 
     message += "--------------------------\n";
-    message += "TOTAL : " + formaterPrix(total) + "\n\n";
-    message += "Merci de me confirmer la disponibilité et les modalités de commande.";
+    message += "TOTAL : " + formaterPrix(total) + "\n";
+
+
+    // COORDONNÉES DE LIVRAISON
+
+    if (livraison) {
+
+        message += "\nADRESSE DE LIVRAISON\n\n";
+
+        message += "Adresse : " + livraison.adresse + "\n";
+        message += "Code postal : " + livraison.codePostal + "\n";
+        message += "Ville : " + livraison.ville + "\n";
+
+    }
+
+    message += "\nMerci de me confirmer la disponibilité et les modalités de commande.";
 
     return message;
+
 }
 
 
 /* ==========================================
    OUVRIR TELEGRAM
+   AUTRES PAGES DU SITE
 ========================================== */
 
 function ouvrirTelegram() {
 
-    if (
-        !TELEGRAM_USERNAME ||
-        TELEGRAM_USERNAME === "TON_IDENTIFIANT_TELEGRAM"
-    ) {
-        alert("Configure d'abord ton identifiant Telegram dans commande.js.");
+    if (!TELEGRAM_USERNAME) {
+        alert("Configure ton identifiant Telegram dans commande.js.");
         return;
     }
 
@@ -77,10 +91,9 @@ function ouvrirTelegram() {
 
     if (!message) return;
 
-    const username = TELEGRAM_USERNAME.replace("@", "");
-
     const lienTelegram =
-        "https://t.me/" + username +
+        "https://t.me/" +
+        TELEGRAM_USERNAME.replace("@", "") +
         "?text=" + encodeURIComponent(message);
 
     window.open(lienTelegram, "_blank");
@@ -89,16 +102,15 @@ function ouvrirTelegram() {
 
 
 /* ==========================================
-   INITIALISATION DES BOUTONS
+   INITIALISATION
 ========================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
 
     // Le bouton commander-panier est géré par order-popup.js.
 
-    // Bouton de commande sur les autres pages
-    const boutonCommande =
-        document.getElementById("commander");
+    // On conserve le bouton de commande éventuel des autres pages.
+    const boutonCommande = document.getElementById("commander");
 
     if (boutonCommande) {
         boutonCommande.addEventListener("click", ouvrirTelegram);
