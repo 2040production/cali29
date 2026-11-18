@@ -20,14 +20,39 @@ function recupererCatalogueFiche() {
             const catalogueSauvegarde = JSON.parse(donnees);
 
             if (Array.isArray(catalogueSauvegarde)) {
+
+                // CORRECTION ANCIEN CHEMIN VIDÉO RMF
+
+                const produitRMF = catalogueSauvegarde.find(
+                    produit => produit.id === "resine-002"
+                );
+
+                if (
+                    produitRMF &&
+                    produitRMF.video === "assets/videos/rmfVid.mov"
+                ) {
+
+                    produitRMF.video = "assets/videos/rmfVid.mp4";
+
+                    localStorage.setItem(
+                        "catalogueCali29",
+                        JSON.stringify(catalogueSauvegarde)
+                    );
+
+                }
+
                 return catalogueSauvegarde;
+
             }
 
         }
 
     } catch (erreur) {
 
-        console.error("Erreur de récupération du catalogue :", erreur);
+        console.error(
+            "Erreur de récupération du catalogue :",
+            erreur
+        );
 
     }
 
