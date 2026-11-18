@@ -226,29 +226,70 @@ function calculerDetailsCommande(livraison = null) {
         return null;
     }
 
-
-    // ARTICLES AVEC LEURS PRIX APPLIQUÉS
-
+    // ARTICLES AVEC LEURS PRIX APPLIQUÉS SELON LA VILLE
     const articles = obtenirArticlesCommande(livraison);
 
-
-    // SOUS-TOTAL PRODUITS
-
+    // SOUS-TOTAL AVANT RÉDUCTIONS
     const sousTotal = articles.reduce(
         (total, article) => total + article.sousTotal,
         0
     );
 
-
-    // MINIMUM DE COMMANDE
-
+    // MINIMUM DE COMMANDE : calculé sur le sous-total produits
     const verificationMinimum = livraison && livraison.ville
         ? verifierMinimumCommande(livraison, sousTotal)
         : null;
 
+    // OFFRES SPÉCIALES
+    const resultatOffres = (
+        typeof calculerOffresSpeciales === "function" && livraison && livraison.ville
+    )
+        ? calculerOffresSpeciales(articles, livraison.ville)
+        : {
+            montantReduction: 0,
+            offresAppliquees: [],
+            detailsArticles: []
+        };
+
+    const montantReductionOffres = Number(resultatOffres.montantReduction) || 0;
+
+    // Préparer les montants après offres pour calculer un éventuel code promo cumulable.
+    // La réduction fixe de l'offre est répartie sur les unités de l'article.
+    const articlesApresOffres = articles.map(article => {
+
+        const reductionsArticle = (resultatOffres.detailsArticles || [])
+            .filter(detail =>
+                detail.produitId === article.id &&
+                Number(detail.grammage) === Number(article.grammage)
+            )
+            .reduce(
+                (total, detail) => total + Number(detail.montantReduction || 0),
+                0
+            );
+
+        const reductionUnitaire = article.quantite > 0
+            ? reductionsArticle / Number(article.quantite)
+            : 0;
+
+        const prixApresOffre = Math.max(
+            0,
+            Number(article.prix) - reductionUnitaire
+        );
+
+        return {
+            ...article,
+            prix: prixApresOffre,
+            sousTotal: prixApresOffre * Number(article.quantite)
+        };
+
+    });
+
+    const sousTotalApresOffres = Math.max(
+        0,
+        sousTotal - montantReductionOffres
+    );
 
     // CODE PROMO
-
     let codePromo = "";
     let montantReduction = 0;
     let messagePromo = "";
@@ -269,16 +310,17 @@ function calculerDetailsCommande(livraison = null) {
 
             const resultatPromo = verifierCodePromo(
                 codePromo,
-                sousTotal,
+                sousTotalApresOffres,
                 livraison.ville,
-                articles
+                articlesApresOffres,
+                resultatOffres.offresAppliquees || []
             );
 
             promoValide = resultatPromo.valide;
             messagePromo = resultatPromo.message;
 
             if (promoValide) {
-                montantReduction = resultatPromo.montantReduction;
+                montantReduction = Number(resultatPromo.montantReduction) || 0;
             }
 
         } else if (!livraison || !livraison.ville) {
@@ -289,25 +331,25 @@ function calculerDetailsCommande(livraison = null) {
 
     }
 
-
     // LIVRAISON
-
     const fraisLivraison = calculerFraisLivraison(livraison);
 
-
     // TOTAL FINAL
-
     const total = Math.max(
         0,
-        sousTotal - montantReduction + fraisLivraison
+        sousTotal - montantReductionOffres - montantReduction + fraisLivraison
     );
-
 
     return {
 
         articles,
-
         sousTotal,
+
+        montantReductionOffres,
+        offresAppliquees: resultatOffres.offresAppliquees || [],
+        detailsOffres: resultatOffres.detailsArticles || [],
+
+        sousTotalApresOffres,
 
         codePromo,
         montantReduction,
@@ -318,7 +360,6 @@ function calculerDetailsCommande(livraison = null) {
         total,
 
         // Informations sur le minimum de commande
-
         minimumCommande: verificationMinimum
             ? verificationMinimum.minimum
             : null,
@@ -349,9 +390,7 @@ function genererRecapitulatifCommande(livraison = null) {
         return null;
     }
 
-
     // VÉRIFICATION DU MINIMUM
-
     if (
         livraison &&
         livraison.ville &&
@@ -370,15 +409,12 @@ function genererRecapitulatifCommande(livraison = null) {
 
     }
 
-
     let message =
         "Bonjour, je souhaite passer commande chez CALI29.\n\n";
 
     message += "MA COMMANDE\n\n";
 
-
     // ARTICLES
-
     details.articles.forEach(article => {
 
         const prixLigne = article.sousTotal;
@@ -402,18 +438,27 @@ function genererRecapitulatifCommande(livraison = null) {
 
     });
 
-
     // RÉCAPITULATIF FINANCIER
-
     message += "--------------------------\n";
 
     message +=
         "SOUS-TOTAL PRODUITS : " +
         formaterPrix(details.sousTotal) + "\n";
 
+    // OFFRES SPÉCIALES
+    if (details.offresAppliquees && details.offresAppliquees.length > 0) {
 
-    // PROMOTION
+        details.offresAppliquees.forEach(offre => {
 
+            message +=
+                "OFFRE SPÉCIALE (" + offre.nom + ") : -" +
+                formaterPrix(offre.montantReduction) + "\n";
+
+        });
+
+    }
+
+    // CODE PROMO
     if (details.codePromo) {
 
         if (details.promoValide) {
@@ -435,9 +480,7 @@ function genererRecapitulatifCommande(livraison = null) {
 
     }
 
-
     // LIVRAISON
-
     if (livraison) {
 
         message +=
@@ -454,17 +497,13 @@ function genererRecapitulatifCommande(livraison = null) {
 
     }
 
-
     // TOTAL
-
     message += "--------------------------\n";
 
     message +=
         "TOTAL : " + formaterPrix(details.total) + "\n";
 
-
     // COORDONNÉES DE LIVRAISON
-
     if (livraison) {
 
         message += "\nADRESSE DE LIVRAISON\n\n";
