@@ -6,6 +6,12 @@
 // Récupération du panier enregistré
 let panier = JSON.parse(localStorage.getItem("panierCali29")) || [];
 
+// Code promo appliqué (non conservé après rechargement)
+let codePromoActif = "";
+let montantReductionActive = 0;
+let messagePromoActuel = "";
+let statutPromoActuel = "";
+
 
 /* ==========================================
    SAUVEGARDE
@@ -190,6 +196,15 @@ function viderPanier() {
 
     panier = [];
 
+    codePromoActif = "";
+    montantReductionActive = 0;
+    messagePromoActuel = "";
+    statutPromoActuel = "";
+
+    const champCodePromo = document.getElementById("code-promo");
+
+    if (champCodePromo) champCodePromo.value = "";
+
     sauvegarderPanier();
     actualiserPanier();
 }
@@ -218,6 +233,114 @@ function calculerTotalPanier() {
 
 
 /* ==========================================
+   GESTION DU CODE PROMO
+========================================== */
+
+function afficherMessagePromo(message, statut = "") {
+
+    const element = document.getElementById("message-code-promo");
+
+    messagePromoActuel = message;
+    statutPromoActuel = statut;
+
+    if (!element) return;
+
+    element.textContent = message;
+    element.classList.remove("succes", "erreur");
+
+    if (statut) {
+        element.classList.add(statut);
+    }
+}
+
+
+function recalculerPromotionActive() {
+
+    const sousTotal = calculerTotalPanier();
+
+    if (!codePromoActif) {
+        montantReductionActive = 0;
+        return 0;
+    }
+
+    const resultat = verifierCodePromo(
+        codePromoActif,
+        sousTotal,
+        "",
+        panier
+    );
+
+    if (!resultat.valide) {
+
+        codePromoActif = "";
+        montantReductionActive = 0;
+
+        afficherMessagePromo(resultat.message, "erreur");
+
+        return 0;
+    }
+
+    montantReductionActive = resultat.montantReduction;
+
+    afficherMessagePromo(
+        `Code ${codePromoActif} appliqué : -${montantReductionActive.toFixed(2).replace(".", ",")} €.`,
+        "succes"
+    );
+
+    return montantReductionActive;
+}
+
+
+function appliquerCodePromo() {
+
+    const champ = document.getElementById("code-promo");
+
+    if (!champ) return;
+
+    const code = champ.value.trim();
+
+    if (!code) {
+
+        codePromoActif = "";
+        montantReductionActive = 0;
+
+        afficherMessagePromo("Saisis un code promo.", "erreur");
+        actualiserPanier();
+
+        return;
+    }
+
+    const resultat = verifierCodePromo(
+        code,
+        calculerTotalPanier(),
+        "",
+        panier
+    );
+
+    if (!resultat.valide) {
+
+        codePromoActif = "";
+        montantReductionActive = 0;
+
+        afficherMessagePromo(resultat.message, "erreur");
+        actualiserPanier();
+
+        return;
+    }
+
+    codePromoActif = resultat.promotion.code;
+    montantReductionActive = resultat.montantReduction;
+
+    afficherMessagePromo(
+        `Code ${codePromoActif} appliqué : -${montantReductionActive.toFixed(2).replace(".", ",")} €.`,
+        "succes"
+    );
+
+    actualiserPanier();
+}
+
+
+/* ==========================================
    AFFICHER LE PANIER
 ========================================== */
 
@@ -236,12 +359,9 @@ function afficherArticlesPanier() {
         const ligne = document.createElement("article");
         ligne.className = "article-panier";
 
-        // URL de la fiche produit correspondante
         const urlProduit = `produit.html?id=${encodeURIComponent(article.id)}`;
 
-        // ==========================================
         // IMAGE CLIQUABLE
-        // ==========================================
 
         const lienImage = document.createElement("a");
         lienImage.href = urlProduit;
@@ -254,14 +374,11 @@ function afficherArticlesPanier() {
 
         lienImage.appendChild(image);
 
-        // ==========================================
         // INFORMATIONS PRODUIT
-        // ==========================================
 
         const informations = document.createElement("div");
         informations.className = "article-panier-informations";
 
-        // Nom cliquable
         const titre = document.createElement("h3");
 
         const lienTitre = document.createElement("a");
@@ -276,7 +393,6 @@ function afficherArticlesPanier() {
         prixUnitaire.textContent =
             article.prix.toFixed(2) + " € / unité";
 
-        // Afficher le grammage si présent
         if (article.grammage !== null) {
 
             const grammage = document.createElement("p");
@@ -290,9 +406,7 @@ function afficherArticlesPanier() {
 
         }
 
-        // ==========================================
         // QUANTITÉ
-        // ==========================================
 
         const quantite = document.createElement("div");
         quantite.className = "article-panier-quantite";
@@ -320,9 +434,7 @@ function afficherArticlesPanier() {
 
         informations.append(quantite);
 
-        // ==========================================
         // ACTIONS ET PRIX TOTAL
-        // ==========================================
 
         const actions = document.createElement("div");
 
@@ -343,9 +455,7 @@ function afficherArticlesPanier() {
 
         actions.append(prixTotal, supprimer);
 
-        // ==========================================
-        // ASSEMBLAGE DE LA LIGNE
-        // ==========================================
+        // ASSEMBLAGE
 
         ligne.append(lienImage, informations, actions);
 
@@ -366,10 +476,13 @@ function actualiserPanier() {
 
     const nombreArticles = calculerNombreArticles();
     const total = calculerTotalPanier();
+    const reduction = recalculerPromotionActive();
+    const totalApresReduction = Math.max(0, total - reduction);
 
     const compteur = document.getElementById("nombre-articles");
     const nombreTotal = document.getElementById("panier-nombre-total");
     const sousTotal = document.getElementById("panier-sous-total");
+    const reductionElement = document.getElementById("panier-reduction");
     const totalElement = document.getElementById("panier-total");
 
     if (compteur) compteur.textContent = nombreArticles;
@@ -378,7 +491,35 @@ function actualiserPanier() {
 
     if (sousTotal) sousTotal.textContent = total.toFixed(2) + " €";
 
-    if (totalElement) totalElement.textContent = total.toFixed(2) + " €";
+    if (reductionElement) {
+
+        reductionElement.textContent =
+            reduction > 0 ? "- " + reduction.toFixed(2) + " €" : "0,00 €";
+
+    }
+
+    if (totalElement) {
+        totalElement.textContent = totalApresReduction.toFixed(2) + " €";
+    }
+
+    const champCodePromo = document.getElementById("code-promo");
+
+    if (champCodePromo && !champCodePromo.value && codePromoActif) {
+        champCodePromo.value = codePromoActif;
+    }
+
+    const messagePromo = document.getElementById("message-code-promo");
+
+    if (messagePromo && messagePromoActuel) {
+
+        messagePromo.textContent = messagePromoActuel;
+        messagePromo.classList.remove("succes", "erreur");
+
+        if (statutPromoActuel) {
+            messagePromo.classList.add(statutPromoActuel);
+        }
+
+    }
 
     if (panierVide && panierRempli) {
 
@@ -411,6 +552,27 @@ document.addEventListener("DOMContentLoaded", () => {
         boutonVider.addEventListener("click", viderPanier);
     }
 
+    // APPLICATION DU CODE PROMO
+
+    const boutonPromo = document.getElementById("appliquer-code-promo");
+    const champCodePromo = document.getElementById("code-promo");
+
+    if (boutonPromo) {
+        boutonPromo.addEventListener("click", appliquerCodePromo);
+    }
+
+    if (champCodePromo) {
+
+        champCodePromo.addEventListener("keydown", event => {
+
+            if (event.key === "Enter") {
+                event.preventDefault();
+                appliquerCodePromo();
+            }
+
+        });
+
+    }
 
     // AJOUT DEPUIS LE CATALOGUE
 
@@ -438,7 +600,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
-
     // AJOUT DEPUIS LA FICHE PRODUIT
 
     const boutonFiche = document.getElementById("ajouter-produit-panier");
@@ -459,6 +620,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!idProduit) return;
 
             // Récupérer le grammage sélectionné
+
             const selectGrammage = document.getElementById("grammage-produit");
 
             let grammage = null;

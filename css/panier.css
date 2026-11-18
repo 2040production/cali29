@@ -64,3 +64,126 @@
     cursor: pointer;
     box-shadow: 0 0 15px #F000D966;
 }
+
+
+/* ==========================================
+   CODE PROMO - CALI29
+========================================== */
+
+.panier-promo {
+    margin: 22px 0;
+    padding: 16px;
+    background: rgba(146, 0, 255, 0.07);
+    border: 1px solid rgba(146, 0, 255, 0.25);
+    border-radius: 14px;
+}
+
+.panier-promo label {
+    display: block;
+    margin-bottom: 11px;
+    color: #D9C8F5;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.panier-promo-champ {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+}
+
+.panier-promo-champ input {
+    flex: 1;
+    min-width: 0;
+    height: 44px;
+    padding: 0 12px;
+
+    background: #08051B;
+    border: 1px solid rgba(146, 0, 255, 0.4);
+    border-radius: 9px;
+
+    color: #FFFFFF;
+    font-family: inherit;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.panier-promo-champ input::placeholder {
+    color: #77718D;
+}
+
+.panier-promo-champ input:focus {
+    border-color: var(--violet);
+    box-shadow: 0 0 10px rgba(146, 0, 255, 0.25);
+}
+
+.panier-promo-champ button {
+    flex-shrink: 0;
+    min-height: 44px;
+    padding: 0 15px;
+
+    border: none;
+    border-radius: 9px;
+    background: linear-gradient(90deg, #9200FF, #F000D9);
+
+    color: white;
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.panier-promo-champ button:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+}
+
+.message-code-promo {
+    min-height: 0;
+    margin: 9px 0 0;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.5;
+}
+
+.message-code-promo:empty {
+    display: none;
+}
+
+.message-code-promo.succes,
+.message-code-promo.success {
+    color: #62E6A5;
+}
+
+.message-code-promo.erreur,
+.message-code-promo.error {
+    color: #FF6B91;
+}
+
+/* MOBILE */
+
+@media (max-width: 480px) {
+    .panier-promo {
+        padding: 13px;
+        margin: 17px 0;
+    }
+
+    .panier-promo-champ {
+        gap: 6px;
+    }
+
+    .panier-promo-champ input {
+        font-size: 11px;
+    }
+
+    .panier-promo-champ button {
+        padding: 0 11px;
+        font-size: 9px;
+    }
+}
+

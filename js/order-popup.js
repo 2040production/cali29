@@ -7,9 +7,9 @@
 // CONFIGURATION DES CONTACTS
 
 const ORDER_CONTACTS = {
-    whatsapp: "33600000000",
+    // whatsapp: "33600000000", // TEMPORAIREMENT DÉSACTIVÉ
     telegram: "brestdrive",
-    signal: "+33600000000"
+    signal: "https://signal.me/#eu/dpNJ7xgqOCOTjJOCXEovuih4RfIbpdbn7ZjRtp_UrMw7yRYkV0xP8I5YRehpa5_E"
 };
 
 
@@ -41,6 +41,50 @@ let coordonneesLivraison = null;
 
 function formatOrderPrice(price) {
     return Number(price).toFixed(2).replace(".", ",") + " €";
+}
+
+
+/* ==========================================
+   AJOUTER UNE LIGNE AU RÉCAPITULATIF
+========================================== */
+
+function ajouterLigneRecapitulatif(label, valeur, classe = "") {
+
+    const ligne = document.createElement("div");
+    ligne.className = "order-popup-item";
+
+    if (classe) {
+        ligne.classList.add(classe);
+    }
+
+    const nom = document.createElement("span");
+    nom.className = "order-popup-item-name";
+    nom.textContent = label;
+
+    const prix = document.createElement("strong");
+    prix.className = "order-popup-item-price";
+    prix.textContent = valeur;
+
+    ligne.append(nom, prix);
+
+    orderItems.appendChild(ligne);
+
+}
+
+
+/* ==========================================
+   AJOUTER UN TITRE DE SECTION
+========================================== */
+
+function ajouterTitreRecapitulatif(texte) {
+
+    const titre = document.createElement("div");
+
+    titre.className = "order-popup-delivery";
+    titre.textContent = texte;
+
+    orderItems.appendChild(titre);
+
 }
 
 
@@ -98,15 +142,31 @@ function afficherRecapitulatifPopup() {
         return false;
     }
 
+    if (typeof calculerDetailsCommande !== "function") {
+
+        console.error("Fonction calculerDetailsCommande introuvable.");
+
+        return false;
+
+    }
+
+    // CALCULS CENTRALISÉS
+
+    const details = calculerDetailsCommande(coordonneesLivraison);
+
+    if (!details) {
+        return false;
+    }
+
     orderItems.innerHTML = "";
 
-    let total = 0;
+
+    // ARTICLES
 
     panier.forEach(article => {
 
-        const sousTotal = Number(article.prix) * Number(article.quantite);
-
-        total += sousTotal;
+        const sousTotal =
+            Number(article.prix) * Number(article.quantite);
 
         const ligne = document.createElement("div");
         ligne.className = "order-popup-item";
@@ -125,19 +185,74 @@ function afficherRecapitulatifPopup() {
 
     });
 
-    orderTotal.textContent = formatOrderPrice(total);
+
+    // RÉCAPITULATIF FINANCIER
+
+    ajouterTitreRecapitulatif("RÉCAPITULATIF");
+
+    // Sous-total
+
+    ajouterLigneRecapitulatif(
+        "Sous-total produits",
+        formatOrderPrice(details.sousTotal)
+    );
 
 
-    // ADRESSE DE LIVRAISON
+    // Code promo
+
+    if (details.codePromo) {
+
+        if (details.promoValide) {
+
+            ajouterLigneRecapitulatif(
+                "Code promo (" + details.codePromo + ")",
+                "-" + formatOrderPrice(details.montantReduction),
+                "order-popup-promo"
+            );
+
+        } else {
+
+            ajouterLigneRecapitulatif(
+                "Code promo non applicable",
+                details.codePromo,
+                "order-popup-promo"
+            );
+
+            const messagePromo = document.createElement("p");
+
+            messagePromo.className = "order-popup-promo-message";
+            messagePromo.textContent = details.messagePromo;
+
+            orderItems.appendChild(messagePromo);
+
+        }
+
+    }
+
+
+    // Livraison
+
+    const texteLivraison =
+        details.fraisLivraison === 0
+            ? "Gratuite"
+            : formatOrderPrice(details.fraisLivraison);
+
+    ajouterLigneRecapitulatif(
+        "Livraison",
+        texteLivraison
+    );
+
+
+    // TOTAL FINAL
+
+    orderTotal.textContent = formatOrderPrice(details.total);
+
+
+    // COORDONNÉES DE LIVRAISON
 
     if (coordonneesLivraison) {
 
-        const titreLivraison = document.createElement("div");
-
-        titreLivraison.className = "order-popup-delivery";
-        titreLivraison.textContent = "COORDONNÉES DE LIVRAISON";
-
-        orderItems.appendChild(titreLivraison);
+        ajouterTitreRecapitulatif("COORDONNÉES DE LIVRAISON");
 
         const informations = [
             ["Adresse", coordonneesLivraison.adresse],
@@ -147,23 +262,7 @@ function afficherRecapitulatifPopup() {
 
         informations.forEach(([label, valeur]) => {
 
-            const ligne = document.createElement("div");
-
-            ligne.className = "order-popup-item";
-
-            const nom = document.createElement("span");
-
-            nom.className = "order-popup-item-name";
-            nom.textContent = label;
-
-            const contenu = document.createElement("strong");
-
-            contenu.className = "order-popup-item-price";
-            contenu.textContent = valeur;
-
-            ligne.append(nom, contenu);
-
-            orderItems.appendChild(ligne);
+            ajouterLigneRecapitulatif(label, valeur);
 
         });
 
@@ -329,8 +428,9 @@ async function envoyerCommande(platform) {
     const encodedMessage = encodeURIComponent(message);
 
 
-    // WHATSAPP
+    // WHATSAPP - TEMPORAIREMENT DÉSACTIVÉ
 
+    /*
     if (platform === "whatsapp") {
 
         const numero = ORDER_CONTACTS.whatsapp;
@@ -349,11 +449,12 @@ async function envoyerCommande(platform) {
         );
 
     }
+    */
 
 
     // TELEGRAM
 
-    else if (platform === "telegram") {
+    if (platform === "telegram") {
 
         const username = ORDER_CONTACTS.telegram.replace("@", "");
 
@@ -377,11 +478,11 @@ async function envoyerCommande(platform) {
 
     else if (platform === "signal") {
 
-        const numero = ORDER_CONTACTS.signal;
+        const lienSignal = ORDER_CONTACTS.signal;
 
-        if (!/^\+\d{8,15}$/.test(numero) || numero === "+33600000000") {
+        if (!lienSignal || !lienSignal.startsWith("https://signal.me/")) {
 
-            alert("Configure ton numéro Signal dans order-popup.js.");
+            alert("Configure ton lien Signal dans order-popup.js.");
 
             return;
 
@@ -392,7 +493,7 @@ async function envoyerCommande(platform) {
             await copierMessageCommande(message);
 
             window.open(
-                "https://signal.me/#p/" + encodeURIComponent(numero),
+                lienSignal,
                 "_blank"
             );
 
