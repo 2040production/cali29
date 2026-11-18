@@ -83,7 +83,7 @@ const produits = [
     ],
 
     image: "assets/images/filtre.png",
-    video: "assets/videos/rmfVid.mov",
+    video: "assets/videos/rmfVid.mp4",
     description: "Description de la résine à compléter.",
     popularite: 8
 },
