@@ -1,109 +1,33 @@
 
 /* ==========================================
    HEADER CALI29
+   Navigation ordinateur + menu mobile
 ========================================== */
 
-/* En-tête */
-
 .header {
-    width: 100%;
-    height: 85px;
-    padding: 0 25px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    background: rgba(5, 3, 22, 0.96);
-    border-bottom: 1px solid #B000FF;
-
-    box-shadow: 0 0 18px #A000FF55;
-
     position: relative;
     z-index: 100;
-}
-
-/* Bouton menu */
-
-.menu-burger {
-    background: transparent;
-    border: none;
-    color: white;
-    font-size: 30px;
-    cursor: pointer;
-}
-
-/* Logo */
-
-.logo {
-    color: white;
-    font-size: 36px;
-    font-weight: 800;
-    letter-spacing: -2px;
-    text-decoration: none;
-
-    text-shadow:
-        0 0 10px #008CFF,
-        0 0 25px #E900FF;
-}
-
-/* Bouton panier du header */
-
-.bouton-panier {
-    background: #160B30;
-    border: 1px solid #B000FF;
-    border-radius: 30px;
-
-    padding: 10px 17px;
-
-    color: white;
-    font-size: 13px;
-    font-weight: 700;
-
-    cursor: pointer;
-}
-
-/* Nombre d'articles */
-
-#nombre-articles {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 23px;
-    height: 23px;
-
-    margin-left: 5px;
-
-    border-radius: 50%;
-    background: #F000D9;
-    color: white;
-}
-
-
-/* ==========================================
-   HEADER - CALI29
-========================================== */
-
-.header {
     width: 100%;
-    height: 75px;
+    min-height: 75px;
     padding: 0 6%;
 
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 28px;
 
     background: #050316;
-    border-bottom: 1px solid rgba(160, 0, 255, 0.15);
-
-    position: relative;
-    z-index: 100;
+    border-bottom: 1px solid rgba(160, 0, 255, 0.2);
 }
 
-/* LOGO */
+
+/* ==========================================
+   LOGO
+========================================== */
 
 .logo {
+    flex-shrink: 0;
+
     color: #ffffff;
     text-decoration: none;
 
@@ -113,25 +37,147 @@
     letter-spacing: 2px;
 }
 
-/* MENU BURGER */
 
-.menu-burger {
-    display: none;
+/* ==========================================
+   NAVIGATION ORDINATEUR
+========================================== */
 
-    padding: 5px;
+.navigation-desktop {
+    display: flex;
+    align-items: center;
+    gap: 32px;
 
-    background: transparent;
-    border: none;
-
-    color: #ffffff;
-    font-size: 25px;
-
-    cursor: pointer;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* BOUTON PANIER */
+.lien-navigation {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    padding: 12px 4px;
+
+    color: #ffffff;
+    background: transparent;
+    border: 0;
+    text-decoration: none;
+
+    font-family: 'Manrope', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.lien-navigation:hover,
+.lien-navigation:focus-visible {
+    color: #c56aff;
+}
+
+
+/* ==========================================
+   MENU DÉROULANT BOUTIQUE
+========================================== */
+
+.boutique-dropdown {
+    position: relative;
+}
+
+/* Bouton Boutique */
+
+.boutique-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Flèche CSS */
+
+.boutique-toggle::after {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    border-right: 1.8px solid currentColor;
+    border-bottom: 1.8px solid currentColor;
+
+    transform: rotate(45deg) translateY(-2px);
+
+    transition: transform 0.25s ease;
+}
+
+/* Rotation à l'ouverture */
+
+.boutique-dropdown.ouvert .boutique-toggle::after {
+    transform: rotate(225deg) translateY(-2px);
+}
+
+
+/* Sous-menu */
+
+.boutique-sous-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+
+    display: none;
+
+    min-width: 185px;
+    padding: 8px;
+
+    background: #100a25;
+
+    border: 1px solid rgba(160, 0, 255, 0.35);
+    border-radius: 12px;
+
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Affichage du sous-menu */
+
+.boutique-dropdown.ouvert .boutique-sous-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Liens du sous-menu */
+
+.boutique-sous-menu a {
+    display: block;
+
+    padding: 11px 13px;
+
+    color: #ffffff;
+    text-decoration: none;
+
+    font-family: 'Manrope', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+
+    border-radius: 7px;
+
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.boutique-sous-menu a:hover,
+.boutique-sous-menu a:focus-visible {
+    color: #ffffff;
+    background: rgba(160, 0, 255, 0.2);
+}
+
+
+/* ==========================================
+   BOUTON PANIER
+========================================== */
 
 .bouton-panier {
+    flex-shrink: 0;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -147,6 +193,7 @@
     font-weight: 700;
 
     background: rgba(160, 0, 255, 0.10);
+
     border: 1px solid rgba(160, 0, 255, 0.4);
     border-radius: 30px;
 
@@ -158,14 +205,17 @@
     border-color: #A000FF;
 }
 
-/* COMPTEUR */
+
+/* ==========================================
+   COMPTEUR PANIER
+========================================== */
 
 #nombre-articles {
     min-width: 22px;
     height: 22px;
     padding: 0 5px;
 
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
 
@@ -178,29 +228,136 @@
     border-radius: 50px;
 }
 
+
 /* ==========================================
-   RESPONSIVE MOBILE
+   BURGER ET MENU MOBILE
+   CACHÉS SUR ORDINATEUR
+========================================== */
+
+.menu-burger,
+.menu-mobile {
+    display: none;
+}
+
+
+/* ==========================================
+   ACCESSIBILITÉ
+========================================== */
+
+.header a:focus-visible,
+.header button:focus-visible {
+    outline: 2px solid #c56aff;
+    outline-offset: 4px;
+}
+
+
+/* ==========================================
+   VERSION MOBILE
 ========================================== */
 
 @media (max-width: 768px) {
 
+    /* HEADER */
+
     .header {
-        height: 65px;
-        padding: 0 5%;
+        min-height: 70px;
+        height: 70px;
+        padding: 0 15px;
+        gap: 12px;
     }
+
+
+    /* BURGER */
 
     .menu-burger {
-        display: block;
+        flex-shrink: 0;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 38px;
+        height: 38px;
+        padding: 0;
+
+        color: #ffffff;
+        background: transparent;
+        border: 0;
+
+        font-size: 26px;
+
+        cursor: pointer;
     }
+
+
+    /* LOGO */
 
     .logo {
+        margin-right: auto;
+
         font-size: 22px;
+        letter-spacing: 1px;
     }
 
+
+    /* NAVIGATION ORDINATEUR */
+
+    .navigation-desktop {
+        display: none;
+    }
+
+
+    /* PANIER */
+
     .bouton-panier {
-        padding: 8px 13px;
-        font-size: 12px;
+        padding: 8px 11px;
+        font-size: 11px;
+    }
+
+
+    /* MENU MOBILE OUVERT */
+
+    .menu-mobile:not([hidden]) {
+        position: absolute;
+
+        top: 100%;
+        left: 0;
+        right: 0;
+
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        padding: 12px 15px 16px;
+
+        background: #08051b;
+
+        border-bottom: 1px solid rgba(160, 0, 255, 0.3);
+
+        box-shadow: 0 14px 25px rgba(0, 0, 0, 0.35);
+    }
+
+
+    /* LIENS MOBILE */
+
+    .menu-mobile a {
+        display: block;
+
+        padding: 13px 14px;
+
+        color: #ffffff;
+        text-decoration: none;
+
+        font-family: 'Manrope', sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+
+        border-radius: 8px;
+    }
+
+    .menu-mobile a:hover,
+    .menu-mobile a:focus-visible {
+        background: rgba(160, 0, 255, 0.18);
     }
 
 }
-

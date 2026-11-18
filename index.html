@@ -20,8 +20,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
     <!-- FEUILLES DE STYLE -->
 
@@ -40,35 +42,36 @@
 <body>
 
     <!-- =================================
-     01 - ÉCRAN D'ACCÈS CALI29
-================================== -->
+         01 - ÉCRAN D'ACCÈS CALI29
+    ================================== -->
 
-<div id="ecran-acces" class="ecran-acces">
+    <div id="ecran-acces" class="ecran-acces">
 
-    <div class="acces-contenu">
+        <div class="acces-contenu">
 
-        <div class="acces-logo">CALI29</div>
+            <div class="acces-logo">CALI29</div>
 
-        <p>ACCÈS RÉSERVÉ</p>
+            <p>ACCÈS RÉSERVÉ</p>
 
-        <h1>Bienvenue</h1>
+            <h1>Bienvenue</h1>
 
-        <input
-            type="password"
-            id="code-acces"
-            placeholder="Votre code d'accès"
-            autocomplete="off"
-        >
+            <input
+                type="password"
+                id="code-acces"
+                placeholder="Votre code d'accès"
+                autocomplete="off"
+            >
 
-        <button id="valider-acces">
-            ENTRER →
-        </button>
+            <button id="valider-acces">
+                ENTRER →
+            </button>
 
-        <p id="message-erreur"></p>
+            <p id="message-erreur"></p>
+
+        </div>
 
     </div>
 
-</div>
 
     <!-- =================================
          02 - HEADER / NAVIGATION
@@ -76,22 +79,117 @@
 
     <header id="header" class="header">
 
-        <button id="menu-burger"
-                class="menu-burger"
-                aria-label="Ouvrir le menu">
-            ☰
+        <!-- BURGER MOBILE -->
+
+        <button
+            id="menu-burger"
+            class="menu-burger"
+            type="button"
+            aria-label="Ouvrir le menu"
+            aria-controls="menu-mobile"
+            aria-expanded="false"
+        >
+            <span class="burger-icone">☰</span>
         </button>
+
+
+        <!-- LOGO -->
 
         <a href="index.html" class="logo">
             CALI29
         </a>
 
-        <a href="panier.html"
-           id="ouvrir-panier"
-           class="bouton-panier">
+
+        <!-- NAVIGATION ORDINATEUR -->
+
+        <nav class="navigation-desktop">
+
+            <a href="index.html" class="lien-navigation">
+                Accueil
+            </a>
+
+
+            <!-- MENU DÉROULANT BOUTIQUE -->
+
+            <div id="boutique-dropdown" class="boutique-dropdown">
+
+                <button
+                    id="boutique-toggle"
+                    class="lien-navigation boutique-toggle"
+                    type="button"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                >
+                    Boutique
+                </button>
+
+
+                <!-- SOUS-MENU -->
+
+                <div class="boutique-sous-menu">
+
+                    <a href="fleur.html">
+                        Fleurs
+                    </a>
+
+                    <a href="resine.html">
+                        Résines
+                    </a>
+
+                    <a href="accessoires.html">
+                        Accessoires
+                    </a>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+        <!-- PANIER -->
+
+        <a
+            href="panier.html"
+            id="ouvrir-panier"
+            class="bouton-panier"
+        >
             Panier
+
             <span id="nombre-articles">0</span>
+
         </a>
+
+
+        <!-- MENU MOBILE -->
+
+        <nav
+            id="menu-mobile"
+            class="menu-mobile"
+            hidden
+        >
+
+            <a href="index.html">
+                Accueil
+            </a>
+
+            <a href="fleur.html">
+                Fleurs
+            </a>
+
+            <a href="resine.html">
+                Résines
+            </a>
+
+            <a href="accessoires.html">
+                Accessoires
+            </a>
+
+            <a href="panier.html">
+                Mon panier
+            </a>
+
+        </nav>
 
     </header>
 
@@ -129,6 +227,7 @@
 
             </div>
 
+
             <!-- IMAGE DES MASCOTTES -->
 
             <div class="hero-image">
@@ -151,22 +250,33 @@
 
             <div class="avantages-container">
 
-    <article class="avantage">
-        <span class="avantage-icone">✦</span>
-        <p>Paiement en main propre</p>
-    </article>
+                <article class="avantage">
 
-    <article class="avantage">
-        <span class="avantage-icone">◇</span>
-        <p>Offres dégressives</p>
-    </article>
+                    <span class="avantage-icone">✦</span>
 
-    <article class="avantage">
-        <span class="avantage-icone">✧</span>
-        <p>Commande simplifiée</p>
-    </article>
+                    <p>Paiement en main propre</p>
 
-</div>
+                </article>
+
+
+                <article class="avantage">
+
+                    <span class="avantage-icone">◇</span>
+
+                    <p>Offres dégressives</p>
+
+                </article>
+
+
+                <article class="avantage">
+
+                    <span class="avantage-icone">✧</span>
+
+                    <p>Commande simplifiée</p>
+
+                </article>
+
+            </div>
 
         </section>
 
@@ -187,21 +297,42 @@
 
             </div>
 
+
             <div class="categories-container">
 
                 <a href="fleur.html" class="categorie">
-                    <img src="assets/images/weed.png" alt="Fleurs">
+
+                    <img
+                        src="assets/images/weed.png"
+                        alt="Fleurs"
+                    >
+
                     <h3>Fleurs</h3>
+
                 </a>
+
 
                 <a href="resine.html" class="categorie">
-                    <img src="assets/images/resine.png" alt="Résines">
+
+                    <img
+                        src="assets/images/resine.png"
+                        alt="Résines"
+                    >
+
                     <h3>Résines</h3>
+
                 </a>
 
+
                 <a href="accessoires.html" class="categorie">
-                    <img src="assets/images/accessoires.png" alt="Accessoires">
+
+                    <img
+                        src="assets/images/accessoires.png"
+                        alt="Accessoires"
+                    >
+
                     <h3>Produits</h3>
+
                 </a>
 
             </div>
@@ -211,8 +342,9 @@
 
         <!-- =================================
              07 - CATALOGUE PRODUITS
-        ================================== 
+        ================================== -->
 
+        <!--
         <section id="produits" class="produits">
 
             <div class="section-titre">
@@ -225,16 +357,15 @@
 
             </div>
 
-             CONTENU GÉNÉRÉ PAR JAVASCRIPT -->
+            <div
+                id="catalogue-produits"
+                class="produits-container"
+            >
 
-             <!--<div id="catalogue-produits"
-                 class="produits-container"> -->
+            </div>
 
-                <!-- Les cartes produits apparaîtront ici -->
-
-           <!-- </div>
-
-        </section> -->
+        </section>
+        -->
 
 
         <!-- =================================
@@ -251,6 +382,7 @@
                 >
 
             </div>
+
 
             <div class="univers-contenu">
 
@@ -282,17 +414,25 @@
             CALI29
         </div>
 
+
         <nav class="footer-liens">
 
             <a href="index.html">Accueil</a>
+
             <a href="fleur.html">Fleurs</a>
+
             <a href="resine.html">Résines</a>
+
             <a href="accessoires.html">Produits</a>
+
             <a href="#">Contact</a>
+
             <a href="#">Mentions légales</a>
+
             <a href="#">Politique de confidentialité</a>
 
         </nav>
+
 
         <p class="footer-copyright">
             © CALI29 - Tous droits réservés
@@ -317,9 +457,11 @@
 
         </div>
 
-        <a href="panier.html"
-           id="#"
-           class="bouton-commander">
+
+        <a
+            href="panier.html"
+            class="bouton-commander"
+        >
             VOIR MON PANIER →
         </a>
 
@@ -329,6 +471,8 @@
     <!-- =================================
          11 - FICHIERS JAVASCRIPT
     ================================== -->
+
+    <script src="js/menu.js" defer></script>
     <script src="js/acces.js" defer></script>
     <script src="js/produits.js" defer></script>
     <script src="js/catalogue.js" defer></script>
@@ -336,7 +480,5 @@
     <script src="js/commande.js" defer></script>
 
 </body>
-
-    
 
 </html>
