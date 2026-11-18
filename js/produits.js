@@ -1,10 +1,8 @@
-
 /* ==========================================
    CATALOGUE PRODUITS - CALI29
 ========================================== */
 
 const produits = [
-
 
 {
     id: "fleur-001",
@@ -42,7 +40,6 @@ const produits = [
     popularite: 8
 },
 
-
 {
     id: "resine-001",
     nom: "Royal mousse",
@@ -65,7 +62,6 @@ const produits = [
     nom: "RMF 73u",
     categorie: "resines",
     prix: 10.00,
-
     tarifs: [
         { grammage: 5, prix: 40.00 },
         { grammage: 10, prix: 70.00 },
@@ -87,7 +83,6 @@ const produits = [
     description: "Description de la résine à compléter.",
     popularite: 8
 },
-
 
 {
     id: "accessoire-001",
