@@ -44,33 +44,132 @@
 
     <header id="header" class="header">
 
-        <button id="menu-burger"
-                class="menu-burger"
-                aria-label="Ouvrir le menu">
-            ☰
+        <!-- BOUTON MENU MOBILE -->
+
+        <button
+            id="menu-burger"
+            class="menu-burger"
+            type="button"
+            aria-label="Ouvrir le menu"
+            aria-controls="menu-mobile"
+            aria-expanded="false"
+        >
+            <span class="burger-icone">☰</span>
         </button>
+
+
+        <!-- LOGO -->
 
         <a href="index.html" class="logo">
             CALI29
         </a>
 
-        <a href="panier.html" id="ouvrir-panier" class="bouton-panier">
+
+        <!-- NAVIGATION ORDINATEUR -->
+
+        <nav class="navigation-desktop">
+
+            <a href="index.html" class="lien-navigation">
+                Accueil
+            </a>
+
+
+            <!-- MENU DÉROULANT BOUTIQUE -->
+
+            <div id="boutique-dropdown" class="boutique-dropdown">
+
+                <button
+                    id="boutique-toggle"
+                    class="lien-navigation boutique-toggle"
+                    type="button"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                >
+                    Boutique
+                </button>
+
+
+                <!-- SOUS-MENU -->
+
+                <div class="boutique-sous-menu">
+
+                    <a href="fleur.html">
+                        Fleurs
+                    </a>
+
+                    <a href="resine.html">
+                        Résines
+                    </a>
+
+                    <a href="accessoires.html">
+                        Produits
+                    </a>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+        <!-- PANIER -->
+
+        <a
+            href="panier.html"
+            id="ouvrir-panier"
+            class="bouton-panier"
+        >
             Panier
             <span id="nombre-articles">0</span>
         </a>
 
+
+        <!-- MENU MOBILE -->
+
+        <nav
+            id="menu-mobile"
+            class="menu-mobile"
+            hidden
+        >
+
+            <a href="index.html">
+                Accueil
+            </a>
+
+            <a href="fleur.html">
+                Fleurs
+            </a>
+
+            <a href="resine.html">
+                Résines
+            </a>
+
+            <a href="accessoires.html">
+                Accessoires
+            </a>
+
+            <a href="panier.html">
+                Mon panier
+            </a>
+
+        </nav>
+
     </header>
 
 
+    <!-- =================================
+         03 - CONTENU PRINCIPAL
+    ================================== -->
+
     <main>
 
-        <!-- =================================
-             03 - TITRE DE LA CATÉGORIE
-        ================================== -->
+        <!-- TITRE DE LA CATÉGORIE -->
 
-        <section class="page-categorie"
-                 id="categorie-accessoires"
-                 data-categorie="accessoires">
+        <section
+            class="page-categorie"
+            id="categorie-accessoires"
+            data-categorie="accessoires"
+        >
 
             <div class="section-titre">
 
@@ -79,7 +178,7 @@
                 </p>
 
                 <h1 class="titre-categorie">
-                    ACCESSOIRES
+                    PRODUITS
                 </h1>
 
             </div>
@@ -111,8 +210,10 @@
                  05 - CATALOGUE PRODUITS
             ================================== -->
 
-            <div id="catalogue-produits"
-                 class="produits-container">
+            <div
+                id="catalogue-produits"
+                class="produits-container"
+            >
                 <!-- Cartes générées automatiquement depuis js/produits.js -->
             </div>
 
@@ -137,9 +238,10 @@
 
         </div>
 
-        <a href="panier.html"
-           id="#"
-           class="bouton-commander">
+        <a
+            href="panier.html"
+            class="bouton-commander"
+        >
             Voir mon panier
         </a>
 
@@ -177,6 +279,7 @@
          08 - JAVASCRIPT
     ================================== -->
 
+    <script src="js/menu.js" defer></script>
     <script src="js/acces.js"></script>
     <script src="js/produits.js" defer></script>
     <script src="js/catalogue.js" defer></script>

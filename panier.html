@@ -3,18 +3,33 @@
 <html lang="fr">
 
 <head>
+
+    <!-- =================================
+         01 - CONFIGURATION
+    ================================== -->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Mon panier | CALI29</title>
-    <meta name="description" content="Retrouvez votre sélection CALI29.">
 
-    <!-- POLICE -->
+    <meta
+        name="description"
+        content="Retrouvez votre sélection CALI29."
+    >
+
+    <!-- POLICE MANROPE -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
     <!-- FEUILLES DE STYLE -->
+
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/panier.css">
@@ -27,38 +42,155 @@
 
 <body>
 
-    <!-- HEADER -->
+    <!-- =================================
+         02 - HEADER
+    ================================== -->
+
     <header id="header" class="header">
 
-        <button id="menu-burger"
-                class="menu-burger"
-                aria-label="Ouvrir le menu">
-            ☰
+        <!-- BOUTON MENU MOBILE -->
+
+        <button
+            id="menu-burger"
+            class="menu-burger"
+            type="button"
+            aria-label="Ouvrir le menu"
+            aria-controls="menu-mobile"
+            aria-expanded="false"
+        >
+            <span class="burger-icone">☰</span>
         </button>
 
-        <a href="index.html" class="logo">CALI29</a>
 
-        <a href="panier.html" class="bouton-panier">
+        <!-- LOGO -->
+
+        <a href="index.html" class="logo">
+            CALI29
+        </a>
+
+
+        <!-- NAVIGATION ORDINATEUR -->
+
+        <nav class="navigation-desktop">
+
+            <a href="index.html" class="lien-navigation">
+                Accueil
+            </a>
+
+
+            <!-- MENU DÉROULANT BOUTIQUE -->
+
+            <div id="boutique-dropdown" class="boutique-dropdown">
+
+                <button
+                    id="boutique-toggle"
+                    class="lien-navigation boutique-toggle"
+                    type="button"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                >
+                    Boutique
+                </button>
+
+
+                <!-- SOUS-MENU -->
+
+                <div class="boutique-sous-menu">
+
+                    <a href="fleur.html">
+                        Fleurs
+                    </a>
+
+                    <a href="resine.html">
+                        Résines
+                    </a>
+
+                    <a href="accessoires.html">
+                        Produits
+                    </a>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+        <!-- PANIER -->
+
+        <a
+            href="panier.html"
+            id="ouvrir-panier"
+            class="bouton-panier"
+        >
             Panier
             <span id="nombre-articles">0</span>
         </a>
 
+
+        <!-- MENU MOBILE -->
+
+        <nav
+            id="menu-mobile"
+            class="menu-mobile"
+            hidden
+        >
+
+            <a href="index.html">
+                Accueil
+            </a>
+
+            <a href="fleur.html">
+                Fleurs
+            </a>
+
+            <a href="resine.html">
+                Résines
+            </a>
+
+            <a href="accessoires.html">
+                Accessoires
+            </a>
+
+            <a href="panier.html">
+                Mon panier
+            </a>
+
+        </nav>
+
     </header>
+
+
+    <!-- =================================
+         03 - CONTENU PRINCIPAL
+    ================================== -->
 
     <main>
 
         <section class="panier-page">
 
             <div class="section-titre">
-                <p class="section-surtitre">VOTRE SÉLECTION</p>
+
+                <p class="section-surtitre">
+                    VOTRE SÉLECTION
+                </p>
+
                 <h1>MON PANIER</h1>
-                <p>Retrouvez tous les articles que vous avez sélectionnés.</p>
+
+                <p>
+                    Retrouvez tous les articles que vous avez sélectionnés.
+                </p>
+
             </div>
 
+
             <!-- PANIER VIDE -->
+
             <div id="panier-vide" class="panier-vide">
 
-                <div class="panier-vide-icone">🛒</div>
+                <div class="panier-vide-icone">
+                    🛒
+                </div>
 
                 <h2>Votre panier est vide</h2>
 
@@ -66,50 +198,81 @@
                     Vous n'avez pas encore ajouté d'article à votre sélection.
                 </p>
 
-                <a href="index.html" class="bouton-retour-boutique">
+                <a
+                    href="index.html"
+                    class="bouton-retour-boutique"
+                >
                     RETOURNER À LA BOUTIQUE
                 </a>
 
             </div>
 
+
             <!-- PANIER AVEC ARTICLES -->
+
             <div id="panier-rempli" class="panier-rempli">
 
                 <div class="panier-liste-container">
 
                     <div class="panier-liste-titre">
+
                         <h2>MES ARTICLES</h2>
 
-                        <button id="vider-panier" type="button">
+                        <button
+                            id="vider-panier"
+                            type="button"
+                        >
                             Vider le panier
                         </button>
+
                     </div>
 
-                    <div id="liste-panier" class="liste-panier">
+                    <div
+                        id="liste-panier"
+                        class="liste-panier"
+                    >
                         <!-- ARTICLES GÉNÉRÉS PAR JAVASCRIPT -->
                     </div>
 
                 </div>
 
+
                 <!-- RÉCAPITULATIF -->
+
                 <aside class="panier-recapitulatif">
 
                     <h2>RÉCAPITULATIF</h2>
 
-                    <div class="panier-recap-ligne">
-                        <span>Nombre d'articles</span>
-                        <strong id="panier-nombre-total">0</strong>
-                    </div>
 
                     <div class="panier-recap-ligne">
-                        <span>Sous-total</span>
-                        <strong id="panier-sous-total">0,00 €</strong>
+
+                        <span>Nombre d'articles</span>
+
+                        <strong id="panier-nombre-total">
+                            0
+                        </strong>
+
                     </div>
+
+
+                    <div class="panier-recap-ligne">
+
+                        <span>Sous-total</span>
+
+                        <strong id="panier-sous-total">
+                            0,00 €
+                        </strong>
+
+                    </div>
+
 
                     <!-- CODE PROMO -->
+
                     <div class="panier-promo">
 
-                        <label for="code-promo">CODE PROMO</label>
+                        <label for="code-promo">
+                            CODE PROMO
+                        </label>
 
                         <div class="panier-promo-champ">
 
@@ -117,11 +280,13 @@
                                 type="text"
                                 id="code-promo"
                                 placeholder="Saisir un code promo"
-                                autocomplete="off">
+                                autocomplete="off"
+                            >
 
                             <button
                                 type="button"
-                                id="appliquer-code-promo">
+                                id="appliquer-code-promo"
+                            >
                                 APPLIQUER
                             </button>
 
@@ -130,35 +295,65 @@
                         <p
                             id="message-code-promo"
                             class="message-code-promo"
-                            aria-live="polite">
-                        </p>
+                            aria-live="polite"
+                        ></p>
 
                     </div>
+
 
                     <!-- RÉDUCTION -->
-                    <div class="panier-recap-ligne">
-                        <span>Réduction</span>
-                        <strong id="panier-reduction">0,00 €</strong>
-                    </div>
 
                     <div class="panier-recap-ligne">
-                        <span>Livraison</span>
-                        <strong id="panier-livraison">À confirmer</strong>
+
+                        <span>Réduction</span>
+
+                        <strong id="panier-reduction">
+                            0,00 €
+                        </strong>
+
                     </div>
+
+
+                    <!-- LIVRAISON -->
+
+                    <div class="panier-recap-ligne">
+
+                        <span>Livraison</span>
+
+                        <strong id="panier-livraison">
+                            À confirmer
+                        </strong>
+
+                    </div>
+
+
+                    <!-- TOTAL -->
 
                     <div class="panier-recap-total">
+
                         <span>TOTAL</span>
-                        <strong id="panier-total">0,00 €</strong>
+
+                        <strong id="panier-total">
+                            0,00 €
+                        </strong>
+
                     </div>
+
+
+                    <!-- PASSER COMMANDE -->
 
                     <button
                         id="commander-panier"
                         class="bouton-commander"
-                        type="button">
+                        type="button"
+                    >
                         PASSER COMMANDE
                     </button>
 
-                    <a href="index.html" class="lien-continuer-achats">
+                    <a
+                        href="index.html"
+                        class="lien-continuer-achats"
+                    >
                         Continuer mes achats
                     </a>
 
@@ -172,26 +367,37 @@
 
 
     <!-- ==========================================
-         POPUP DE COMMANDE
+         04 - POPUP DE COMMANDE
     =========================================== -->
 
-    <div id="order-popup" class="order-popup" aria-hidden="true">
+    <div
+        id="order-popup"
+        class="order-popup"
+        aria-hidden="true"
+    >
 
-        <div class="order-popup-overlay" data-close-popup></div>
+        <div
+            class="order-popup-overlay"
+            data-close-popup
+        ></div>
+
 
         <div
             class="order-popup-content"
             role="dialog"
             aria-modal="true"
-            aria-labelledby="order-popup-title">
+            aria-labelledby="order-popup-title"
+        >
 
             <button
                 class="order-popup-close"
                 type="button"
                 aria-label="Fermer"
-                data-close-popup>
+                data-close-popup
+            >
                 &times;
             </button>
+
 
             <span class="order-popup-label">
                 VOTRE SÉLECTION
@@ -201,53 +407,84 @@
                 Finaliser ma commande
             </h2>
 
-            <p class="order-popup-description" id="order-popup-description">
+            <p
+                class="order-popup-description"
+                id="order-popup-description"
+            >
                 Renseignez votre adresse pour préparer votre commande.
             </p>
 
 
             <!-- ÉTAPE 1 : LIVRAISON -->
 
-            <form id="delivery-form" class="delivery-form">
+            <form
+                id="delivery-form"
+                class="delivery-form"
+            >
 
                 <h3>COORDONNÉES DE LIVRAISON</h3>
 
+
                 <div class="delivery-field">
-                    <label for="delivery-address">Adresse</label>
+
+                    <label for="delivery-address">
+                        Adresse
+                    </label>
+
                     <input
                         type="text"
                         id="delivery-address"
                         name="adresse"
                         required
-                        autocomplete="street-address">
+                        autocomplete="street-address"
+                    >
+
                 </div>
+
 
                 <div class="delivery-fields-row">
 
                     <div class="delivery-field">
-                        <label for="delivery-postcode">Code postal</label>
+
+                        <label for="delivery-postcode">
+                            Code postal
+                        </label>
+
                         <input
                             type="text"
                             id="delivery-postcode"
                             name="codePostal"
                             required
                             autocomplete="postal-code"
-                            inputmode="numeric">
+                            inputmode="numeric"
+                        >
+
                     </div>
 
+
                     <div class="delivery-field">
-                        <label for="delivery-city">Ville</label>
+
+                        <label for="delivery-city">
+                            Ville
+                        </label>
+
                         <input
                             type="text"
                             id="delivery-city"
                             name="ville"
                             required
-                            autocomplete="address-level2">
+                            autocomplete="address-level2"
+                        >
+
                     </div>
 
                 </div>
 
-                <button type="submit" class="delivery-continue">
+
+                <button
+                    type="submit"
+                    class="delivery-continue"
+                >
                     CONTINUER
                 </button>
 
@@ -259,7 +496,8 @@
             <div
                 class="order-popup-summary"
                 id="order-popup-summary"
-                hidden>
+                hidden
+            >
 
                 <h3>RÉCAPITULATIF</h3>
 
@@ -268,8 +506,13 @@
                 </div>
 
                 <div class="order-popup-total">
+
                     <span>TOTAL</span>
-                    <strong id="order-popup-total">0,00 €</strong>
+
+                    <strong id="order-popup-total">
+                        0,00 €
+                    </strong>
+
                 </div>
 
             </div>
@@ -280,25 +523,30 @@
             <div
                 class="order-popup-options"
                 id="order-popup-options"
-                hidden>
+                hidden
+            >
 
                 <button
                     type="button"
                     id="delivery-back"
-                    class="delivery-back">
+                    class="delivery-back"
+                >
                     ← Modifier mes coordonnées
                 </button>
+
 
                 <p class="order-popup-choice">
                     CHOISIR UN MOYEN DE CONTACT
                 </p>
+
 
                 <!-- WHATSAPP TEMPORAIREMENT DÉSACTIVÉ
 
                 <button
                     type="button"
                     class="order-contact-btn whatsapp"
-                    data-contact="whatsapp">
+                    data-contact="whatsapp"
+                >
 
                     <span class="contact-icon">W</span>
 
@@ -313,12 +561,14 @@
 
                 -->
 
+
                 <!-- TELEGRAM -->
 
                 <button
                     type="button"
                     class="order-contact-btn telegram"
-                    data-contact="telegram">
+                    data-contact="telegram"
+                >
 
                     <span class="contact-icon">T</span>
 
@@ -331,12 +581,14 @@
 
                 </button>
 
+
                 <!-- SIGNAL -->
 
                 <button
                     type="button"
                     class="order-contact-btn signal"
-                    data-contact="signal">
+                    data-contact="signal"
+                >
 
                     <span class="contact-icon">S</span>
 
@@ -351,6 +603,7 @@
 
             </div>
 
+
             <p class="order-popup-footer">
                 Votre récapitulatif sera préparé automatiquement.
             </p>
@@ -360,7 +613,9 @@
     </div>
 
 
-    <!-- FOOTER -->
+    <!-- =================================
+         05 - FOOTER
+    ================================== -->
 
     <footer class="footer">
 
@@ -371,10 +626,12 @@
             </a>
 
             <nav class="footer-liens">
+
                 <a href="index.html">Accueil</a>
                 <a href="fleur.html">Fleurs</a>
                 <a href="resine.html">Résines</a>
                 <a href="accessoires.html">Produits</a>
+
             </nav>
 
         </div>
@@ -386,8 +643,11 @@
     </footer>
 
 
-    <!-- JAVASCRIPT -->
+    <!-- =================================
+         06 - JAVASCRIPT
+    ================================== -->
 
+    <script src="js/menu.js" defer></script>
     <script src="js/acces.js"></script>
     <script src="js/produits.js" defer></script>
     <script src="js/panier.js" defer></script>
@@ -396,4 +656,5 @@
     <script src="js/order-popup.js" defer></script>
 
 </body>
+
 </html>

@@ -16,13 +16,17 @@
 
     <title>Fleurs CBD | CALI29</title>
 
+
     <!-- POLICE MANROPE -->
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
 
     <!-- FEUILLES DE STYLE -->
 
@@ -36,41 +40,132 @@
 
 </head>
 
+
 <body>
 
+
     <!-- =================================
-         02 - HEADER
+         02 - HEADER / NAVIGATION
     ================================== -->
 
     <header id="header" class="header">
 
-        <button id="menu-burger"
-                class="menu-burger"
-                aria-label="Ouvrir le menu">
-            ☰
+
+        <!-- BURGER MOBILE -->
+
+        <button
+            id="menu-burger"
+            class="menu-burger"
+            type="button"
+            aria-label="Ouvrir le menu"
+            aria-controls="menu-mobile"
+            aria-expanded="false"
+        >
+            <span class="burger-icone">☰</span>
         </button>
+
+
+        <!-- LOGO -->
 
         <a href="index.html" class="logo">
             CALI29
         </a>
 
-        <a href="panier.html" id="ouvrir-panier" class="bouton-panier">
+
+        <!-- NAVIGATION ORDINATEUR -->
+
+        <nav class="navigation-desktop">
+
+            <a href="index.html" class="lien-navigation">
+                Accueil
+            </a>
+
+
+            <!-- MENU BOUTIQUE -->
+
+            <div id="boutique-dropdown" class="boutique-dropdown">
+
+                <button
+                    id="boutique-toggle"
+                    class="lien-navigation boutique-toggle"
+                    type="button"
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                >
+                    Boutique
+                </button>
+
+
+                <!-- SOUS-MENU -->
+
+                <div class="boutique-sous-menu">
+
+                    <a href="fleur.html">Fleurs</a>
+
+                    <a href="resine.html">Résines</a>
+
+                    <a href="accessoires.html">Produits</a>
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+        <!-- PANIER -->
+
+        <a
+            href="panier.html"
+            id="ouvrir-panier"
+            class="bouton-panier"
+        >
             Panier
+
             <span id="nombre-articles">0</span>
         </a>
+
+
+        <!-- MENU MOBILE -->
+
+        <nav
+            id="menu-mobile"
+            class="menu-mobile"
+            hidden
+        >
+
+            <a href="index.html">Accueil</a>
+
+            <a href="fleur.html">Fleurs</a>
+
+            <a href="resine.html">Résines</a>
+
+            <a href="accessoires.html">Accessoires</a>
+
+            <a href="panier.html">Mon panier</a>
+
+        </nav>
 
     </header>
 
 
+
+    <!-- =================================
+         03 - CONTENU PRINCIPAL
+    ================================== -->
+
     <main>
 
+
         <!-- =================================
-             03 - TITRE DE LA CATÉGORIE
+             04 - CATÉGORIE FLEURS
         ================================== -->
 
-        <section class="page-categorie"
-                 id="categorie-fleurs"
-                 data-categorie="fleurs">
+        <section
+            class="page-categorie"
+            id="categorie-fleurs"
+            data-categorie="fleurs"
+        >
 
             <div class="section-titre">
 
@@ -86,7 +181,7 @@
 
 
             <!-- =================================
-                 04 - TRI DES PRODUITS
+                 05 - TRI DES PRODUITS
             ================================== -->
 
             <div class="tri-produits">
@@ -96,20 +191,36 @@
                 </label>
 
                 <select id="tri-produits">
-                    <option value="popularite">Popularité</option>
-                    <option value="prix-croissant">Prix croissant</option>
-                    <option value="prix-decroissant">Prix décroissant</option>
-                    <option value="nom">Nom</option>
+
+                    <option value="popularite">
+                        Popularité
+                    </option>
+
+                    <option value="prix-croissant">
+                        Prix croissant
+                    </option>
+
+                    <option value="prix-decroissant">
+                        Prix décroissant
+                    </option>
+
+                    <option value="nom">
+                        Nom
+                    </option>
+
                 </select>
 
             </div>
 
 
             <!-- =================================
-                 05 - CATALOGUE PRODUITS
+                 06 - CATALOGUE PRODUITS
             ================================== -->
 
-            <div id="catalogue-produits" class="produits-container">
+            <div
+                id="catalogue-produits"
+                class="produits-container"
+            >
                 <!-- Cartes générées automatiquement depuis js/produits.js -->
             </div>
 
@@ -118,8 +229,9 @@
     </main>
 
 
+
     <!-- =================================
-         06 - PANIER FIXE
+         07 - PANIER FIXE
     ================================== -->
 
     <div id="panier-fixe" class="panier-fixe">
@@ -134,17 +246,19 @@
 
         </div>
 
-        <a href="panier.html"
-           id="#"
-           class="bouton-commander">
+        <a
+            href="panier.html"
+            class="bouton-commander"
+        >
             Voir mon panier
         </a>
 
     </div>
 
 
+
     <!-- =================================
-         07 - FOOTER
+         08 - FOOTER
     ================================== -->
 
     <footer class="footer">
@@ -153,15 +267,21 @@
             CALI29
         </div>
 
+
         <nav class="footer-liens">
 
             <a href="index.html">Accueil</a>
+
             <a href="fleur.html">Fleurs</a>
+
             <a href="resine.html">Résines</a>
+
             <a href="accessoires.html">Produits</a>
+
             <a href="#">Contact</a>
 
         </nav>
+
 
         <p class="footer-copyright">
             © 2026 CALI29 - Tous droits réservés.
@@ -170,11 +290,13 @@
     </footer>
 
 
+
     <!-- =================================
-         08 - JAVASCRIPT
+         09 - JAVASCRIPT
     ================================== -->
 
-    <script src="js/acces.js"></script>
+    <script src="js/menu.js" defer></script>
+    <script src="js/acces.js" defer></script>
     <script src="js/produits.js" defer></script>
     <script src="js/catalogue.js" defer></script>
     <script src="js/panier.js" defer></script>
