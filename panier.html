@@ -106,6 +106,41 @@
                         <strong id="panier-sous-total">0,00 €</strong>
                     </div>
 
+                    <!-- CODE PROMO -->
+                    <div class="panier-promo">
+
+                        <label for="code-promo">CODE PROMO</label>
+
+                        <div class="panier-promo-champ">
+
+                            <input
+                                type="text"
+                                id="code-promo"
+                                placeholder="Saisir un code promo"
+                                autocomplete="off">
+
+                            <button
+                                type="button"
+                                id="appliquer-code-promo">
+                                APPLIQUER
+                            </button>
+
+                        </div>
+
+                        <p
+                            id="message-code-promo"
+                            class="message-code-promo"
+                            aria-live="polite">
+                        </p>
+
+                    </div>
+
+                    <!-- RÉDUCTION -->
+                    <div class="panier-recap-ligne">
+                        <span>Réduction</span>
+                        <strong id="panier-reduction">0,00 €</strong>
+                    </div>
+
                     <div class="panier-recap-ligne">
                         <span>Livraison</span>
                         <strong id="panier-livraison">À confirmer</strong>
@@ -258,6 +293,8 @@
                     CHOISIR UN MOYEN DE CONTACT
                 </p>
 
+                <!-- WHATSAPP TEMPORAIREMENT DÉSACTIVÉ
+
                 <button
                     type="button"
                     class="order-contact-btn whatsapp"
@@ -274,6 +311,10 @@
 
                 </button>
 
+                -->
+
+                <!-- TELEGRAM -->
+
                 <button
                     type="button"
                     class="order-contact-btn telegram"
@@ -289,6 +330,8 @@
                     <span class="contact-arrow">›</span>
 
                 </button>
+
+                <!-- SIGNAL -->
 
                 <button
                     type="button"
@@ -348,6 +391,7 @@
     <script src="js/acces.js"></script>
     <script src="js/produits.js" defer></script>
     <script src="js/panier.js" defer></script>
+    <script src="js/promotions.js" defer></script>
     <script src="js/commande.js" defer></script>
     <script src="js/order-popup.js" defer></script>
 
