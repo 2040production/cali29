@@ -1,4 +1,3 @@
-
 /* ==========================================
    AFFICHAGE DU CATALOGUE - CALI29
    Données :
@@ -138,70 +137,19 @@ function afficherCatalogue() {
 
     const categorie = sectionCategorie?.dataset.categorie;
 
-    const selectTri = document.getElementById('tri-produits');
-
 
     /* ======================================
        OBTENIR LES PRODUITS À AFFICHER
+       Aucun tri : ordre défini dans produits.js
     ====================================== */
 
     function obtenirProduitsAffiches() {
 
-        let liste = categorie
-
+        // Sur une page catégorie, afficher tous les produits de la catégorie.
+        // Sur l'accueil, afficher les 4 premiers produits du catalogue.
+        return categorie
             ? catalogue.filter(produit => produit.categorie === categorie)
-
-            : [...catalogue]
-                .sort((a, b) =>
-                    (b.popularite || 0) - (a.popularite || 0)
-                )
-                .slice(0, 4);
-
-
-        /* ==================================
-           TRI DES PRODUITS
-        ================================== */
-
-        if (selectTri) {
-
-            switch (selectTri.value) {
-
-                case 'prix-croissant':
-
-                    liste.sort((a, b) => a.prix - b.prix);
-
-                    break;
-
-
-                case 'prix-decroissant':
-
-                    liste.sort((a, b) => b.prix - a.prix);
-
-                    break;
-
-
-                case 'nom':
-
-                    liste.sort((a, b) =>
-                        a.nom.localeCompare(b.nom, 'fr')
-                    );
-
-                    break;
-
-
-                case 'popularite':
-
-                default:
-
-                    liste.sort((a, b) =>
-                        (b.popularite || 0) - (a.popularite || 0)
-                    );
-
-            }
-
-        }
-
-        return liste;
+            : catalogue.slice(0, 4);
 
     }
 
@@ -219,17 +167,6 @@ function afficherCatalogue() {
             ? liste.map(creerCarteProduit).join('')
 
             : '<p class="catalogue-vide">Aucun produit dans cette catégorie pour le moment.</p>';
-
-    }
-
-
-    /* ======================================
-       ÉVÉNEMENT DE TRI
-    ====================================== */
-
-    if (selectTri) {
-
-        selectTri.addEventListener('change', rendre);
 
     }
 

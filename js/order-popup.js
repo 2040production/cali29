@@ -161,23 +161,35 @@ function afficherRecapitulatifPopup() {
     orderItems.innerHTML = "";
 
 
-    // ARTICLES
+    /* ======================================
+       ARTICLES
+       PRIX RECALCULÉS SELON LA VILLE
+    ====================================== */
 
-    panier.forEach(article => {
-
-        const sousTotal =
-            Number(article.prix) * Number(article.quantite);
+    details.articles.forEach(article => {
 
         const ligne = document.createElement("div");
         ligne.className = "order-popup-item";
 
         const nom = document.createElement("span");
         nom.className = "order-popup-item-name";
-        nom.textContent = article.nom + " × " + article.quantite;
+
+        let texteNom = article.nom;
+
+        if (
+            article.grammage !== null &&
+            article.grammage !== undefined
+        ) {
+            texteNom += " — " + article.grammage + " g";
+        }
+
+        texteNom += " × " + article.quantite;
+
+        nom.textContent = texteNom;
 
         const prix = document.createElement("strong");
         prix.className = "order-popup-item-price";
-        prix.textContent = formatOrderPrice(sousTotal);
+        prix.textContent = formatOrderPrice(article.sousTotal);
 
         ligne.append(nom, prix);
 
@@ -186,11 +198,14 @@ function afficherRecapitulatifPopup() {
     });
 
 
-    // RÉCAPITULATIF FINANCIER
+    /* ======================================
+       RÉCAPITULATIF FINANCIER
+    ====================================== */
 
     ajouterTitreRecapitulatif("RÉCAPITULATIF");
 
-    // Sous-total
+
+    // SOUS-TOTAL
 
     ajouterLigneRecapitulatif(
         "Sous-total produits",
@@ -198,7 +213,7 @@ function afficherRecapitulatifPopup() {
     );
 
 
-    // Code promo
+    // CODE PROMO
 
     if (details.codePromo) {
 
@@ -230,7 +245,7 @@ function afficherRecapitulatifPopup() {
     }
 
 
-    // Livraison
+    // LIVRAISON
 
     const texteLivraison =
         details.fraisLivraison === 0
@@ -248,7 +263,9 @@ function afficherRecapitulatifPopup() {
     orderTotal.textContent = formatOrderPrice(details.total);
 
 
-    // COORDONNÉES DE LIVRAISON
+    /* ======================================
+       COORDONNÉES DE LIVRAISON
+    ====================================== */
 
     if (coordonneesLivraison) {
 
@@ -285,6 +302,10 @@ function ouvrirOrderPopup() {
         return;
 
     }
+
+    coordonneesLivraison = null;
+
+    effacerErreurMinimum();
 
     afficherEtapeLivraison();
 
@@ -336,6 +357,102 @@ function recupererCoordonneesLivraison() {
 
 
 /* ==========================================
+   MESSAGE D'ERREUR INTÉGRÉ AU FORMULAIRE
+========================================== */
+
+function afficherErreurMinimum(message) {
+
+    let erreur = document.getElementById("order-minimum-error");
+
+    if (!erreur) {
+
+        erreur = document.createElement("div");
+        erreur.id = "order-minimum-error";
+        erreur.className = "order-minimum-error";
+        erreur.setAttribute("role", "alert");
+
+        const bouton = deliveryForm.querySelector(".delivery-continue");
+
+        deliveryForm.insertBefore(erreur, bouton);
+
+    }
+
+    erreur.textContent = message;
+    erreur.hidden = false;
+
+}
+
+
+function effacerErreurMinimum() {
+
+    const erreur = document.getElementById("order-minimum-error");
+
+    if (erreur) {
+        erreur.remove();
+    }
+
+}
+
+
+/* ==========================================
+   VÉRIFIER LE MINIMUM DE COMMANDE
+========================================== */
+
+function verifierMinimumAvantCommande() {
+
+    if (
+        !coordonneesLivraison ||
+        !coordonneesLivraison.ville
+    ) {
+
+        afficherErreurMinimum("Renseigne ta ville de livraison.");
+
+        return false;
+
+    }
+
+    if (typeof calculerDetailsCommande !== "function") {
+
+        console.error("Fonction calculerDetailsCommande introuvable.");
+
+        return false;
+
+    }
+
+    const details = calculerDetailsCommande(coordonneesLivraison);
+
+    if (!details) {
+
+        afficherErreurMinimum("Impossible de récupérer le panier.");
+
+        return false;
+
+    }
+
+    if (details.commandeMinimumAtteint === false) {
+
+        afficherErreurMinimum(
+            "Minimum de commande non atteint.\n\n" +
+            "Minimum requis : " +
+            formatOrderPrice(details.minimumCommande) +
+            "\nSous-total actuel : " +
+            formatOrderPrice(details.sousTotal) +
+            "\nMontant manquant : " +
+            formatOrderPrice(details.montantManquant)
+        );
+
+        return false;
+
+    }
+
+    effacerErreurMinimum();
+
+    return true;
+
+}
+
+
+/* ==========================================
    VALIDER LA LIVRAISON
 ========================================== */
 
@@ -348,6 +465,12 @@ function validerLivraison(event) {
     }
 
     coordonneesLivraison = recupererCoordonneesLivraison();
+
+    // VÉRIFICATION DU MINIMUM AVANT DE CONTINUER
+
+    if (!verifierMinimumAvantCommande()) {
+        return;
+    }
 
     if (!afficherRecapitulatifPopup()) {
 
@@ -416,6 +539,18 @@ async function copierMessageCommande(message) {
 ========================================== */
 
 async function envoyerCommande(platform) {
+
+
+    // NOUVELLE VÉRIFICATION AVANT L'ENVOI
+
+    if (!verifierMinimumAvantCommande()) {
+
+        afficherEtapeLivraison();
+
+        return;
+
+    }
+
 
     const message = genererRecapitulatifCommande(
         coordonneesLivraison

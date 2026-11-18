@@ -385,6 +385,33 @@
 }
 
 /* ==========================================
+   ERREUR MINIMUM DE COMMANDE
+   MAUVE ROSÉ DOUX
+========================================== */
+
+.order-minimum-error {
+    white-space: pre-line;
+
+    padding: 16px;
+    margin-top: 5px;
+
+    border: 1px solid #D8B2CE;
+    border-left: 4px solid #B77A9F;
+    border-radius: 9px;
+
+    background: #F7EDF3;
+    color: #59364D;
+
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.9;
+}
+
+.order-minimum-error[hidden] {
+    display: none !important;
+}
+
+/* ==========================================
    MOBILE
 ========================================== */
 

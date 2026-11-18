@@ -1,7 +1,12 @@
 
 /* ==========================================
    PROMOTIONS - CALI29
-   CONFIGURATION DES CODES PROMO
+   CODES PROMO ET OFFRES SPÉCIALES
+========================================== */
+
+
+/* ==========================================
+   1. CODES PROMO
 ========================================== */
 
 const PROMOTIONS = [
@@ -12,27 +17,19 @@ const PROMOTIONS = [
 
         // Type : "pourcentage" ou "fixe"
         type: "pourcentage",
-
-        // Valeur de la réduction
         valeur: 10,
 
-        // Montant minimum du panier en euros
         montantMinimum: 0,
 
-        // Villes autorisées
         // [] = toutes les villes
         villesAutorisees: [],
 
-        // Identifiants des produits autorisés
         // [] = tous les produits
         produitsAutorises: [],
 
-        // Catégories autorisées
         // [] = toutes les catégories
         categoriesAutorisees: [],
 
-        // Dates de validité (format AAAA-MM-JJ)
-        // null = aucune limite
         dateDebut: null,
         dateFin: null
     }
@@ -41,10 +38,54 @@ const PROMOTIONS = [
 
 
 /* ==========================================
-   NORMALISER UN TEXTE
+   2. OFFRES SPÉCIALES
+========================================== */
+
+const OFFRES_SPECIALES = [
+
+    {
+        id: "offre-rmf-73u-10g",
+
+        nom: "Offre RMF 73u - 10 g",
+
+        actif: false,
+
+        // Produit concerné
+        produitId: "resine-002",
+
+        // Grammage concerné
+        grammage: 10,
+
+        // Type : "pourcentage" ou "fixe"
+        type: "fixe",
+
+        // Montant de la réduction
+        // En fixe : réduction par unité commandée
+        // En pourcentage : pourcentage du prix
+        valeur: 20,
+
+        // Zone : "toutes" ou "ville"
+        zone: "ville",
+
+        // Ville concernée si zone = "ville"
+        ville: "Brest",
+
+        // Cumul avec les codes promo
+        cumulableCodePromo: false,
+
+        dateDebut: null,
+        dateFin: null
+    }
+
+];
+
+
+/* ==========================================
+   3. NORMALISER UN TEXTE
 ========================================== */
 
 function normaliserTexte(texte) {
+
     return String(texte || "")
         .trim()
         .toLowerCase()
@@ -54,23 +95,7 @@ function normaliserTexte(texte) {
 
 
 /* ==========================================
-   TROUVER UN CODE PROMO
-========================================== */
-
-function trouverPromotion(code) {
-
-    const codeNormalise = String(code || "")
-        .trim()
-        .toUpperCase();
-
-    return PROMOTIONS.find(promotion =>
-        promotion.code.toUpperCase() === codeNormalise
-    ) || null;
-}
-
-
-/* ==========================================
-   OBTENIR LA DATE DU JOUR
+   4. OBTENIR LA DATE DU JOUR
 ========================================== */
 
 function obtenirDateLocale() {
@@ -86,7 +111,43 @@ function obtenirDateLocale() {
 
 
 /* ==========================================
-   CALCULER LE MONTANT ÉLIGIBLE
+   5. VÉRIFIER LES DATES
+========================================== */
+
+function promotionDansPeriode(promotion) {
+
+    const aujourdHui = obtenirDateLocale();
+
+    if (promotion.dateDebut && aujourdHui < promotion.dateDebut) {
+        return false;
+    }
+
+    if (promotion.dateFin && aujourdHui > promotion.dateFin) {
+        return false;
+    }
+
+    return true;
+}
+
+
+/* ==========================================
+   6. TROUVER UN CODE PROMO
+========================================== */
+
+function trouverPromotion(code) {
+
+    const codeNormalise = String(code || "")
+        .trim()
+        .toUpperCase();
+
+    return PROMOTIONS.find(promotion =>
+        String(promotion.code || "").toUpperCase() === codeNormalise
+    ) || null;
+}
+
+
+/* ==========================================
+   7. CALCULER LE MONTANT ÉLIGIBLE
 ========================================== */
 
 function calculerMontantEligible(promotion, sousTotal, articles = []) {
@@ -94,7 +155,6 @@ function calculerMontantEligible(promotion, sousTotal, articles = []) {
     const produitsAutorises = promotion.produitsAutorises || [];
     const categoriesAutorisees = promotion.categoriesAutorisees || [];
 
-    // Aucun filtre produit : tout le panier est éligible
     if (
         produitsAutorises.length === 0 &&
         categoriesAutorisees.length === 0
@@ -141,7 +201,7 @@ function calculerMontantEligible(promotion, sousTotal, articles = []) {
 
 
 /* ==========================================
-   CALCULER LA RÉDUCTION
+   8. CALCULER UNE RÉDUCTION DE CODE PROMO
 ========================================== */
 
 function calculerReductionPromo(promotion, sousTotal, articles = []) {
@@ -166,7 +226,6 @@ function calculerReductionPromo(promotion, sousTotal, articles = []) {
 
     }
 
-    // La réduction ne peut pas dépasser le montant éligible
     reduction = Math.min(reduction, montantEligible);
 
     return Math.max(0, Math.round(reduction * 100) / 100);
@@ -174,10 +233,16 @@ function calculerReductionPromo(promotion, sousTotal, articles = []) {
 
 
 /* ==========================================
-   VÉRIFIER UN CODE PROMO
+   9. VÉRIFIER UN CODE PROMO
 ========================================== */
 
-function verifierCodePromo(code, sousTotal, ville = "", articles = []) {
+function verifierCodePromo(
+    code,
+    sousTotal,
+    ville = "",
+    articles = [],
+    offresAppliquees = []
+) {
 
     const promotion = trouverPromotion(code);
 
@@ -199,9 +264,18 @@ function verifierCodePromo(code, sousTotal, ville = "", articles = []) {
         };
     }
 
-    const total = Number(sousTotal) || 0;
+    if (!promotionDansPeriode(promotion)) {
+        return {
+            valide: false,
+            message: "Ce code promo n'est pas valable à cette date.",
+            promotion: null,
+            montantReduction: 0
+        };
+    }
 
     // Vérifier le montant minimum
+    const total = Number(sousTotal) || 0;
+
     if (total < Number(promotion.montantMinimum || 0)) {
         return {
             valide: false,
@@ -212,9 +286,11 @@ function verifierCodePromo(code, sousTotal, ville = "", articles = []) {
     }
 
     // Vérifier la ville
-    if (promotion.villesAutorisees.length > 0) {
+    const villesAutorisees = promotion.villesAutorisees || [];
 
-        const villeAutorisee = promotion.villesAutorisees.some(v =>
+    if (villesAutorisees.length > 0) {
+
+        const villeAutorisee = villesAutorisees.some(v =>
             normaliserTexte(v) === normaliserTexte(ville)
         );
 
@@ -228,23 +304,15 @@ function verifierCodePromo(code, sousTotal, ville = "", articles = []) {
         }
     }
 
-    // Vérifier la date de début
-    const aujourdHui = obtenirDateLocale();
+    // Vérifier le cumul avec les offres spéciales
+    const offreNonCumulable = offresAppliquees.find(offre =>
+        offre.cumulableCodePromo === false
+    );
 
-    if (promotion.dateDebut && aujourdHui < promotion.dateDebut) {
+    if (offreNonCumulable) {
         return {
             valide: false,
-            message: "Ce code promo n'est pas encore valable.",
-            promotion: null,
-            montantReduction: 0
-        };
-    }
-
-    // Vérifier la date de fin
-    if (promotion.dateFin && aujourdHui > promotion.dateFin) {
-        return {
-            valide: false,
-            message: "Ce code promo a expiré.",
+            message: `L'offre "${offreNonCumulable.nom}" n'est pas cumulable avec un code promo.`,
             promotion: null,
             montantReduction: 0
         };
@@ -272,4 +340,116 @@ function verifierCodePromo(code, sousTotal, ville = "", articles = []) {
         promotion: promotion,
         montantReduction: montantReduction
     };
+}
+
+
+/* ==========================================
+   10. VÉRIFIER LA ZONE D'UNE OFFRE
+========================================== */
+
+function offreAutoriseeDansVille(offre, ville) {
+
+    if (offre.zone === "toutes") {
+        return true;
+    }
+
+    if (offre.zone === "ville") {
+
+        return normaliserTexte(offre.ville) === normaliserTexte(ville);
+    }
+
+    return false;
+}
+
+
+/* ==========================================
+   11. CALCULER LES OFFRES SPÉCIALES
+========================================== */
+
+function calculerOffresSpeciales(articles = [], ville = "") {
+
+    const resultat = {
+        montantReduction: 0,
+        offresAppliquees: [],
+        detailsArticles: []
+    };
+
+    if (!Array.isArray(articles)) {
+        return resultat;
+    }
+
+    articles.forEach(article => {
+
+        const quantite = Number(article.quantite) || 0;
+        const prix = Number(article.prix) || 0;
+        const grammage = Number(article.grammage) || 0;
+
+        if (quantite <= 0 || prix <= 0) return;
+
+        const offresEligibles = OFFRES_SPECIALES.filter(offre => {
+
+            if (!offre.actif) return false;
+
+            if (!promotionDansPeriode(offre)) return false;
+
+            if (offre.produitId !== article.id) return false;
+
+            if (Number(offre.grammage) !== grammage) return false;
+
+            if (!offreAutoriseeDansVille(offre, ville)) return false;
+
+            return true;
+        });
+
+        offresEligibles.forEach(offre => {
+
+            let reductionUnitaire = 0;
+
+            if (offre.type === "fixe") {
+
+                reductionUnitaire = Number(offre.valeur) || 0;
+
+            } else if (offre.type === "pourcentage") {
+
+                reductionUnitaire = prix * (
+                    Number(offre.valeur) / 100
+                );
+
+            }
+
+            // La réduction ne peut pas dépasser le prix
+            reductionUnitaire = Math.min(reductionUnitaire, prix);
+
+            const reductionTotale = Math.round(
+                reductionUnitaire * quantite * 100
+            ) / 100;
+
+            if (reductionTotale <= 0) return;
+
+            resultat.montantReduction += reductionTotale;
+
+            resultat.offresAppliquees.push({
+                id: offre.id,
+                nom: offre.nom,
+                cumulableCodePromo: offre.cumulableCodePromo,
+                montantReduction: reductionTotale
+            });
+
+            resultat.detailsArticles.push({
+                produitId: article.id,
+                grammage: grammage,
+                quantite: quantite,
+                nomOffre: offre.nom,
+                montantReduction: reductionTotale
+            });
+
+        });
+
+    });
+
+    resultat.montantReduction = Math.round(
+        resultat.montantReduction * 100
+    ) / 100;
+
+    return resultat;
 }

@@ -18,6 +18,178 @@ function formaterPrix(prix) {
 
 
 /* ==========================================
+   NORMALISER LE NOM DE LA VILLE
+========================================== */
+
+function normaliserVilleCommande(ville) {
+
+    return String(ville || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+}
+
+
+/* ==========================================
+   OBTENIR LE PRIX D'UN ARTICLE
+   SELON LA VILLE DE LIVRAISON
+========================================== */
+
+function obtenirPrixArticleCommande(article, livraison = null) {
+
+    const produit = typeof produits !== "undefined"
+        ? produits.find(p => p.id === article.id)
+        : null;
+
+    // Produit introuvable : conserver le prix du panier
+    if (!produit) {
+        return Number(article.prix) || 0;
+    }
+
+    // Prix standard
+    let prix = Number(article.prix) || 0;
+
+    // Retrouver le tarif standard du grammage
+    if (article.grammage !== null && article.grammage !== undefined) {
+
+        const tarifStandard = produit.tarifs?.find(
+            tarif =>
+                Number(tarif.grammage) === Number(article.grammage)
+        );
+
+        if (tarifStandard) {
+            prix = Number(tarifStandard.prix);
+        }
+
+    } else {
+
+        prix = Number(produit.prix) || prix;
+
+    }
+
+    // Aucun tarif spécial sans ville renseignée
+    if (!livraison || !livraison.ville) {
+        return prix;
+    }
+
+    const ville = normaliserVilleCommande(livraison.ville);
+
+    // Rechercher un tarif spécial correspondant
+    const tarifSpecial = Array.isArray(produit.tarifsSpeciaux)
+        ? produit.tarifsSpeciaux.find(tarif => {
+
+            const villeTarif = normaliserVilleCommande(tarif.ville);
+
+            const memeVille =
+                villeTarif === ville ||
+                villeTarif === "toutes" ||
+                villeTarif === "toutes les villes";
+
+            const memeGrammage =
+                Number(tarif.grammage) === Number(article.grammage);
+
+            return memeVille && memeGrammage;
+
+        })
+        : null;
+
+    if (tarifSpecial && Number.isFinite(Number(tarifSpecial.prix))) {
+        prix = Number(tarifSpecial.prix);
+    }
+
+    return prix;
+
+}
+
+
+/* ==========================================
+   PRÉPARER LES ARTICLES DE COMMANDE
+========================================== */
+
+function obtenirArticlesCommande(livraison = null) {
+
+    if (!Array.isArray(panier)) {
+        return [];
+    }
+
+    return panier.map(article => {
+
+        const prix = obtenirPrixArticleCommande(
+            article,
+            livraison
+        );
+
+        return {
+            ...article,
+            prix: prix,
+            sousTotal: prix * Number(article.quantite)
+        };
+
+    });
+
+}
+
+
+/* ==========================================
+   MINIMUM DE COMMANDE
+========================================== */
+
+function obtenirMinimumCommande(livraison) {
+
+    if (!livraison || !livraison.ville) {
+        return null;
+    }
+
+    const ville = normaliserVilleCommande(livraison.ville);
+
+    // Minimum de 30 € uniquement à Brest
+    if (ville === "brest") {
+        return 30;
+    }
+
+    // Aucun minimum dans les autres villes
+    return null;
+
+}
+
+
+/* ==========================================
+   VÉRIFIER LE MINIMUM DE COMMANDE
+========================================== */
+
+function verifierMinimumCommande(livraison, sousTotal) {
+
+    const minimum = obtenirMinimumCommande(livraison);
+
+    const montant = Number(sousTotal) || 0;
+
+    // Aucune restriction hors Brest
+    if (minimum === null) {
+
+        return {
+            valide: true,
+            minimum: null,
+            sousTotal: montant,
+            montantManquant: 0
+        };
+
+    }
+
+    const montantManquant = Math.max(0, minimum - montant);
+
+    return {
+        valide: montant >= minimum,
+        minimum,
+        sousTotal: montant,
+        montantManquant
+    };
+
+}
+
+
+/* ==========================================
    CALCULER LES FRAIS DE LIVRAISON
 ========================================== */
 
@@ -27,7 +199,7 @@ function calculerFraisLivraison(livraison) {
         return 0;
     }
 
-    const ville = normaliserTexte(livraison.ville);
+    const ville = normaliserVilleCommande(livraison.ville);
 
     // Livraison gratuite à Brest
     if (ville === "brest") {
@@ -36,6 +208,7 @@ function calculerFraisLivraison(livraison) {
 
     // Toutes les autres villes : 10 €
     return 10;
+
 }
 
 
@@ -53,16 +226,25 @@ function calculerDetailsCommande(livraison = null) {
         return null;
     }
 
+
+    // ARTICLES AVEC LEURS PRIX APPLIQUÉS
+
+    const articles = obtenirArticlesCommande(livraison);
+
+
     // SOUS-TOTAL PRODUITS
 
-    let sousTotal = 0;
+    const sousTotal = articles.reduce(
+        (total, article) => total + article.sousTotal,
+        0
+    );
 
-    panier.forEach(article => {
 
-        sousTotal +=
-            Number(article.prix) * Number(article.quantite);
+    // MINIMUM DE COMMANDE
 
-    });
+    const verificationMinimum = livraison && livraison.ville
+        ? verifierMinimumCommande(livraison, sousTotal)
+        : null;
 
 
     // CODE PROMO
@@ -89,7 +271,7 @@ function calculerDetailsCommande(livraison = null) {
                 codePromo,
                 sousTotal,
                 livraison.ville,
-                panier
+                articles
             );
 
             promoValide = resultatPromo.valide;
@@ -120,14 +302,35 @@ function calculerDetailsCommande(livraison = null) {
         sousTotal - montantReduction + fraisLivraison
     );
 
+
     return {
+
+        articles,
+
         sousTotal,
+
         codePromo,
         montantReduction,
         promoValide,
         messagePromo,
+
         fraisLivraison,
-        total
+        total,
+
+        // Informations sur le minimum de commande
+
+        minimumCommande: verificationMinimum
+            ? verificationMinimum.minimum
+            : null,
+
+        commandeMinimumAtteint: verificationMinimum
+            ? verificationMinimum.valide
+            : null,
+
+        montantManquant: verificationMinimum
+            ? verificationMinimum.montantManquant
+            : 0
+
     };
 
 }
@@ -146,6 +349,28 @@ function genererRecapitulatifCommande(livraison = null) {
         return null;
     }
 
+
+    // VÉRIFICATION DU MINIMUM
+
+    if (
+        livraison &&
+        livraison.ville &&
+        details.commandeMinimumAtteint === false
+    ) {
+
+        alert(
+            "Le minimum de commande pour cette ville est de " +
+            formaterPrix(details.minimumCommande) +
+            ". Il manque " +
+            formaterPrix(details.montantManquant) +
+            " à ton panier."
+        );
+
+        return null;
+
+    }
+
+
     let message =
         "Bonjour, je souhaite passer commande chez CALI29.\n\n";
 
@@ -154,10 +379,9 @@ function genererRecapitulatifCommande(livraison = null) {
 
     // ARTICLES
 
-    panier.forEach(article => {
+    details.articles.forEach(article => {
 
-        const prixLigne =
-            Number(article.prix) * Number(article.quantite);
+        const prixLigne = article.sousTotal;
 
         message += "• " + article.nom + "\n";
 
@@ -165,8 +389,10 @@ function genererRecapitulatifCommande(livraison = null) {
             article.grammage !== null &&
             article.grammage !== undefined
         ) {
+
             message +=
                 "  Grammage : " + article.grammage + " g\n";
+
         }
 
         message +=

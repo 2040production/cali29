@@ -52,7 +52,7 @@ const produits = [
         { grammage: 10, prix: 40.00 },
         { grammage: 20, prix: 80.00 },
         { grammage: 50, prix: 150.00 },
-        { grammage: 100, prix: 250.00 },
+        { grammage: 100, prix: 250.00 }
     ],
     image: "assets/images/mousse.png",
     video: "assets/videos/royalVid.mp4",
@@ -65,12 +65,23 @@ const produits = [
     nom: "RMF 73u",
     categorie: "resines",
     prix: 10.00,
+
     tarifs: [
         { grammage: 5, prix: 40.00 },
         { grammage: 10, prix: 70.00 },
         { grammage: 20, prix: 130.00 },
         { grammage: 50, prix: 230.00 }
     ],
+
+    // TARIFS PARTICULIERS SELON LA VILLE
+    tarifsSpeciaux: [
+        {
+            ville: "Brest",
+            grammage: 10,
+            prix: 60.00
+        }
+    ],
+
     image: "assets/images/filtre.png",
     video: "assets/videos/rmfVid.mov",
     description: "Description de la résine à compléter.",
@@ -78,22 +89,22 @@ const produits = [
 },
 
 
-    {
-        id: "accessoire-001",
-        nom: "Zip",
-        categorie: "accessoires",
-        prix: 35.00,
-        tarifs: [
+{
+    id: "accessoire-001",
+    nom: "Zip",
+    categorie: "accessoires",
+    prix: 35.00,
+    tarifs: [
         { grammage: 0.5, prix: 30.00 },
         { grammage: 1, prix: 50.00 },
         { grammage: 5, prix: 200.00 },
         { grammage: 10, prix: 350.00 },
         { grammage: 20, prix: 630.00 }
     ],
-        image: "assets/images/zip.png",
-        video: "assets/videos/zipVid.mp4",
-        description: "Description de l'accessoire à compléter.",
-        popularite: 10
-    },
+    image: "assets/images/zip.png",
+    video: "assets/videos/zipVid.mp4",
+    description: "Description de l'accessoire à compléter.",
+    popularite: 10
+}
 
 ];
