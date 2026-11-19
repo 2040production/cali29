@@ -5,8 +5,9 @@
 ========================================== */
 
 
+
 /* ==========================================
-   1. RÉCUPÉRER LE CATALOGUE
+   1. RÉCUPÉRER ET MIGRER LE CATALOGUE
 ========================================== */
 
 function recupererCatalogueFiche() {
@@ -15,37 +16,92 @@ function recupererCatalogueFiche() {
 
         const donnees = localStorage.getItem("catalogueCali29");
 
-        if (donnees !== null) {
+        if (donnees === null) {
 
-            const catalogueSauvegarde = JSON.parse(donnees);
+            localStorage.setItem(
+                "catalogueCali29",
+                JSON.stringify(produits)
+            );
 
-            if (Array.isArray(catalogueSauvegarde)) {
+            localStorage.setItem(
+                "catalogueCali29Version",
+                "2"
+            );
 
-                // CORRECTION ANCIEN CHEMIN VIDÉO RMF
-
-                const produitRMF = catalogueSauvegarde.find(
-                    produit => produit.id === "resine-002"
-                );
-
-                if (
-                    produitRMF &&
-                    produitRMF.video === "assets/videos/rmfVid.mov"
-                ) {
-
-                    produitRMF.video = "assets/videos/rmfVid.mp4";
-
-                    localStorage.setItem(
-                        "catalogueCali29",
-                        JSON.stringify(catalogueSauvegarde)
-                    );
-
-                }
-
-                return catalogueSauvegarde;
-
-            }
+            return [...produits];
 
         }
+
+        const catalogueSauvegarde = JSON.parse(donnees);
+
+        if (!Array.isArray(catalogueSauvegarde)) {
+            throw new Error("Catalogue invalide.");
+        }
+
+        const versionStockee = Number(
+            localStorage.getItem("catalogueCali29Version") || 0
+        );
+
+        if (versionStockee < 2) {
+
+            const catalogueFusionne = new Map();
+
+            produits.forEach(produit => {
+                catalogueFusionne.set(produit.id, { ...produit });
+            });
+
+            catalogueSauvegarde.forEach(produit => {
+
+                if (!produit.id) return;
+
+                catalogueFusionne.set(produit.id, {
+                    ...(catalogueFusionne.get(produit.id) || {}),
+                    ...produit
+                });
+
+            });
+
+            const nouveauCatalogue = [
+                ...catalogueFusionne.values()
+            ];
+
+            localStorage.setItem(
+                "catalogueCali29",
+                JSON.stringify(nouveauCatalogue)
+            );
+
+            localStorage.setItem(
+                "catalogueCali29Version",
+                "2"
+            );
+
+            return nouveauCatalogue;
+
+        }
+
+        const catalogue = catalogueSauvegarde;
+
+        // CORRECTION ANCIEN CHEMIN VIDÉO RMF
+
+        const produitRMF = catalogue.find(
+            produit => produit.id === "resine-002"
+        );
+
+        if (
+            produitRMF &&
+            produitRMF.video === "assets/videos/rmfVid.mov"
+        ) {
+
+            produitRMF.video = "assets/videos/rmfVid.mp4";
+
+            localStorage.setItem(
+                "catalogueCali29",
+                JSON.stringify(catalogue)
+            );
+
+        }
+
+        return catalogue;
 
     } catch (erreur) {
 
@@ -54,11 +110,12 @@ function recupererCatalogueFiche() {
             erreur
         );
 
+        return [...produits];
+
     }
 
-    return [...produits];
-
 }
+
 
 
 /* ==========================================

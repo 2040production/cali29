@@ -5,11 +5,13 @@
 ========================================== */
 
 
+
 /* ==========================================
    1. RÉCUPÉRATION DES DONNÉES
 ========================================== */
 
 const CLE_CATALOGUE = "catalogueCali29";
+const VERSION_CATALOGUE = 2;
 
 function chargerCatalogue() {
 
@@ -17,55 +19,83 @@ function chargerCatalogue() {
 
         const donnees = localStorage.getItem(CLE_CATALOGUE);
 
-        if (donnees !== null) {
+        if (donnees === null) {
 
-            const catalogueSauvegarde = JSON.parse(donnees);
+            localStorage.setItem(
+                CLE_CATALOGUE,
+                JSON.stringify(produits)
+            );
 
-            if (Array.isArray(catalogueSauvegarde)) {
-                return catalogueSauvegarde;
-            }
+            localStorage.setItem(
+                "catalogueCali29Version",
+                VERSION_CATALOGUE
+            );
+
+            return [...produits];
 
         }
+
+        const catalogueSauvegarde = JSON.parse(donnees);
+
+        if (!Array.isArray(catalogueSauvegarde)) {
+            throw new Error("Catalogue invalide.");
+        }
+
+        const versionStockee = Number(
+            localStorage.getItem("catalogueCali29Version") || 0
+        );
+
+        if (versionStockee < VERSION_CATALOGUE) {
+
+            const catalogueFusionne = new Map();
+
+            produits.forEach(produit => {
+                catalogueFusionne.set(produit.id, { ...produit });
+            });
+
+            catalogueSauvegarde.forEach(produit => {
+
+                if (!produit.id) return;
+
+                catalogueFusionne.set(produit.id, {
+                    ...(catalogueFusionne.get(produit.id) || {}),
+                    ...produit
+                });
+
+            });
+
+            const nouveauCatalogue = [
+                ...catalogueFusionne.values()
+            ];
+
+            localStorage.setItem(
+                CLE_CATALOGUE,
+                JSON.stringify(nouveauCatalogue)
+            );
+
+            localStorage.setItem(
+                "catalogueCali29Version",
+                VERSION_CATALOGUE
+            );
+
+            return nouveauCatalogue;
+
+        }
+
+        return catalogueSauvegarde;
 
     } catch (erreur) {
 
         console.error("Erreur de lecture :", erreur);
 
-    }
+        return [...produits];
 
-    return [...produits];
+    }
 
 }
 
 let catalogue = chargerCatalogue();
 
-
-/* ==========================================
-   2. SAUVEGARDE
-========================================== */
-
-function sauvegarderCatalogue() {
-
-    try {
-
-        localStorage.setItem(
-            CLE_CATALOGUE,
-            JSON.stringify(catalogue)
-        );
-
-        return true;
-
-    } catch (erreur) {
-
-        console.error("Erreur de sauvegarde :", erreur);
-
-        alert("Impossible de sauvegarder le catalogue.");
-
-        return false;
-
-    }
-
-}
 
 
 /* ==========================================
