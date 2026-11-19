@@ -4,7 +4,7 @@
    Catalogue synchronisé avec localStorage
 ========================================== */
 
-const VERSION_CATALOGUE = 3;
+const VERSION_CATALOGUE = 4;
 const CLE_VERSION_CATALOGUE = "catalogueCali29Version";
 
 
