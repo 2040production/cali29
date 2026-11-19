@@ -22,6 +22,8 @@ const produits = [
     popularite: 10
 },
 
+
+
 {
     id: "fleur-002",
     nom: "Purple Majesty",
@@ -40,6 +42,8 @@ const produits = [
     popularite: 8
 },
 
+
+
 {
     id: "resine-001",
     nom: "Royal mousse",
@@ -56,6 +60,8 @@ const produits = [
     description: "Description de la résine à compléter.",
     popularite: 10
 },
+
+
 
 {
     id: "resine-002",

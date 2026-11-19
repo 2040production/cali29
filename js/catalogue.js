@@ -4,7 +4,7 @@
    Catalogue synchronisé avec localStorage
 ========================================== */
 
-const VERSION_CATALOGUE = 2;
+const VERSION_CATALOGUE = 3;
 const CLE_VERSION_CATALOGUE = "catalogueCali29Version";
 
 
@@ -42,6 +42,7 @@ function obtenirCatalogue() {
 
         const donnees = localStorage.getItem('catalogueCali29');
 
+        // Aucun catalogue sauvegardé
         if (donnees === null) {
 
             localStorage.setItem(
@@ -68,19 +69,28 @@ function obtenirCatalogue() {
             localStorage.getItem(CLE_VERSION_CATALOGUE) || 0
         );
 
-        // Migration uniquement lors d'un changement de version
+
+        // MIGRATION LORS D'UN CHANGEMENT DE VERSION
 
         if (versionStockee < VERSION_CATALOGUE) {
 
             const catalogueFusionne = new Map();
 
-            // Charger les produits du catalogue principal
+            // Charger les produits présents dans produits.js
 
             produits.forEach(produit => {
-                catalogueFusionne.set(produit.id, { ...produit });
+
+                if (!produit.id) return;
+
+                catalogueFusionne.set(
+                    produit.id,
+                    { ...produit }
+                );
+
             });
 
-            // Conserver les données enregistrées dans l'administration
+
+            // Conserver les données de l'administration
 
             catalogueSauvegarde.forEach(produit => {
 
@@ -90,15 +100,21 @@ function obtenirCatalogue() {
                     catalogueFusionne.get(produit.id) || {};
 
                 catalogueFusionne.set(produit.id, {
+
                     ...produitExistant,
                     ...produit
+
                 });
 
             });
 
+
             const nouveauCatalogue = [
                 ...catalogueFusionne.values()
             ];
+
+
+            // Sauvegarder le catalogue fusionné
 
             localStorage.setItem(
                 'catalogueCali29',
@@ -110,11 +126,16 @@ function obtenirCatalogue() {
                 VERSION_CATALOGUE
             );
 
+
             return nouveauCatalogue;
 
         }
 
+
+        // Catalogue déjà à jour
+
         return catalogueSauvegarde;
+
 
     } catch (erreur) {
 
@@ -193,6 +214,7 @@ function afficherCatalogue() {
 
     const categorie = sectionCategorie?.dataset.categorie;
 
+
     function obtenirProduitsAffiches() {
 
         return categorie
@@ -200,6 +222,7 @@ function afficherCatalogue() {
             : catalogue.slice(0, 4);
 
     }
+
 
     function rendre() {
 
@@ -210,6 +233,7 @@ function afficherCatalogue() {
             : '<p class="catalogue-vide">Aucun produit dans cette catégorie pour le moment.</p>';
 
     }
+
 
     rendre();
 
