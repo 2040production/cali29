@@ -5,13 +5,12 @@
 ========================================== */
 
 
-
 /* ==========================================
    1. RÉCUPÉRATION DES DONNÉES
 ========================================== */
 
 const CLE_CATALOGUE = "catalogueCali29";
-const VERSION_CATALOGUE = 2;
+const VERSION_CATALOGUE = 4;
 
 function chargerCatalogue() {
 
@@ -96,6 +95,45 @@ function chargerCatalogue() {
 
 let catalogue = chargerCatalogue();
 
+
+/* ==========================================
+   2. SAUVEGARDE DU CATALOGUE
+========================================== */
+
+function sauvegarderCatalogue() {
+
+    try {
+
+        if (!Array.isArray(catalogue)) {
+            throw new Error("Le catalogue à sauvegarder est invalide.");
+        }
+
+        localStorage.setItem(
+            CLE_CATALOGUE,
+            JSON.stringify(catalogue)
+        );
+
+        localStorage.setItem(
+            "catalogueCali29Version",
+            String(VERSION_CATALOGUE)
+        );
+
+        return true;
+
+    } catch (erreur) {
+
+        console.error("Erreur de sauvegarde du catalogue :", erreur);
+
+        alert(
+            "Impossible d'enregistrer le catalogue. " +
+            "Vérifie les paramètres de stockage de ton navigateur."
+        );
+
+        return false;
+
+    }
+
+}
 
 
 /* ==========================================
