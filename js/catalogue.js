@@ -1,9 +1,11 @@
+
 /* ==========================================
    AFFICHAGE DU CATALOGUE - CALI29
-   Données :
-   - localStorage si catalogue modifié
-   - produits.js par défaut
+   Catalogue synchronisé avec localStorage
 ========================================== */
+
+const VERSION_CATALOGUE = 2;
+const CLE_VERSION_CATALOGUE = "catalogueCali29Version";
 
 
 /* ==========================================
@@ -11,9 +13,7 @@
 ========================================== */
 
 function formaterPrixCatalogue(prix) {
-
     return Number(prix).toFixed(2).replace('.', ',') + ' €';
-
 }
 
 
@@ -22,22 +22,18 @@ function formaterPrixCatalogue(prix) {
 ========================================== */
 
 function echapperHTML(valeur) {
-
     return String(valeur ?? '').replace(/[&<>"']/g, caractere => ({
-
         '&': '&amp;',
         '<': '&lt;',
         '>': '&gt;',
         '"': '&quot;',
         "'": '&#39;'
-
     })[caractere]);
-
 }
 
 
 /* ==========================================
-   3. RÉCUPÉRER LE CATALOGUE
+   3. MIGRATION DU CATALOGUE
 ========================================== */
 
 function obtenirCatalogue() {
@@ -46,26 +42,87 @@ function obtenirCatalogue() {
 
         const donnees = localStorage.getItem('catalogueCali29');
 
-        if (donnees !== null) {
+        if (donnees === null) {
 
-            const catalogueSauvegarde = JSON.parse(donnees);
+            localStorage.setItem(
+                'catalogueCali29',
+                JSON.stringify(produits)
+            );
 
-            if (Array.isArray(catalogueSauvegarde)) {
-                return catalogueSauvegarde;
-            }
+            localStorage.setItem(
+                CLE_VERSION_CATALOGUE,
+                VERSION_CATALOGUE
+            );
+
+            return [...produits];
 
         }
 
-    } catch (erreur) {
+        const catalogueSauvegarde = JSON.parse(donnees);
 
-        console.error(
-            "Erreur de récupération du catalogue :",
-            erreur
+        if (!Array.isArray(catalogueSauvegarde)) {
+            throw new Error("Catalogue sauvegardé invalide.");
+        }
+
+        const versionStockee = Number(
+            localStorage.getItem(CLE_VERSION_CATALOGUE) || 0
         );
 
-    }
+        // Migration uniquement lors d'un changement de version
 
-    return [...produits];
+        if (versionStockee < VERSION_CATALOGUE) {
+
+            const catalogueFusionne = new Map();
+
+            // Charger les produits du catalogue principal
+
+            produits.forEach(produit => {
+                catalogueFusionne.set(produit.id, { ...produit });
+            });
+
+            // Conserver les données enregistrées dans l'administration
+
+            catalogueSauvegarde.forEach(produit => {
+
+                if (!produit.id) return;
+
+                const produitExistant =
+                    catalogueFusionne.get(produit.id) || {};
+
+                catalogueFusionne.set(produit.id, {
+                    ...produitExistant,
+                    ...produit
+                });
+
+            });
+
+            const nouveauCatalogue = [
+                ...catalogueFusionne.values()
+            ];
+
+            localStorage.setItem(
+                'catalogueCali29',
+                JSON.stringify(nouveauCatalogue)
+            );
+
+            localStorage.setItem(
+                CLE_VERSION_CATALOGUE,
+                VERSION_CATALOGUE
+            );
+
+            return nouveauCatalogue;
+
+        }
+
+        return catalogueSauvegarde;
+
+    } catch (erreur) {
+
+        console.error("Erreur catalogue :", erreur);
+
+        return [...produits];
+
+    }
 
 }
 
@@ -130,48 +187,30 @@ function afficherCatalogue() {
 
     if (!conteneur) return;
 
-    // Récupérer les données actualisées
     const catalogue = obtenirCatalogue();
 
     const sectionCategorie = conteneur.closest('[data-categorie]');
 
     const categorie = sectionCategorie?.dataset.categorie;
 
-
-    /* ======================================
-       OBTENIR LES PRODUITS À AFFICHER
-       Aucun tri : ordre défini dans produits.js
-    ====================================== */
-
     function obtenirProduitsAffiches() {
 
-        // Sur une page catégorie, afficher tous les produits de la catégorie.
-        // Sur l'accueil, afficher les 4 premiers produits du catalogue.
         return categorie
             ? catalogue.filter(produit => produit.categorie === categorie)
             : catalogue.slice(0, 4);
 
     }
 
-
-    /* ======================================
-       GÉNÉRER L'AFFICHAGE
-    ====================================== */
-
     function rendre() {
 
         const liste = obtenirProduitsAffiches();
 
         conteneur.innerHTML = liste.length
-
             ? liste.map(creerCarteProduit).join('')
-
             : '<p class="catalogue-vide">Aucun produit dans cette catégorie pour le moment.</p>';
 
     }
 
-
-    // Affichage initial
     rendre();
 
 }

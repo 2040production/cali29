@@ -85,6 +85,25 @@ const produits = [
 },
 
 {
+    id: "resine-003",
+    nom: "Lemon Mint 180-390u (Golden Farms)",
+    categorie: "resines",
+    prix: 15.00,
+    tarifs: [
+        { grammage: 2, prix: 30.00 },
+        { grammage: 5, prix: 60.00 },
+        { grammage: 10, prix: 90.00 },
+        { grammage: 20, prix: 170.00 }
+    ],
+
+
+    image: "assets/images/190-390u.png",
+    video: "assets/videos/190-390u.mp4",
+    description: "Description de la résine à compléter.",
+    popularite: 8
+},
+
+{
     id: "accessoire-001",
     nom: "Zip",
     categorie: "accessoires",
