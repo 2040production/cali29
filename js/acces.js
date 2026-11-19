@@ -17,55 +17,78 @@ const CODES_ACCES = [
     "cali29-009"
 ];
 
+const CLE_SESSION = "cali29_acces";
+const ACCES_AUTORISE = "autorise";
+
 const ecran = document.getElementById("ecran-acces");
 const champ = document.getElementById("code-acces");
 const bouton = document.getElementById("valider-acces");
 const erreur = document.getElementById("message-erreur");
 
-// ==========================================
-// VÉRIFICATION DE LA SESSION
-// ==========================================
+function sessionAutorisee() {
+    try {
+        return sessionStorage.getItem(CLE_SESSION) === ACCES_AUTORISE;
+    } catch (erreurSession) {
+        console.error("Impossible de vérifier la session :", erreurSession);
+        return false;
+    }
+}
 
-if (sessionStorage.getItem("cali29_acces") === "autorise") {
+function enregistrerSession() {
+    try {
+        sessionStorage.setItem(CLE_SESSION, ACCES_AUTORISE);
+        return true;
+    } catch (erreurSession) {
+        console.error("Impossible d'enregistrer la session :", erreurSession);
+        return false;
+    }
+}
+
+// Sans session autorisée, les autres pages redirigent vers l'accueil.
+if (!sessionAutorisee()) {
+    if (!ecran) {
+        window.location.replace("index.html");
+    }
+} else if (ecran) {
     ecran.style.display = "none";
 }
 
-// ==========================================
-// VÉRIFICATION DU CODE
-// ==========================================
+// L'écran de saisie existe uniquement sur l'accueil.
+if (ecran && champ && bouton && erreur) {
 
-function verifierCode() {
+    function verifierCode() {
 
-    const codeSaisi = champ.value.trim();
+        const codeSaisi = champ.value.trim();
 
-    if (CODES_ACCES.includes(codeSaisi)) {
+        if (CODES_ACCES.includes(codeSaisi)) {
 
-        // Enregistrer l'autorisation
-        sessionStorage.setItem("cali29_acces", "autorise");
+            if (!enregistrerSession()) {
+                erreur.textContent =
+                    "Impossible d'enregistrer l'accès. Vérifie les paramètres du navigateur.";
+                return;
+            }
 
-        // Masquer l'écran d'accès
-        ecran.style.display = "none";
+            ecran.style.display = "none";
 
-    } else {
+        } else {
 
-        erreur.textContent = "Code incorrect.";
-        champ.value = "";
-        champ.focus();
+            erreur.textContent = "Code incorrect.";
+            champ.value = "";
+            champ.focus();
+
+        }
 
     }
+
+    bouton.addEventListener("click", verifierCode);
+
+    champ.addEventListener("keydown", function(event) {
+
+        if (event.key === "Enter") {
+            event.preventDefault();
+            verifierCode();
+        }
+
+    });
 
 }
-
-// ==========================================
-// ÉVÉNEMENTS
-// ==========================================
-
-bouton.addEventListener("click", verifierCode);
-
-champ.addEventListener("keydown", function(event) {
-
-    if (event.key === "Enter") {
-        verifierCode();
-    }
-
-});

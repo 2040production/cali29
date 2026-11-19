@@ -1,10 +1,8 @@
-
 /* ==========================================
-   COMMANDE CALI29
+   COMMANDE CALI29 V2
    CALCUL ET GÉNÉRATION DU MESSAGE
 ========================================== */
 
-// Identifiant Telegram
 const TELEGRAM_USERNAME = "brestdrive";
 
 
@@ -34,72 +32,36 @@ function normaliserVilleCommande(ville) {
 
 /* ==========================================
    OBTENIR LE PRIX D'UN ARTICLE
-   SELON LA VILLE DE LIVRAISON
+   TARIFS STANDARDS SUPABASE
 ========================================== */
 
-function obtenirPrixArticleCommande(article, livraison = null) {
+function obtenirPrixArticleCommande(article) {
 
-    const produit = typeof produits !== "undefined"
-        ? produits.find(p => p.id === article.id)
-        : null;
+    const catalogue = Array.isArray(window.produits)
+        ? window.produits
+        : [];
 
-    // Produit introuvable : conserver le prix du panier
+    const produit = catalogue.find(
+        p => String(p.id) === String(article.id)
+    );
+
     if (!produit) {
         return Number(article.prix) || 0;
     }
 
-    // Prix standard
-    let prix = Number(article.prix) || 0;
-
-    // Retrouver le tarif standard du grammage
     if (article.grammage !== null && article.grammage !== undefined) {
 
-        const tarifStandard = produit.tarifs?.find(
-            tarif =>
-                Number(tarif.grammage) === Number(article.grammage)
+        const tarif = produit.tarifs?.find(
+            t => Number(t.grammage) === Number(article.grammage)
         );
 
-        if (tarifStandard) {
-            prix = Number(tarifStandard.prix);
+        if (tarif) {
+            return Number(tarif.prix);
         }
 
-    } else {
-
-        prix = Number(produit.prix) || prix;
-
     }
 
-    // Aucun tarif spécial sans ville renseignée
-    if (!livraison || !livraison.ville) {
-        return prix;
-    }
-
-    const ville = normaliserVilleCommande(livraison.ville);
-
-    // Rechercher un tarif spécial correspondant
-    const tarifSpecial = Array.isArray(produit.tarifsSpeciaux)
-        ? produit.tarifsSpeciaux.find(tarif => {
-
-            const villeTarif = normaliserVilleCommande(tarif.ville);
-
-            const memeVille =
-                villeTarif === ville ||
-                villeTarif === "toutes" ||
-                villeTarif === "toutes les villes";
-
-            const memeGrammage =
-                Number(tarif.grammage) === Number(article.grammage);
-
-            return memeVille && memeGrammage;
-
-        })
-        : null;
-
-    if (tarifSpecial && Number.isFinite(Number(tarifSpecial.prix))) {
-        prix = Number(tarifSpecial.prix);
-    }
-
-    return prix;
+    return Number(produit.prix) || Number(article.prix) || 0;
 
 }
 
@@ -108,7 +70,7 @@ function obtenirPrixArticleCommande(article, livraison = null) {
    PRÉPARER LES ARTICLES DE COMMANDE
 ========================================== */
 
-function obtenirArticlesCommande(livraison = null) {
+function obtenirArticlesCommande() {
 
     if (!Array.isArray(panier)) {
         return [];
@@ -116,14 +78,11 @@ function obtenirArticlesCommande(livraison = null) {
 
     return panier.map(article => {
 
-        const prix = obtenirPrixArticleCommande(
-            article,
-            livraison
-        );
+        const prix = obtenirPrixArticleCommande(article);
 
         return {
             ...article,
-            prix: prix,
+            prix,
             sousTotal: prix * Number(article.quantite)
         };
 
@@ -144,19 +103,17 @@ function obtenirMinimumCommande(livraison) {
 
     const ville = normaliserVilleCommande(livraison.ville);
 
-    // Minimum de 30 € uniquement à Brest
     if (ville === "brest") {
         return 30;
     }
 
-    // Aucun minimum dans les autres villes
     return null;
 
 }
 
 
 /* ==========================================
-   VÉRIFIER LE MINIMUM DE COMMANDE
+   VÉRIFIER LE MINIMUM
 ========================================== */
 
 function verifierMinimumCommande(livraison, sousTotal) {
@@ -165,7 +122,6 @@ function verifierMinimumCommande(livraison, sousTotal) {
 
     const montant = Number(sousTotal) || 0;
 
-    // Aucune restriction hors Brest
     if (minimum === null) {
 
         return {
@@ -190,7 +146,7 @@ function verifierMinimumCommande(livraison, sousTotal) {
 
 
 /* ==========================================
-   CALCULER LES FRAIS DE LIVRAISON
+   FRAIS DE LIVRAISON
 ========================================== */
 
 function calculerFraisLivraison(livraison) {
@@ -201,19 +157,13 @@ function calculerFraisLivraison(livraison) {
 
     const ville = normaliserVilleCommande(livraison.ville);
 
-    // Livraison gratuite à Brest
-    if (ville === "brest") {
-        return 0;
-    }
-
-    // Toutes les autres villes : 10 €
-    return 10;
+    return ville === "brest" ? 0 : 10;
 
 }
 
 
 /* ==========================================
-   CALCULER LES TOTAUX DE COMMANDE
+   CALCULER LES TOTAUX
 ========================================== */
 
 function calculerDetailsCommande(livraison = null) {
@@ -226,23 +176,27 @@ function calculerDetailsCommande(livraison = null) {
         return null;
     }
 
-    // ARTICLES AVEC LEURS PRIX APPLIQUÉS SELON LA VILLE
-    const articles = obtenirArticlesCommande(livraison);
+    const articles = obtenirArticlesCommande();
 
-    // SOUS-TOTAL AVANT RÉDUCTIONS
     const sousTotal = articles.reduce(
         (total, article) => total + article.sousTotal,
         0
     );
 
-    // MINIMUM DE COMMANDE : calculé sur le sous-total produits
+
+    // MINIMUM DE COMMANDE
+
     const verificationMinimum = livraison && livraison.ville
         ? verifierMinimumCommande(livraison, sousTotal)
         : null;
 
+
     // OFFRES SPÉCIALES
+
     const resultatOffres = (
-        typeof calculerOffresSpeciales === "function" && livraison && livraison.ville
+        typeof calculerOffresSpeciales === "function" &&
+        livraison &&
+        livraison.ville
     )
         ? calculerOffresSpeciales(articles, livraison.ville)
         : {
@@ -251,10 +205,12 @@ function calculerDetailsCommande(livraison = null) {
             detailsArticles: []
         };
 
-    const montantReductionOffres = Number(resultatOffres.montantReduction) || 0;
+    const montantReductionOffres =
+        Number(resultatOffres.montantReduction) || 0;
 
-    // Préparer les montants après offres pour calculer un éventuel code promo cumulable.
-    // La réduction fixe de l'offre est répartie sur les unités de l'article.
+
+    // ARTICLES APRÈS OFFRES
+
     const articlesApresOffres = articles.map(article => {
 
         const reductionsArticle = (resultatOffres.detailsArticles || [])
@@ -263,7 +219,8 @@ function calculerDetailsCommande(livraison = null) {
                 Number(detail.grammage) === Number(article.grammage)
             )
             .reduce(
-                (total, detail) => total + Number(detail.montantReduction || 0),
+                (total, detail) =>
+                    total + Number(detail.montantReduction || 0),
                 0
             );
 
@@ -284,12 +241,15 @@ function calculerDetailsCommande(livraison = null) {
 
     });
 
+
     const sousTotalApresOffres = Math.max(
         0,
         sousTotal - montantReductionOffres
     );
 
+
     // CODE PROMO
+
     let codePromo = "";
     let montantReduction = 0;
     let messagePromo = "";
@@ -317,10 +277,12 @@ function calculerDetailsCommande(livraison = null) {
             );
 
             promoValide = resultatPromo.valide;
+
             messagePromo = resultatPromo.message;
 
             if (promoValide) {
-                montantReduction = Number(resultatPromo.montantReduction) || 0;
+                montantReduction =
+                    Number(resultatPromo.montantReduction) || 0;
             }
 
         } else if (!livraison || !livraison.ville) {
@@ -331,35 +293,49 @@ function calculerDetailsCommande(livraison = null) {
 
     }
 
+
     // LIVRAISON
+
     const fraisLivraison = calculerFraisLivraison(livraison);
 
+
     // TOTAL FINAL
+
     const total = Math.max(
         0,
-        sousTotal - montantReductionOffres - montantReduction + fraisLivraison
+        sousTotal -
+        montantReductionOffres -
+        montantReduction +
+        fraisLivraison
     );
+
 
     return {
 
         articles,
+
         sousTotal,
 
         montantReductionOffres,
+
         offresAppliquees: resultatOffres.offresAppliquees || [],
+
         detailsOffres: resultatOffres.detailsArticles || [],
 
         sousTotalApresOffres,
 
         codePromo,
+
         montantReduction,
+
         promoValide,
+
         messagePromo,
 
         fraisLivraison,
+
         total,
 
-        // Informations sur le minimum de commande
         minimumCommande: verificationMinimum
             ? verificationMinimum.minimum
             : null,
@@ -390,7 +366,9 @@ function genererRecapitulatifCommande(livraison = null) {
         return null;
     }
 
+
     // VÉRIFICATION DU MINIMUM
+
     if (
         livraison &&
         livraison.ville &&
@@ -409,15 +387,16 @@ function genererRecapitulatifCommande(livraison = null) {
 
     }
 
+
     let message =
         "Bonjour, je souhaite passer commande chez CALI29.\n\n";
 
     message += "MA COMMANDE\n\n";
 
-    // ARTICLES
-    details.articles.forEach(article => {
 
-        const prixLigne = article.sousTotal;
+    // ARTICLES
+
+    details.articles.forEach(article => {
 
         message += "• " + article.nom + "\n";
 
@@ -434,31 +413,33 @@ function genererRecapitulatifCommande(livraison = null) {
         message +=
             "  Quantité : " + article.quantite + "\n" +
             "  Prix unitaire : " + formaterPrix(article.prix) + "\n" +
-            "  Sous-total : " + formaterPrix(prixLigne) + "\n\n";
+            "  Sous-total : " + formaterPrix(article.sousTotal) + "\n\n";
 
     });
 
+
     // RÉCAPITULATIF FINANCIER
+
     message += "--------------------------\n";
 
     message +=
         "SOUS-TOTAL PRODUITS : " +
         formaterPrix(details.sousTotal) + "\n";
 
+
     // OFFRES SPÉCIALES
-    if (details.offresAppliquees && details.offresAppliquees.length > 0) {
 
-        details.offresAppliquees.forEach(offre => {
+    details.offresAppliquees.forEach(offre => {
 
-            message +=
-                "OFFRE SPÉCIALE (" + offre.nom + ") : -" +
-                formaterPrix(offre.montantReduction) + "\n";
+        message +=
+            "OFFRE SPÉCIALE (" + offre.nom + ") : -" +
+            formaterPrix(offre.montantReduction) + "\n";
 
-        });
+    });
 
-    }
 
     // CODE PROMO
+
     if (details.codePromo) {
 
         if (details.promoValide) {
@@ -480,7 +461,9 @@ function genererRecapitulatifCommande(livraison = null) {
 
     }
 
+
     // LIVRAISON
+
     if (livraison) {
 
         message +=
@@ -497,19 +480,25 @@ function genererRecapitulatifCommande(livraison = null) {
 
     }
 
+
     // TOTAL
+
     message += "--------------------------\n";
 
     message +=
         "TOTAL : " + formaterPrix(details.total) + "\n";
 
-    // COORDONNÉES DE LIVRAISON
+
+    // ADRESSE
+
     if (livraison) {
 
         message += "\nADRESSE DE LIVRAISON\n\n";
 
         message += "Adresse : " + livraison.adresse + "\n";
+
         message += "Code postal : " + livraison.codePostal + "\n";
+
         message += "Ville : " + livraison.ville + "\n";
 
     }
@@ -524,7 +513,6 @@ function genererRecapitulatifCommande(livraison = null) {
 
 /* ==========================================
    OUVRIR TELEGRAM
-   AUTRES PAGES DU SITE
 ========================================== */
 
 function ouvrirTelegram() {
@@ -559,7 +547,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Le bouton commander-panier est géré par order-popup.js.
 
-    // On conserve le bouton de commande éventuel des autres pages.
     const boutonCommande = document.getElementById("commander");
 
     if (boutonCommande) {

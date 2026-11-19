@@ -1,132 +1,108 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-
-<head>
+  <head>
     <!-- =================================
          01 - CONFIGURATION DU DOCUMENT
     ================================== -->
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <meta name="description"
-          content="Découvrez la sélection d'accessoires CALI29.">
+    <meta
+      name="description"
+      content="Découvrez la sélection d'accessoires CALI29."
+    />
 
     <title>Accessoires | CALI29</title>
 
     <!-- POLICE MANROPE -->
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- FEUILLES DE STYLE -->
 
-    <link rel="stylesheet" href="css/style.css?v=20261119-1">
-    <link rel="stylesheet" href="css/header.css?v=20261119-1">
-    <link rel="stylesheet" href="css/categories.css?v=20261119-1">
-    <link rel="stylesheet" href="css/produits.css?v=20261119-1">
-    <link rel="stylesheet" href="css/panier.css?v=20261119-1">
-    <link rel="stylesheet" href="css/footer.css?v=20261119-1">
-    <link rel="stylesheet" href="css/responsive.css?v=20261119-1">
+    <link rel="stylesheet" href="css/style.css?v=20261119-1" />
+    <link rel="stylesheet" href="css/header.css?v=20261119-1" />
+    <link rel="stylesheet" href="css/categories.css?v=20261119-1" />
+    <link rel="stylesheet" href="css/produits.css?v=20261119-1" />
+    <link rel="stylesheet" href="css/panier.css?v=20261119-1" />
+    <link rel="stylesheet" href="css/footer.css?v=20261119-1" />
+    <link rel="stylesheet" href="css/responsive.css?v=20261119-1" />
+  </head>
 
-</head>
-
-<body>
-
+  <body>
     <!-- =================================
          02 - HEADER
     ================================== -->
 
     <header id="header" class="header">
+      <!-- BOUTON MENU MOBILE -->
 
-        <!-- BOUTON MENU MOBILE -->
+      <button
+        id="menu-burger"
+        class="menu-burger"
+        type="button"
+        aria-label="Ouvrir le menu"
+        aria-controls="menu-mobile"
+        aria-expanded="false"
+      >
+        <span class="burger-icone">☰</span>
+      </button>
 
-        <button
-            id="menu-burger"
-            class="menu-burger"
+      <!-- LOGO -->
+
+      <a href="index.html" class="logo"> CALI29 </a>
+
+      <!-- NAVIGATION ORDINATEUR -->
+
+      <nav class="navigation-desktop">
+        <a href="index.html" class="lien-navigation"> Accueil </a>
+
+        <!-- MENU DÉROULANT BOUTIQUE -->
+
+        <div id="boutique-dropdown" class="boutique-dropdown">
+          <button
+            id="boutique-toggle"
+            class="lien-navigation boutique-toggle"
             type="button"
-            aria-label="Ouvrir le menu"
-            aria-controls="menu-mobile"
             aria-expanded="false"
-        >
-            <span class="burger-icone">☰</span>
-        </button>
+            aria-haspopup="true"
+          >
+            Boutique
+          </button>
 
-        <!-- LOGO -->
+          <!-- SOUS-MENU -->
 
-        <a href="index.html" class="logo">
-            CALI29
-        </a>
-
-        <!-- NAVIGATION ORDINATEUR -->
-
-        <nav class="navigation-desktop">
-
-            <a href="index.html" class="lien-navigation">
-                Accueil
-            </a>
-
-            <!-- MENU DÉROULANT BOUTIQUE -->
-
-            <div id="boutique-dropdown" class="boutique-dropdown">
-
-                <button
-                    id="boutique-toggle"
-                    class="lien-navigation boutique-toggle"
-                    type="button"
-                    aria-expanded="false"
-                    aria-haspopup="true"
-                >
-                    Boutique
-                </button>
-
-                <!-- SOUS-MENU -->
-
-                <div class="boutique-sous-menu">
-
-                    <a href="fleur.html">Fleurs</a>
-                    <a href="resine.html">Résines</a>
-                    <a href="accessoires.html">Produits</a>
-
-                </div>
-
-            </div>
-
-        </nav>
-
-        <!-- PANIER -->
-
-        <a
-            href="panier.html"
-            id="ouvrir-panier"
-            class="bouton-panier"
-        >
-            Panier
-            <span id="nombre-articles">0</span>
-        </a>
-
-        <!-- MENU MOBILE -->
-
-        <nav
-            id="menu-mobile"
-            class="menu-mobile"
-            hidden
-        >
-
-            <a href="index.html">Accueil</a>
+          <div class="boutique-sous-menu">
             <a href="fleur.html">Fleurs</a>
             <a href="resine.html">Résines</a>
-            <a href="accessoires.html">Accessoires</a>
-            <a href="panier.html">Mon panier</a>
+            <a href="accessoires.html">Produits</a>
+          </div>
+        </div>
+      </nav>
 
-        </nav>
+      <!-- PANIER -->
 
+      <a href="panier.html" id="ouvrir-panier" class="bouton-panier">
+        Panier
+        <span id="nombre-articles">0</span>
+      </a>
+
+      <!-- MENU MOBILE -->
+
+      <nav id="menu-mobile" class="menu-mobile" hidden>
+        <a href="index.html">Accueil</a>
+        <a href="fleur.html">Fleurs</a>
+        <a href="resine.html">Résines</a>
+        <a href="accessoires.html">Accessoires</a>
+        <a href="panier.html">Mon panier</a>
+      </nav>
     </header>
 
     <!-- =================================
@@ -134,40 +110,27 @@
     ================================== -->
 
     <main>
+      <!-- TITRE DE LA CATÉGORIE -->
 
-        <!-- TITRE DE LA CATÉGORIE -->
+      <section
+        class="page-categorie"
+        id="categorie-accessoires"
+        data-categorie="accessoires"
+      >
+        <div class="section-titre">
+          <p class="section-surtitre">CALI29 COLLECTION</p>
 
-        <section
-            class="page-categorie"
-            id="categorie-accessoires"
-            data-categorie="accessoires"
-        >
+          <h1 class="titre-categorie">PRODUITS</h1>
+        </div>
 
-            <div class="section-titre">
-
-                <p class="section-surtitre">
-                    CALI29 COLLECTION
-                </p>
-
-                <h1 class="titre-categorie">
-                    PRODUITS
-                </h1>
-
-            </div>
-
-            <!-- =================================
+        <!-- =================================
                  04 - CATALOGUE PRODUITS
             ================================== -->
 
-            <div
-                id="catalogue-produits"
-                class="produits-container"
-            >
-                <!-- Cartes générées automatiquement depuis js/produits.js -->
-            </div>
-
-        </section>
-
+        <div id="catalogue-produits" class="produits-container">
+          <!-- Cartes générées automatiquement depuis js/produits.js -->
+        </div>
+      </section>
     </main>
 
     <!-- =================================
@@ -175,24 +138,13 @@
     ================================== -->
 
     <div id="panier-fixe" class="panier-fixe">
+      <div class="panier-informations">
+        <span>MON PANIER</span>
 
-        <div class="panier-informations">
+        <strong id="panier-total"> 0,00 € </strong>
+      </div>
 
-            <span>MON PANIER</span>
-
-            <strong id="panier-total">
-                0,00 €
-            </strong>
-
-        </div>
-
-        <a
-            href="panier.html"
-            class="bouton-commander"
-        >
-            Voir mon panier
-        </a>
-
+      <a href="panier.html" class="bouton-commander"> Voir mon panier </a>
     </div>
 
     <!-- =================================
@@ -200,37 +152,28 @@
     ================================== -->
 
     <footer class="footer">
+      <div class="footer-logo">CALI29</div>
 
-        <div class="footer-logo">
-            CALI29
-        </div>
+      <nav class="footer-liens">
+        <a href="index.html">Accueil</a>
+        <a href="fleur.html">Fleurs</a>
+        <a href="resine.html">Résines</a>
+        <a href="accessoires.html">Produits</a>
+        <a href="#">Contact</a>
+      </nav>
 
-        <nav class="footer-liens">
-
-            <a href="index.html">Accueil</a>
-            <a href="fleur.html">Fleurs</a>
-            <a href="resine.html">Résines</a>
-            <a href="accessoires.html">Produits</a>
-            <a href="#">Contact</a>
-
-        </nav>
-
-        <p class="footer-copyright">
-            © 2026 CALI29 - Tous droits réservés.
-        </p>
-
+      <p class="footer-copyright">© 2026 CALI29 - Tous droits réservés.</p>
     </footer>
 
-    <!-- =================================
-         07 - JAVASCRIPT
-    ================================== -->
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase/client.js"></script>
 
-    <script src="js/menu.js?v=20261119-1" defer></script>
-    <script src="js/acces.js?v=20261119-1" defer></script>
-    <script src="js/produits.js?v=20261119-1" defer></script>
-    <script src="js/catalogue.js?v=20261119-1" defer></script>
-    <script src="js/panier.js?v=20261119-1" defer></script>
-    <script src="js/commande.js?v=20261119-1" defer></script>
-
-</body>
+    <!-- SCRIPTS CALI29 -->
+    <script src="js/menu.js" defer></script>
+    <script src="js/acces.js" defer></script>
+    <script src="js/catalogue.js" defer></script>
+    <script src="js/panier.js" defer></script>
+    <script src="js/commande.js" defer></script>
+  </body>
 </html>
