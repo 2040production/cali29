@@ -1,76 +1,65 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="fr">
-
-<head>
-
+  <head>
     <!-- =================================
          01 - CONFIGURATION DU DOCUMENT
     ================================== -->
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>CALI29 | Boutique</title>
 
-    <meta name="description" content="Bienvenue dans l'univers CALI29.">
+    <meta name="description" content="Bienvenue dans l'univers CALI29." />
 
     <!-- POLICE MANROPE -->
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
 
     <!-- FEUILLES DE STYLE -->
 
-    <link rel="stylesheet" href="css/style.css?v=20261119-1">
-    <link rel="stylesheet" href="css/header.css?v=20261119-1">
-    <link rel="stylesheet" href="css/accueil.css?v=20261119-1">
-    <link rel="stylesheet" href="css/categories.css?v=20261119-1">
-    <link rel="stylesheet" href="css/produits.css?v=20261119-1">
-    <link rel="stylesheet" href="css/panier.css?v=20261119-1">
-    <link rel="stylesheet" href="css/footer.css?v=20261119-1">
-    <link rel="stylesheet" href="css/responsive.css?v=20261119-1">
+    <link rel="stylesheet" href="css/style.css?v=20261119-2" />
+    <link rel="stylesheet" href="css/header.css?v=20261119-2" />
+    <link rel="stylesheet" href="css/accueil.css?v=20261119-2" />
+    <link rel="stylesheet" href="css/categories.css?v=20261119-2" />
+    <link rel="stylesheet" href="css/produits.css?v=20261119-2" />
+    <link rel="stylesheet" href="css/panier.css?v=20261119-2" />
+    <link rel="stylesheet" href="css/footer.css?v=20261119-2" />
+    <link rel="stylesheet" href="css/responsive.css?v=20261119-2" />
+  </head>
 
-</head>
-
-
-<body>
-
+  <body>
     <!-- =================================
          01 - ÉCRAN D'ACCÈS CALI29
     ================================== -->
 
     <div id="ecran-acces" class="ecran-acces">
+      <div class="acces-contenu">
+        <div class="acces-logo">CALI29</div>
 
-        <div class="acces-contenu">
+        <p>ACCÈS RÉSERVÉ</p>
 
-            <div class="acces-logo">CALI29</div>
+        <h1>Bienvenue</h1>
 
-            <p>ACCÈS RÉSERVÉ</p>
+        <input
+          type="password"
+          id="code-acces"
+          placeholder="Votre code d'accès"
+          autocomplete="off"
+        />
 
-            <h1>Bienvenue</h1>
+        <button id="valider-acces">ENTRER →</button>
 
-            <input
-                type="password"
-                id="code-acces"
-                placeholder="Votre code d'accès"
-                autocomplete="off"
-            >
-
-            <button id="valider-acces">
-                ENTRER →
-            </button>
-
-            <p id="message-erreur"></p>
-
-        </div>
-
+        <p id="message-erreur"></p>
+      </div>
     </div>
-
 
     <!-- =================================
          02 - HEADER / NAVIGATION
@@ -78,120 +67,67 @@
 
     <header id="header" class="header">
 
-        <!-- BURGER MOBILE -->
+      <!-- BURGER MOBILE -->
 
-        <button
-            id="menu-burger"
-            class="menu-burger"
+      <button
+        id="menu-burger"
+        class="menu-burger"
+        type="button"
+        aria-label="Ouvrir le menu"
+        aria-controls="menu-mobile"
+        aria-expanded="false"
+      >
+        <span class="burger-icone">☰</span>
+      </button>
+
+      <!-- LOGO -->
+
+      <a href="index.html" class="logo">CALI29</a>
+
+      <!-- NAVIGATION ORDINATEUR -->
+
+      <nav class="navigation-desktop">
+        <a href="index.html" class="lien-navigation">Accueil</a>
+
+        <div id="boutique-dropdown" class="boutique-dropdown">
+
+          <button
+            id="boutique-toggle"
+            class="lien-navigation boutique-toggle"
             type="button"
-            aria-label="Ouvrir le menu"
-            aria-controls="menu-mobile"
             aria-expanded="false"
-        >
-            <span class="burger-icone">☰</span>
-        </button>
+            aria-haspopup="true"
+          >
+            Boutique
+          </button>
 
+          <div class="boutique-sous-menu">
+            <a href="fleur.html">Fleurs</a>
+            <a href="resine.html">Résines</a>
+            <a href="accessoires.html">Accessoires</a>
+          </div>
 
-        <!-- LOGO -->
+        </div>
+      </nav>
 
-        <a href="index.html" class="logo">
-            CALI29
-        </a>
+      <!-- PANIER -->
 
+      <a href="panier.html" id="ouvrir-panier" class="bouton-panier">
+        Panier
+        <span id="nombre-articles">0</span>
+      </a>
 
-        <!-- NAVIGATION ORDINATEUR -->
+      <!-- MENU MOBILE -->
 
-        <nav class="navigation-desktop">
-
-            <a href="index.html" class="lien-navigation">
-                Accueil
-            </a>
-
-
-            <!-- MENU DÉROULANT BOUTIQUE -->
-
-            <div id="boutique-dropdown" class="boutique-dropdown">
-
-                <button
-                    id="boutique-toggle"
-                    class="lien-navigation boutique-toggle"
-                    type="button"
-                    aria-expanded="false"
-                    aria-haspopup="true"
-                >
-                    Boutique
-                </button>
-
-
-                <!-- SOUS-MENU -->
-
-                <div class="boutique-sous-menu">
-
-                    <a href="fleur.html">
-                        Fleurs
-                    </a>
-
-                    <a href="resine.html">
-                        Résines
-                    </a>
-
-                    <a href="accessoires.html">
-                        Accessoires
-                    </a>
-
-                </div>
-
-            </div>
-
-        </nav>
-
-
-        <!-- PANIER -->
-
-        <a
-            href="panier.html"
-            id="ouvrir-panier"
-            class="bouton-panier"
-        >
-            Panier
-
-            <span id="nombre-articles">0</span>
-
-        </a>
-
-
-        <!-- MENU MOBILE -->
-
-        <nav
-            id="menu-mobile"
-            class="menu-mobile"
-            hidden
-        >
-
-            <a href="index.html">
-                Accueil
-            </a>
-
-            <a href="fleur.html">
-                Fleurs
-            </a>
-
-            <a href="resine.html">
-                Résines
-            </a>
-
-            <a href="accessoires.html">
-                Accessoires
-            </a>
-
-            <a href="panier.html">
-                Mon panier
-            </a>
-
-        </nav>
+      <nav id="menu-mobile" class="menu-mobile" hidden>
+        <a href="index.html">Accueil</a>
+        <a href="fleur.html">Fleurs</a>
+        <a href="resine.html">Résines</a>
+        <a href="accessoires.html">Accessoires</a>
+        <a href="panier.html">Mon panier</a>
+      </nav>
 
     </header>
-
 
     <!-- =================================
          03 - CONTENU PRINCIPAL
@@ -199,209 +135,148 @@
 
     <main id="contenu-principal">
 
+      <!-- =================================
+           04 - HERO / BANNIÈRE
+      ================================== -->
 
-        <!-- =================================
-             04 - HERO / BANNIÈRE
-        ================================== -->
+      <section id="hero" class="hero">
 
-        <section id="hero" class="hero">
+        <div class="hero-contenu">
+          <p class="hero-surtitre">SMART COFFEE</p>
 
-            <div class="hero-contenu">
+          <h1>SOYEZ LIVRES CHEZ VOUS</h1>
 
-                <p class="hero-surtitre">
-                    SMART COFFEE
-                </p>
+          <p class="hero-description">
+            Bienvenue dans l'univers CALI29.
+          </p>
 
-                <h1>
-                    SOYEZ LIVRES CHEZ VOUS
-                </h1>
+          <a href="#categories" class="bouton-principal">
+            DÉCOUVRIR NOS OFFRES →
+          </a>
+        </div>
 
-                <p class="hero-description">
-                    Bienvenue dans l'univers CALI29.
-                </p>
+        <div class="hero-image">
+          <img
+            src="assets/images/hero-cali29.png"
+            alt="Illustration de l'univers CALI29"
+          />
+        </div>
 
-                <a href="#categories" class="bouton-principal">
-                    DÉCOUVRIR NOS OFFRES →
-                </a>
+      </section>
 
-            </div>
+      <!-- =================================
+           05 - AVANTAGES
+      ================================== -->
 
+      <section id="avantages" class="avantages">
 
-            <!-- IMAGE DES MASCOTTES -->
+        <div class="avantages-container">
 
-            <div class="hero-image">
+          <article class="avantage">
+            <span class="avantage-icone">✦</span>
+            <p>Paiement en main propre</p>
+          </article>
 
-                <img
-                    src="assets/images/hero-cali29.png"
-                    alt="Illustration de l'univers CALI29"
-                >
+          <article class="avantage">
+            <span class="avantage-icone">◇</span>
+            <p>Offres dégressives</p>
+          </article>
 
-            </div>
+          <article class="avantage">
+            <span class="avantage-icone">✧</span>
+            <p>Commande simplifiée</p>
+          </article>
 
-        </section>
+        </div>
 
+      </section>
 
-        <!-- =================================
-             05 - AVANTAGES
-        ================================== -->
+      <!-- =================================
+           06 - CATÉGORIES
+      ================================== -->
 
-        <section id="avantages" class="avantages">
+      <section id="categories" class="categories">
 
-            <div class="avantages-container">
+        <div class="section-titre">
+          <p class="section-surtitre">EXPLORER</p>
+          <h2>NOS CATÉGORIES</h2>
+        </div>
 
-                <article class="avantage">
+        <div class="categories-container">
 
-                    <span class="avantage-icone">✦</span>
+          <a href="fleur.html" class="categorie">
+            <img src="assets/images/weed.png" alt="Fleurs" />
+            <h3>Fleurs</h3>
+          </a>
 
-                    <p>Paiement en main propre</p>
+          <a href="resine.html" class="categorie">
+            <img src="assets/images/resine.png" alt="Résines" />
+            <h3>Résines</h3>
+          </a>
 
-                </article>
+          <a href="accessoires.html" class="categorie">
+            <img src="assets/images/accessoires.png" alt="Accessoires" />
+            <h3>Produits</h3>
+          </a>
 
+        </div>
 
-                <article class="avantage">
+      </section>
 
-                    <span class="avantage-icone">◇</span>
+      <!-- =================================
+           07 - CATALOGUE PRODUITS
+      ================================== -->
 
-                    <p>Offres dégressives</p>
+      <section id="produits" class="produits">
 
-                </article>
+        <div class="section-titre">
 
+          <p class="section-surtitre">
+            LA SÉLECTION CALI29
+          </p>
 
-                <article class="avantage">
+          <h2>NOS PRODUITS</h2>
 
-                    <span class="avantage-icone">✧</span>
-
-                    <p>Commande simplifiée</p>
-
-                </article>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================
-             06 - CATÉGORIES
-        ================================== -->
-
-        <section id="categories" class="categories">
-
-            <div class="section-titre">
-
-                <p class="section-surtitre">
-                    EXPLORER
-                </p>
-
-                <h2>NOS CATÉGORIES</h2>
-
-            </div>
-
-
-            <div class="categories-container">
-
-                <a href="fleur.html" class="categorie">
-
-                    <img
-                        src="assets/images/weed.png"
-                        alt="Fleurs"
-                    >
-
-                    <h3>Fleurs</h3>
-
-                </a>
-
-
-                <a href="resine.html" class="categorie">
-
-                    <img
-                        src="assets/images/resine.png"
-                        alt="Résines"
-                    >
-
-                    <h3>Résines</h3>
-
-                </a>
-
-
-                <a href="accessoires.html" class="categorie">
-
-                    <img
-                        src="assets/images/accessoires.png"
-                        alt="Accessoires"
-                    >
-
-                    <h3>Produits</h3>
-
-                </a>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================
-             07 - CATALOGUE PRODUITS
-        ================================== -->
+        </div>
 
         <!--
-        <section id="produits" class="produits">
-
-            <div class="section-titre">
-
-                <p class="section-surtitre">
-                    LA SÉLECTION CALI29
-                </p>
-
-                <h2>NOS PRODUITS</h2>
-
-            </div>
-
-            <div
-                id="catalogue-produits"
-                class="produits-container"
-            >
-
-            </div>
-
-        </section>
+          Les produits sont chargés automatiquement
+          depuis Supabase par catalogue.js.
         -->
 
+        <div
+          id="catalogue-produits"
+          class="produits-container"
+        >
+          <p>Chargement du catalogue...</p>
+        </div>
 
-        <!-- =================================
-             08 - UNIVERS CALI29
-        ================================== -->
+      </section>
 
-        <section id="univers" class="univers">
+      <!-- =================================
+           08 - UNIVERS CALI29
+      ================================== -->
 
-            <div class="univers-image">
+      <section id="univers" class="univers">
 
-                <img
-                    src="assets/images/persoFooter.png"
-                    alt="Illustration des mascottes CALI29"
-                >
+        <div class="univers-image">
+          <img
+            src="assets/images/persoFooter.png"
+            alt="Illustration des mascottes CALI29"
+          />
+        </div>
 
-            </div>
+        <div class="univers-contenu">
+          <p class="section-surtitre">NOTRE IDENTITÉ</p>
 
+          <h2>L'UNIVERS CALI29</h2>
 
-            <div class="univers-contenu">
+          <p>Une identité, une communauté, un univers.</p>
+        </div>
 
-                <p class="section-surtitre">
-                    NOTRE IDENTITÉ
-                </p>
-
-                <h2>L'UNIVERS CALI29</h2>
-
-                <p>
-                    Une identité, une communauté, un univers.
-                </p>
-
-            </div>
-
-        </section>
-
+      </section>
 
     </main>
-
 
     <!-- =================================
          09 - FOOTER
@@ -409,36 +284,23 @@
 
     <footer id="footer" class="footer">
 
-        <div class="footer-logo">
-            CALI29
-        </div>
+      <div class="footer-logo">CALI29</div>
 
+      <nav class="footer-liens">
+        <a href="index.html">Accueil</a>
+        <a href="fleur.html">Fleurs</a>
+        <a href="resine.html">Résines</a>
+        <a href="accessoires.html">Produits</a>
+        <a href="#">Contact</a>
+        <a href="#">Mentions légales</a>
+        <a href="#">Politique de confidentialité</a>
+      </nav>
 
-        <nav class="footer-liens">
-
-            <a href="index.html">Accueil</a>
-
-            <a href="fleur.html">Fleurs</a>
-
-            <a href="resine.html">Résines</a>
-
-            <a href="accessoires.html">Produits</a>
-
-            <a href="#">Contact</a>
-
-            <a href="#">Mentions légales</a>
-
-            <a href="#">Politique de confidentialité</a>
-
-        </nav>
-
-
-        <p class="footer-copyright">
-            © CALI29 - Tous droits réservés
-        </p>
+      <p class="footer-copyright">
+        © CALI29 - Tous droits réservés
+      </p>
 
     </footer>
-
 
     <!-- =================================
          10 - PANIER FIXE MOBILE
@@ -446,38 +308,33 @@
 
     <div id="panier-fixe" class="panier-fixe">
 
-        <div class="panier-informations">
+      <div class="panier-informations">
+        <span>MON PANIER</span>
+        <strong id="panier-total">0,00 €</strong>
+      </div>
 
-            <span>MON PANIER</span>
-
-            <strong id="panier-total">
-                0,00 €
-            </strong>
-
-        </div>
-
-
-        <a
-            href="panier.html"
-            class="bouton-commander"
-        >
-            VOIR MON PANIER →
-        </a>
+      <a href="panier.html" class="bouton-commander">
+        VOIR MON PANIER →
+      </a>
 
     </div>
-
 
     <!-- =================================
          11 - FICHIERS JAVASCRIPT
     ================================== -->
 
-    <script src="js/menu.js?v=20261119-1" defer></script>
-    <script src="js/acces.js?v=20261119-1" defer></script>
-    <script src="js/produits.js?v=20261119-1" defer></script>
-    <script src="js/catalogue.js?v=20261119-1" defer></script>
-    <script src="js/panier.js?v=20261119-1" defer></script>
-    <script src="js/commande.js?v=20261119-1" defer></script>
+    <!-- SUPABASE -->
 
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase/client.js"></script>
 
+    <!-- SCRIPTS CALI29 -->
+
+    <script src="js/menu.js?v=20261119-2" defer></script>
+    <script src="js/acces.js?v=20261119-2" defer></script>
+    <script src="js/catalogue.js?v=20261119-2" defer></script>
+    <script src="js/panier.js?v=20261119-2" defer></script>
+    <script src="js/commande.js?v=20261119-2" defer></script>
+
+  </body>
 </html>

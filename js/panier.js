@@ -1,12 +1,17 @@
 
 /* ==========================================
-   PANIER CALI29
+   PANIER CALI29 V2
+   Catalogue synchronisé avec Supabase
 ========================================== */
 
-// Récupération du panier enregistré
-let panier = JSON.parse(localStorage.getItem("panierCali29")) || [];
+let panier = [];
 
-// Code promo appliqué (non conservé après rechargement)
+try {
+    panier = JSON.parse(localStorage.getItem("panierCali29")) || [];
+} catch (erreur) {
+    panier = [];
+}
+
 let codePromoActif = "";
 let montantReductionActive = 0;
 let messagePromoActuel = "";
@@ -32,6 +37,23 @@ function obtenirCleArticle(article) {
 
 
 /* ==========================================
+   RECHERCHER UN PRODUIT
+========================================== */
+
+function obtenirProduitPanier(idProduit) {
+
+    if (!Array.isArray(window.produits)) {
+        return null;
+    }
+
+    return window.produits.find(
+        produit => String(produit.id) === String(idProduit)
+    ) || null;
+
+}
+
+
+/* ==========================================
    SYNCHRONISER LES PRODUITS
 ========================================== */
 
@@ -39,7 +61,7 @@ function synchroniserPrixPanier() {
 
     panier = panier.map(article => {
 
-        const produit = produits.find(p => p.id === article.id);
+        const produit = obtenirProduitPanier(article.id);
 
         if (!produit) return article;
 
@@ -55,7 +77,7 @@ function synchroniserPrixPanier() {
         }
 
         const tarif = produit.tarifs?.find(
-            t => t.grammage === Number(article.grammage)
+            t => Number(t.grammage) === Number(article.grammage)
         );
 
         if (!tarif) return article;
@@ -70,6 +92,7 @@ function synchroniserPrixPanier() {
     });
 
     sauvegarderPanier();
+
 }
 
 
@@ -84,7 +107,7 @@ function ajouterAuPanier(
     prixSelectionne = null
 ) {
 
-    const produit = produits.find(p => p.id === idProduit);
+    const produit = obtenirProduitPanier(idProduit);
 
     if (!produit) {
         console.error("Produit introuvable :", idProduit);
@@ -101,7 +124,7 @@ function ajouterAuPanier(
     if (grammage !== null && produit.tarifs) {
 
         const tarif = produit.tarifs.find(
-            t => t.grammage === Number(grammage)
+            t => Number(t.grammage) === Number(grammage)
         );
 
         if (!tarif) {
@@ -113,7 +136,7 @@ function ajouterAuPanier(
 
     } else if (prixSelectionne !== null) {
 
-        prix = prixSelectionne;
+        prix = Number(prixSelectionne);
 
     }
 
@@ -122,7 +145,7 @@ function ajouterAuPanier(
         nom: produit.nom,
         image: produit.image,
         grammage: grammage,
-        prix: prix,
+        prix: Number(prix),
         quantite: quantiteValide
     };
 
@@ -132,17 +155,14 @@ function ajouterAuPanier(
     );
 
     if (articleExistant) {
-
         articleExistant.quantite += quantiteValide;
-
     } else {
-
         panier.push(nouvelArticle);
-
     }
 
     sauvegarderPanier();
     actualiserPanier();
+
 }
 
 
@@ -170,6 +190,7 @@ function modifierQuantite(cleArticle, changement) {
 
     sauvegarderPanier();
     actualiserPanier();
+
 }
 
 
@@ -185,6 +206,7 @@ function supprimerDuPanier(cleArticle) {
 
     sauvegarderPanier();
     actualiserPanier();
+
 }
 
 
@@ -203,10 +225,13 @@ function viderPanier() {
 
     const champCodePromo = document.getElementById("code-promo");
 
-    if (champCodePromo) champCodePromo.value = "";
+    if (champCodePromo) {
+        champCodePromo.value = "";
+    }
 
     sauvegarderPanier();
     actualiserPanier();
+
 }
 
 
@@ -217,18 +242,21 @@ function viderPanier() {
 function calculerNombreArticles() {
 
     return panier.reduce(
-        (total, article) => total + article.quantite,
+        (total, article) => total + Number(article.quantite || 0),
         0
     );
+
 }
 
 
 function calculerTotalPanier() {
 
     return panier.reduce(
-        (total, article) => total + article.prix * article.quantite,
+        (total, article) =>
+            total + Number(article.prix || 0) * Number(article.quantite || 0),
         0
     );
+
 }
 
 
@@ -246,11 +274,13 @@ function afficherMessagePromo(message, statut = "") {
     if (!element) return;
 
     element.textContent = message;
+
     element.classList.remove("succes", "erreur");
 
     if (statut) {
         element.classList.add(statut);
     }
+
 }
 
 
@@ -260,6 +290,10 @@ function recalculerPromotionActive() {
 
     if (!codePromoActif) {
         montantReductionActive = 0;
+        return 0;
+    }
+
+    if (typeof verifierCodePromo !== "function") {
         return 0;
     }
 
@@ -278,6 +312,7 @@ function recalculerPromotionActive() {
         afficherMessagePromo(resultat.message, "erreur");
 
         return 0;
+
     }
 
     montantReductionActive = resultat.montantReduction;
@@ -288,6 +323,7 @@ function recalculerPromotionActive() {
     );
 
     return montantReductionActive;
+
 }
 
 
@@ -297,6 +333,11 @@ function appliquerCodePromo() {
 
     if (!champ) return;
 
+    if (typeof verifierCodePromo !== "function") {
+        afficherMessagePromo("Le système de promotion n'est pas disponible.", "erreur");
+        return;
+    }
+
     const code = champ.value.trim();
 
     if (!code) {
@@ -305,9 +346,11 @@ function appliquerCodePromo() {
         montantReductionActive = 0;
 
         afficherMessagePromo("Saisis un code promo.", "erreur");
+
         actualiserPanier();
 
         return;
+
     }
 
     const resultat = verifierCodePromo(
@@ -323,9 +366,11 @@ function appliquerCodePromo() {
         montantReductionActive = 0;
 
         afficherMessagePromo(resultat.message, "erreur");
+
         actualiserPanier();
 
         return;
+
     }
 
     codePromoActif = resultat.promotion.code;
@@ -337,11 +382,12 @@ function appliquerCodePromo() {
     );
 
     actualiserPanier();
+
 }
 
 
 /* ==========================================
-   AFFICHER LE PANIER
+   AFFICHER LES ARTICLES DU PANIER
 ========================================== */
 
 function afficherArticlesPanier() {
@@ -359,22 +405,27 @@ function afficherArticlesPanier() {
         const ligne = document.createElement("article");
         ligne.className = "article-panier";
 
-        const urlProduit = `produit.html?id=${encodeURIComponent(article.id)}`;
+        const urlProduit =
+            `produit.html?id=${encodeURIComponent(article.id)}`;
 
-        // IMAGE CLIQUABLE
+
+        // IMAGE
 
         const lienImage = document.createElement("a");
+
         lienImage.href = urlProduit;
         lienImage.className = "article-panier-lien-image";
         lienImage.setAttribute("aria-label", `Voir ${article.nom}`);
 
         const image = document.createElement("img");
-        image.src = article.image;
-        image.alt = article.nom;
+
+        image.src = article.image || "";
+        image.alt = article.nom || "";
 
         lienImage.appendChild(image);
 
-        // INFORMATIONS PRODUIT
+
+        // INFORMATIONS
 
         const informations = document.createElement("div");
         informations.className = "article-panier-informations";
@@ -382,6 +433,7 @@ function afficherArticlesPanier() {
         const titre = document.createElement("h3");
 
         const lienTitre = document.createElement("a");
+
         lienTitre.href = urlProduit;
         lienTitre.textContent = article.nom;
         lienTitre.className = "article-panier-lien-titre";
@@ -391,11 +443,12 @@ function afficherArticlesPanier() {
         const prixUnitaire = document.createElement("p");
 
         prixUnitaire.textContent =
-            article.prix.toFixed(2) + " € / unité";
+            Number(article.prix).toFixed(2) + " € / unité";
 
-        if (article.grammage !== null) {
+        if (article.grammage !== null && article.grammage !== undefined) {
 
             const grammage = document.createElement("p");
+
             grammage.textContent = article.grammage + " g";
 
             informations.append(titre, grammage, prixUnitaire);
@@ -406,12 +459,15 @@ function afficherArticlesPanier() {
 
         }
 
+
         // QUANTITÉ
 
         const quantite = document.createElement("div");
+
         quantite.className = "article-panier-quantite";
 
         const boutonMoins = document.createElement("button");
+
         boutonMoins.type = "button";
         boutonMoins.textContent = "−";
 
@@ -420,9 +476,11 @@ function afficherArticlesPanier() {
         });
 
         const nombre = document.createElement("span");
+
         nombre.textContent = article.quantite;
 
         const boutonPlus = document.createElement("button");
+
         boutonPlus.type = "button";
         boutonPlus.textContent = "+";
 
@@ -434,17 +492,20 @@ function afficherArticlesPanier() {
 
         informations.append(quantite);
 
-        // ACTIONS ET PRIX TOTAL
+
+        // PRIX ET SUPPRESSION
 
         const actions = document.createElement("div");
 
         const prixTotal = document.createElement("div");
+
         prixTotal.className = "article-panier-prix";
 
         prixTotal.textContent =
-            (article.prix * article.quantite).toFixed(2) + " €";
+            (Number(article.prix) * Number(article.quantite)).toFixed(2) + " €";
 
         const supprimer = document.createElement("button");
+
         supprimer.type = "button";
         supprimer.className = "article-panier-supprimer";
         supprimer.textContent = "Supprimer";
@@ -455,6 +516,7 @@ function afficherArticlesPanier() {
 
         actions.append(prixTotal, supprimer);
 
+
         // ASSEMBLAGE
 
         ligne.append(lienImage, informations, actions);
@@ -462,6 +524,7 @@ function afficherArticlesPanier() {
         liste.appendChild(ligne);
 
     });
+
 }
 
 
@@ -472,29 +535,46 @@ function afficherArticlesPanier() {
 function actualiserPanier() {
 
     const panierVide = document.getElementById("panier-vide");
+
     const panierRempli = document.getElementById("panier-rempli");
 
     const nombreArticles = calculerNombreArticles();
+
     const total = calculerTotalPanier();
+
     const reduction = recalculerPromotionActive();
+
     const totalApresReduction = Math.max(0, total - reduction);
 
     const compteur = document.getElementById("nombre-articles");
+
     const nombreTotal = document.getElementById("panier-nombre-total");
+
     const sousTotal = document.getElementById("panier-sous-total");
+
     const reductionElement = document.getElementById("panier-reduction");
+
     const totalElement = document.getElementById("panier-total");
 
-    if (compteur) compteur.textContent = nombreArticles;
 
-    if (nombreTotal) nombreTotal.textContent = nombreArticles;
+    if (compteur) {
+        compteur.textContent = nombreArticles;
+    }
 
-    if (sousTotal) sousTotal.textContent = total.toFixed(2) + " €";
+    if (nombreTotal) {
+        nombreTotal.textContent = nombreArticles;
+    }
+
+    if (sousTotal) {
+        sousTotal.textContent = total.toFixed(2) + " €";
+    }
 
     if (reductionElement) {
 
         reductionElement.textContent =
-            reduction > 0 ? "- " + reduction.toFixed(2) + " €" : "0,00 €";
+            reduction > 0
+                ? "- " + reduction.toFixed(2) + " €"
+                : "0,00 €";
 
     }
 
@@ -502,17 +582,33 @@ function actualiserPanier() {
         totalElement.textContent = totalApresReduction.toFixed(2) + " €";
     }
 
+
+    // Panier fixe
+
+    const panierFixe = document.getElementById("panier-total");
+
+    if (panierFixe) {
+        panierFixe.textContent = totalApresReduction.toFixed(2) + " €";
+    }
+
+
+    // Champ promo
+
     const champCodePromo = document.getElementById("code-promo");
 
     if (champCodePromo && !champCodePromo.value && codePromoActif) {
         champCodePromo.value = codePromoActif;
     }
 
+
+    // Message promo
+
     const messagePromo = document.getElementById("message-code-promo");
 
     if (messagePromo && messagePromoActuel) {
 
         messagePromo.textContent = messagePromoActuel;
+
         messagePromo.classList.remove("succes", "erreur");
 
         if (statutPromoActuel) {
@@ -521,19 +617,150 @@ function actualiserPanier() {
 
     }
 
+
+    // Affichage panier vide / rempli
+
     if (panierVide && panierRempli) {
 
         if (panier.length === 0) {
+
             panierVide.style.display = "block";
             panierRempli.style.display = "none";
+
         } else {
+
             panierVide.style.display = "none";
             panierRempli.style.display = "grid";
+
         }
 
     }
 
     afficherArticlesPanier();
+
+}
+
+
+/* ==========================================
+   BRANCHER LES BOUTONS DU CATALOGUE
+========================================== */
+
+function connecterBoutonsCatalogue() {
+
+    const boutonsCatalogue = document.querySelectorAll(
+        ".carte-produit .bouton-ajouter"
+    );
+
+    boutonsCatalogue.forEach(bouton => {
+
+        if (bouton.dataset.panierConnecte === "true") return;
+
+        bouton.dataset.panierConnecte = "true";
+
+        bouton.addEventListener("click", () => {
+
+            const carte = bouton.closest(".carte-produit");
+
+            const lienProduit = carte?.querySelector(".lien-produit");
+
+            if (!lienProduit) return;
+
+            const url = new URL(lienProduit.href);
+
+            const idProduit = url.searchParams.get("id");
+
+            if (idProduit) {
+
+                const produit = obtenirProduitPanier(idProduit);
+
+                if (!produit) return;
+
+                const tarifs = Array.isArray(produit.tarifs)
+                    ? [...produit.tarifs].sort(
+                        (a, b) => Number(a.grammage) - Number(b.grammage)
+                    )
+                    : [];
+
+                if (tarifs.length > 0) {
+
+                    const premierTarif = tarifs[0];
+
+                    ajouterAuPanier(
+                        idProduit,
+                        1,
+                        Number(premierTarif.grammage),
+                        Number(premierTarif.prix)
+                    );
+
+                } else {
+
+                    ajouterAuPanier(idProduit, 1);
+
+                }
+
+            }
+
+        });
+
+    });
+
+}
+
+
+/* ==========================================
+   BRANCHER LE BOUTON DE LA FICHE PRODUIT
+========================================== */
+
+function connecterBoutonFicheProduit() {
+
+    const boutonFiche = document.getElementById("ajouter-produit-panier");
+
+    if (!boutonFiche || boutonFiche.dataset.panierConnecte === "true") {
+        return;
+    }
+
+    boutonFiche.dataset.panierConnecte = "true";
+
+    boutonFiche.addEventListener("click", () => {
+
+        const parametres = new URLSearchParams(window.location.search);
+
+        const idProduit = parametres.get("id");
+
+        const champQuantite = document.getElementById("quantite-produit");
+
+        const quantite = champQuantite
+            ? Math.max(1, parseInt(champQuantite.value, 10) || 1)
+            : 1;
+
+        if (!idProduit) return;
+
+        const selectGrammage = document.getElementById("grammage-produit");
+
+        let grammage = null;
+
+        let prix = null;
+
+        if (selectGrammage && !selectGrammage.closest("[hidden]")) {
+
+            grammage = Number(selectGrammage.value);
+
+            const produit = obtenirProduitPanier(idProduit);
+
+            const tarif = produit?.tarifs?.find(
+                t => Number(t.grammage) === grammage
+            );
+
+            if (!tarif) return;
+
+            prix = tarif.prix;
+
+        }
+
+        ajouterAuPanier(idProduit, quantite, grammage, prix);
+
+    });
+
 }
 
 
@@ -541,10 +768,30 @@ function actualiserPanier() {
    INITIALISATION
 ========================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
 
-    synchroniserPrixPanier();
-    actualiserPanier();
+    try {
+
+        await window.cataloguePret;
+
+        synchroniserPrixPanier();
+
+        actualiserPanier();
+
+        connecterBoutonsCatalogue();
+
+        connecterBoutonFicheProduit();
+
+    } catch (erreur) {
+
+        console.error("Initialisation du panier impossible :", erreur);
+
+        actualiserPanier();
+
+    }
+
+
+    // VIDER LE PANIER
 
     const boutonVider = document.getElementById("vider-panier");
 
@@ -552,9 +799,11 @@ document.addEventListener("DOMContentLoaded", () => {
         boutonVider.addEventListener("click", viderPanier);
     }
 
-    // APPLICATION DU CODE PROMO
+
+    // CODE PROMO
 
     const boutonPromo = document.getElementById("appliquer-code-promo");
+
     const champCodePromo = document.getElementById("code-promo");
 
     if (boutonPromo) {
@@ -566,83 +815,12 @@ document.addEventListener("DOMContentLoaded", () => {
         champCodePromo.addEventListener("keydown", event => {
 
             if (event.key === "Enter") {
+
                 event.preventDefault();
+
                 appliquerCodePromo();
-            }
-
-        });
-
-    }
-
-    // AJOUT DEPUIS LE CATALOGUE
-
-    const boutonsCatalogue = document.querySelectorAll(
-        ".carte-produit .bouton-ajouter"
-    );
-
-    boutonsCatalogue.forEach(bouton => {
-
-        bouton.addEventListener("click", () => {
-
-            const carte = bouton.closest(".carte-produit");
-            const lienProduit = carte.querySelector(".lien-produit");
-
-            if (!lienProduit) return;
-
-            const url = new URL(lienProduit.href);
-            const idProduit = url.searchParams.get("id");
-
-            if (idProduit) {
-                ajouterAuPanier(idProduit, 1);
-            }
-
-        });
-
-    });
-
-    // AJOUT DEPUIS LA FICHE PRODUIT
-
-    const boutonFiche = document.getElementById("ajouter-produit-panier");
-
-    if (boutonFiche) {
-
-        boutonFiche.addEventListener("click", () => {
-
-            const parametres = new URLSearchParams(window.location.search);
-            const idProduit = parametres.get("id");
-
-            const champQuantite = document.getElementById("quantite-produit");
-
-            const quantite = champQuantite
-                ? Math.max(1, parseInt(champQuantite.value, 10) || 1)
-                : 1;
-
-            if (!idProduit) return;
-
-            // Récupérer le grammage sélectionné
-
-            const selectGrammage = document.getElementById("grammage-produit");
-
-            let grammage = null;
-            let prix = null;
-
-            if (selectGrammage && !selectGrammage.closest("[hidden]")) {
-
-                grammage = Number(selectGrammage.value);
-
-                const produit = produits.find(p => p.id === idProduit);
-
-                const tarif = produit?.tarifs?.find(
-                    t => t.grammage === grammage
-                );
-
-                if (!tarif) return;
-
-                prix = tarif.prix;
 
             }
-
-            ajouterAuPanier(idProduit, quantite, grammage, prix);
 
         });
 
