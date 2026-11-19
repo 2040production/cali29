@@ -5,32 +5,39 @@
 ========================================== */
 
 
-
 /* ==========================================
    1. RÉCUPÉRER ET MIGRER LE CATALOGUE
 ========================================== */
 
 function recupererCatalogueFiche() {
 
+    const VERSION_CATALOGUE_FICHE = 3;
+    const CLE_VERSION = "catalogueCali29Version";
+
     try {
 
         const donnees = localStorage.getItem("catalogueCali29");
 
+        // Aucun catalogue sauvegardé
+
         if (donnees === null) {
+
+            const catalogueInitial = [...produits];
 
             localStorage.setItem(
                 "catalogueCali29",
-                JSON.stringify(produits)
+                JSON.stringify(catalogueInitial)
             );
 
             localStorage.setItem(
-                "catalogueCali29Version",
-                "2"
+                CLE_VERSION,
+                String(VERSION_CATALOGUE_FICHE)
             );
 
-            return [...produits];
+            return catalogueInitial;
 
         }
+
 
         const catalogueSauvegarde = JSON.parse(donnees);
 
@@ -38,54 +45,76 @@ function recupererCatalogueFiche() {
             throw new Error("Catalogue invalide.");
         }
 
+
         const versionStockee = Number(
-            localStorage.getItem("catalogueCali29Version") || 0
+            localStorage.getItem(CLE_VERSION) || 0
         );
 
-        if (versionStockee < 2) {
+
+        let catalogue = catalogueSauvegarde;
+
+        let catalogueModifie = false;
+
+
+        /* ======================================
+           MIGRATION DU CATALOGUE
+        ====================================== */
+
+        if (versionStockee < VERSION_CATALOGUE_FICHE) {
 
             const catalogueFusionne = new Map();
 
+
+            // Charger les produits de produits.js
+
             produits.forEach(produit => {
-                catalogueFusionne.set(produit.id, { ...produit });
+
+                if (!produit.id) return;
+
+                catalogueFusionne.set(
+                    produit.id,
+                    { ...produit }
+                );
+
             });
+
+
+            // Conserver les modifications de l'administration
 
             catalogueSauvegarde.forEach(produit => {
 
                 if (!produit.id) return;
 
+                const produitExistant =
+                    catalogueFusionne.get(produit.id) || {};
+
                 catalogueFusionne.set(produit.id, {
-                    ...(catalogueFusionne.get(produit.id) || {}),
+
+                    ...produitExistant,
                     ...produit
+
                 });
 
             });
 
-            const nouveauCatalogue = [
+
+            catalogue = [
                 ...catalogueFusionne.values()
             ];
 
-            localStorage.setItem(
-                "catalogueCali29",
-                JSON.stringify(nouveauCatalogue)
-            );
-
-            localStorage.setItem(
-                "catalogueCali29Version",
-                "2"
-            );
-
-            return nouveauCatalogue;
+            catalogueModifie = true;
 
         }
 
-        const catalogue = catalogueSauvegarde;
 
-        // CORRECTION ANCIEN CHEMIN VIDÉO RMF
+        /* ======================================
+           CORRECTION ANCIEN CHEMIN VIDÉO RMF
+        ====================================== */
 
         const produitRMF = catalogue.find(
             produit => produit.id === "resine-002"
         );
+
 
         if (
             produitRMF &&
@@ -94,6 +123,17 @@ function recupererCatalogueFiche() {
 
             produitRMF.video = "assets/videos/rmfVid.mp4";
 
+            catalogueModifie = true;
+
+        }
+
+
+        /* ======================================
+           SAUVEGARDER LES MODIFICATIONS
+        ====================================== */
+
+        if (catalogueModifie) {
+
             localStorage.setItem(
                 "catalogueCali29",
                 JSON.stringify(catalogue)
@@ -101,7 +141,21 @@ function recupererCatalogueFiche() {
 
         }
 
+
+        // Enregistrer la version actuelle
+
+        if (versionStockee < VERSION_CATALOGUE_FICHE) {
+
+            localStorage.setItem(
+                CLE_VERSION,
+                String(VERSION_CATALOGUE_FICHE)
+            );
+
+        }
+
+
         return catalogue;
+
 
     } catch (erreur) {
 
@@ -128,15 +182,18 @@ const parametres = new URLSearchParams(window.location.search);
 
 const idProduit = parametres.get("id");
 
+
 // Charger le catalogue actualisé
 
 const catalogueFiche = recupererCatalogueFiche();
+
 
 // Rechercher le produit
 
 const produitSelectionne = catalogueFiche.find(
     produit => produit.id === idProduit
 );
+
 
 
 /* ==========================================
@@ -157,6 +214,7 @@ const blocGrammage = document.getElementById("bloc-grammage");
 
 const selectGrammage = document.getElementById("grammage-produit");
 
+
 // Éléments tarifaires
 
 const infosTarifs = document.getElementById("infos-tarifs");
@@ -172,6 +230,7 @@ const economieRealisee = document.getElementById("economie-realisee");
 const pourcentageEconomie = document.getElementById("pourcentage-economie");
 
 
+
 /* ==========================================
    4. FORMATER LES PRIX
 ========================================== */
@@ -181,6 +240,7 @@ const formaterPrixFicheProduit = prix => {
     return Number(prix).toFixed(2).replace(".", ",") + " €";
 
 };
+
 
 
 /* ==========================================
@@ -197,16 +257,25 @@ if (produitSelectionne) {
     ====================================== */
 
     if (titreProduit) {
+
         titreProduit.textContent = produitSelectionne.nom;
+
     }
+
 
     if (categorieProduit) {
+
         categorieProduit.textContent = produitSelectionne.categorie;
+
     }
 
+
     if (descriptionProduit) {
+
         descriptionProduit.textContent = produitSelectionne.description || "";
+
     }
+
 
 
     /* ======================================
@@ -236,6 +305,7 @@ if (produitSelectionne) {
     }
 
 
+
     /* ======================================
        6. PRIX DÉGRESSIFS
     ====================================== */
@@ -249,19 +319,27 @@ if (produitSelectionne) {
 
     if (tarifs.length > 0 && selectGrammage) {
 
+
         // Afficher les blocs tarifaires
 
         if (blocGrammage) {
+
             blocGrammage.hidden = false;
+
         }
 
+
         if (infosTarifs) {
+
             infosTarifs.hidden = false;
+
         }
+
 
         // Réinitialiser les options
 
         selectGrammage.innerHTML = "";
+
 
 
         /* ==================================
@@ -283,6 +361,7 @@ if (produitSelectionne) {
         });
 
 
+
         /* ==================================
            7. ACTUALISER LES TARIFS
         ================================== */
@@ -294,11 +373,14 @@ if (produitSelectionne) {
                     Number(tarif.grammage) === Number(selectGrammage.value)
             );
 
+
             if (!tarifSelectionne) return;
+
 
             const grammage = Number(tarifSelectionne.grammage);
 
             const prixTotal = Number(tarifSelectionne.prix);
+
 
             if (
                 !Number.isFinite(grammage) ||
@@ -306,13 +388,17 @@ if (produitSelectionne) {
                 grammage <= 0 ||
                 prixTotal < 0
             ) {
+
                 return;
+
             }
+
 
 
             // Prix au gramme
 
             const prixGramme = prixTotal / grammage;
+
 
 
             // Prix de référence
@@ -321,9 +407,11 @@ if (produitSelectionne) {
                 Number(produitSelectionne.prix) * grammage;
 
 
+
             // Économie réalisée
 
             const economie = prixReference - prixTotal;
+
 
 
             // Pourcentage de réduction
@@ -331,6 +419,7 @@ if (produitSelectionne) {
             const pourcentage = prixReference > 0
                 ? (economie / prixReference) * 100
                 : 0;
+
 
 
             /* ==================================
@@ -344,12 +433,14 @@ if (produitSelectionne) {
 
             }
 
+
             if (prixAuGramme) {
 
                 prixAuGramme.textContent =
                     formaterPrixFicheProduit(prixGramme) + "/g";
 
             }
+
 
             if (prixTotalTarif) {
 
@@ -359,6 +450,7 @@ if (produitSelectionne) {
             }
 
 
+
             /* ==================================
                AFFICHAGE DES ÉCONOMIES
             ================================== */
@@ -366,8 +458,11 @@ if (produitSelectionne) {
             if (economie > 0.005 && pourcentage > 0) {
 
                 if (blocEconomie) {
+
                     blocEconomie.hidden = false;
+
                 }
+
 
                 if (economieRealisee) {
 
@@ -375,6 +470,7 @@ if (produitSelectionne) {
                         formaterPrixFicheProduit(economie);
 
                 }
+
 
                 if (pourcentageEconomie) {
 
@@ -386,7 +482,9 @@ if (produitSelectionne) {
             } else {
 
                 if (blocEconomie) {
+
                     blocEconomie.hidden = true;
+
                 }
 
             }
@@ -394,9 +492,11 @@ if (produitSelectionne) {
         };
 
 
+
         // Affichage initial
 
         actualiserTarifs();
+
 
 
         // Changement de grammage
@@ -406,6 +506,7 @@ if (produitSelectionne) {
             actualiserTarifs
         );
 
+
     } else {
 
 
@@ -414,16 +515,25 @@ if (produitSelectionne) {
         ================================== */
 
         if (blocGrammage) {
+
             blocGrammage.hidden = true;
+
         }
+
 
         if (infosTarifs) {
+
             infosTarifs.hidden = true;
+
         }
 
+
         if (blocEconomie) {
+
             blocEconomie.hidden = true;
+
         }
+
 
         if (prixProduit) {
 
@@ -433,6 +543,7 @@ if (produitSelectionne) {
         }
 
     }
+
 
 
 } else {
@@ -445,6 +556,7 @@ if (produitSelectionne) {
     const conteneur = document.querySelector(
         ".fiche-produit-container"
     );
+
 
     if (conteneur) {
 
