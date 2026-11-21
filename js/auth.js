@@ -2,6 +2,7 @@
 /* ==========================================
    CALI29 V2 - AUTHENTIFICATION CLIENT
    Inscription / Connexion / Session / Profil
+   Historique des commandes
 ========================================== */
 
 (() => {
@@ -29,10 +30,18 @@
         return;
     }
 
+    /* ==========================================
+       MESSAGES
+    ========================================== */
+
     function afficherMessage(texte, succes = false) {
         message.textContent = texte || "";
         message.classList.toggle("succes", succes);
     }
+
+    /* ==========================================
+       MODALE
+    ========================================== */
 
     function ouvrirModal() {
         modal.hidden = false;
@@ -74,6 +83,10 @@
         }
     }
 
+    /* ==========================================
+       PROFIL CLIENT
+    ========================================== */
+
     async function chargerProfil(user) {
         const { data, error } = await supabaseClient
             .from("profiles")
@@ -82,7 +95,7 @@
             .maybeSingle();
 
         if (error) {
-            console.error("CALI29 Auth - lecture profil :", error.message);
+            console.error("CALI29 Auth - lecture profil :", error);
             return null;
         }
 
@@ -110,6 +123,161 @@
         description.textContent = "Votre session est active.";
     }
 
+    /* ==========================================
+       HISTORIQUE DES COMMANDES
+    ========================================== */
+
+    function preparerHistorique() {
+        let historique = $("#historique-commandes");
+
+        if (historique) {
+            return historique;
+        }
+
+        historique = document.createElement("section");
+        historique.id = "historique-commandes";
+        historique.className = "historique-commandes";
+
+        historique.innerHTML = `
+            <div class="historique-entete">
+                <div>
+                    <span class="historique-surtitre">VOTRE ACTIVITÉ</span>
+                    <h3>Mes commandes</h3>
+                </div>
+                <span id="historique-compteur">0</span>
+            </div>
+
+            <div id="historique-liste">
+                <p class="historique-chargement">
+                    Chargement de vos commandes...
+                </p>
+            </div>
+        `;
+
+        const boutonDeconnexion = $("#bouton-deconnexion");
+
+        connectedView.insertBefore(historique, boutonDeconnexion);
+
+        return historique;
+    }
+
+    function formaterPrix(montant) {
+        return Number(montant || 0).toLocaleString("fr-FR", {
+            style: "currency",
+            currency: "EUR"
+        });
+    }
+
+    function formaterDate(date) {
+        if (!date) return "Date inconnue";
+
+        return new Date(date).toLocaleDateString("fr-FR", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric"
+        });
+    }
+
+    function traduireStatut(statut) {
+        const statuts = {
+            pending: "En attente",
+            confirmed: "Confirmée",
+            preparing: "En préparation",
+            ready: "Prête",
+            delivering: "En livraison",
+            completed: "Terminée",
+            cancelled: "Annulée"
+        };
+
+        return statuts[statut] || statut || "Inconnue";
+    }
+
+    function afficherCommandes(commandes) {
+        const liste = $("#historique-liste");
+        const compteur = $("#historique-compteur");
+
+        compteur.textContent = commandes.length;
+
+        if (!commandes.length) {
+            liste.innerHTML = `
+                <div class="historique-vide">
+                    <span>—</span>
+                    <p>Vous n'avez pas encore de commande.</p>
+                    <a href="index.html">Découvrir la boutique</a>
+                </div>
+            `;
+            return;
+        }
+
+        liste.innerHTML = "";
+
+        commandes.forEach((commande) => {
+            const carte = document.createElement("article");
+            carte.className = "historique-carte";
+
+            const entete = document.createElement("div");
+            entete.className = "historique-carte-entete";
+
+            const numero = document.createElement("strong");
+            numero.textContent = commande.order_number || "Commande CALI29";
+
+            const statut = document.createElement("span");
+            statut.className = "historique-statut";
+            statut.textContent = traduireStatut(commande.status);
+
+            entete.append(numero, statut);
+
+            const details = document.createElement("div");
+            details.className = "historique-carte-details";
+
+            const date = document.createElement("span");
+            date.textContent = formaterDate(commande.created_at);
+
+            const total = document.createElement("strong");
+            total.textContent = formaterPrix(commande.total);
+
+            details.append(date, total);
+
+            carte.append(entete, details);
+            liste.appendChild(carte);
+        });
+    }
+
+    async function chargerHistorique(user) {
+        const historique = preparerHistorique();
+        const liste = historique.querySelector("#historique-liste");
+
+        liste.innerHTML = `
+            <p class="historique-chargement">
+                Chargement de vos commandes...
+            </p>
+        `;
+
+        const { data, error } = await supabaseClient
+            .from("orders")
+            .select("id, order_number, status, total, created_at")
+            .eq("customer_id", user.id)
+            .order("created_at", { ascending: false });
+
+        if (error) {
+            console.error("CALI29 - Erreur historique :", error);
+
+            liste.innerHTML = `
+                <p class="historique-erreur">
+                    Impossible de charger vos commandes.
+                </p>
+            `;
+
+            return;
+        }
+
+        afficherCommandes(data || []);
+    }
+
+    /* ==========================================
+       ACTUALISATION DU COMPTE
+    ========================================== */
+
     async function actualiserEtatCompte() {
         const { data, error } = await supabaseClient.auth.getSession();
 
@@ -121,16 +289,25 @@
 
         if (!session?.user) {
             labelCompte.textContent = "Mon compte";
+
             authViews.hidden = false;
             connectedView.hidden = true;
+
             changerVue("connexion");
+
             return;
         }
 
         const profil = await chargerProfil(session.user);
 
         afficherProfil(profil, session.user);
+
+        await chargerHistorique(session.user);
     }
+
+    /* ==========================================
+       APPELS EDGE FUNCTIONS
+    ========================================== */
 
     async function appelerFonction(nom, donnees) {
         const { data, error } = await supabaseClient.functions.invoke(nom, {
@@ -138,9 +315,7 @@
         });
 
         if (error) {
-            let detail =
-                error.message ||
-                "Erreur de communication avec le serveur.";
+            let detail = error.message || "Erreur de communication avec le serveur.";
 
             if (error.context && typeof error.context.json === "function") {
                 try {
@@ -156,19 +331,21 @@
         }
 
         if (!data?.success) {
-            throw new Error(
-                data?.error || "L'opération n'a pas abouti."
-            );
+            throw new Error(data?.error || "L'opération n'a pas abouti.");
         }
 
         return data;
     }
 
+    /* ==========================================
+       CONNEXION
+    ========================================== */
+
     async function connecter(pseudo, password) {
-        const resultat = await appelerFonction(
-            CONNEXION_FUNCTION,
-            { pseudo, password }
-        );
+        const resultat = await appelerFonction(CONNEXION_FUNCTION, {
+            pseudo,
+            password
+        });
 
         const { access_token, refresh_token } = resultat.session || {};
 
@@ -181,12 +358,14 @@
             refresh_token
         });
 
-        if (error) {
-            throw error;
-        }
+        if (error) throw error;
 
         await actualiserEtatCompte();
     }
+
+    /* ==========================================
+       OUVERTURE DU COMPTE
+    ========================================== */
 
     openDesktop?.addEventListener("click", async () => {
         await actualiserEtatCompte();
@@ -218,22 +397,26 @@
         }
     });
 
+    /* ==========================================
+       ONGLETS
+    ========================================== */
+
     document.querySelectorAll(".compte-onglet").forEach((button) => {
         button.addEventListener("click", () => {
             changerVue(button.dataset.vue);
         });
     });
 
+    /* ==========================================
+       FORMULAIRE CONNEXION
+    ========================================== */
+
     formLogin.addEventListener("submit", async (event) => {
         event.preventDefault();
 
         afficherMessage("");
 
-        verrouillerFormulaire(
-            formLogin,
-            true,
-            "Connexion..."
-        );
+        verrouillerFormulaire(formLogin, true, "Connexion...");
 
         const pseudo = $("#connexion-pseudo").value.trim();
         const password = $("#connexion-motdepasse").value;
@@ -246,18 +429,16 @@
             formLogin.reset();
 
         } catch (error) {
-            afficherMessage(
-                error.message || "Connexion impossible."
-            );
+            afficherMessage(error.message || "Connexion impossible.");
 
         } finally {
-            verrouillerFormulaire(
-                formLogin,
-                false,
-                "Se connecter"
-            );
+            verrouillerFormulaire(formLogin, false, "Se connecter");
         }
     });
+
+    /* ==========================================
+       FORMULAIRE INSCRIPTION
+    ========================================== */
 
     formSignup.addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -269,46 +450,35 @@
         const confirmation = $("#inscription-confirmation").value;
 
         if (password !== confirmation) {
-            afficherMessage(
-                "Les deux mots de passe ne correspondent pas."
-            );
+            afficherMessage("Les deux mots de passe ne correspondent pas.");
             return;
         }
 
-        verrouillerFormulaire(
-            formSignup,
-            true,
-            "Création..."
-        );
+        verrouillerFormulaire(formSignup, true, "Création...");
 
         try {
-            await appelerFonction(
-                INSCRIPTION_FUNCTION,
-                { pseudo, password }
-            );
+            await appelerFonction(INSCRIPTION_FUNCTION, {
+                pseudo,
+                password
+            });
 
             await connecter(pseudo, password);
 
-            afficherMessage(
-                "Compte créé et connexion réussie.",
-                true
-            );
+            afficherMessage("Compte créé et connexion réussie.", true);
 
             formSignup.reset();
 
         } catch (error) {
-            afficherMessage(
-                error.message || "Création du compte impossible."
-            );
+            afficherMessage(error.message || "Création du compte impossible.");
 
         } finally {
-            verrouillerFormulaire(
-                formSignup,
-                false,
-                "Créer mon compte"
-            );
+            verrouillerFormulaire(formSignup, false, "Créer mon compte");
         }
     });
+
+    /* ==========================================
+       DÉCONNEXION
+    ========================================== */
 
     $("#bouton-deconnexion").addEventListener("click", async () => {
         const bouton = $("#bouton-deconnexion");
@@ -320,9 +490,7 @@
         bouton.disabled = false;
 
         if (error) {
-            afficherMessage(
-                "Déconnexion impossible : " + error.message
-            );
+            afficherMessage("Déconnexion impossible : " + error.message);
             return;
         }
 
@@ -331,6 +499,10 @@
         await actualiserEtatCompte();
     });
 
+    /* ==========================================
+       ÉCOUTE DE LA SESSION
+    ========================================== */
+
     supabaseClient.auth.onAuthStateChange((_event, session) => {
         if (!session) {
             labelCompte.textContent = "Mon compte";
@@ -338,6 +510,10 @@
             connectedView.hidden = true;
         }
     });
+
+    /* ==========================================
+       INITIALISATION
+    ========================================== */
 
     actualiserEtatCompte();
 

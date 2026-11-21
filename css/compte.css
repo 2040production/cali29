@@ -447,3 +447,125 @@ body.compte-modal-ouvert {
         min-height: 47px;
     }
 }
+
+
+/* ==========================================
+   CALI29 - HISTORIQUE DES COMMANDES
+========================================== */
+
+.historique-commandes {
+    margin: 24px 0;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,.12);
+}
+
+.historique-entete {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.historique-surtitre {
+    color: #c56aff;
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+}
+
+.historique-entete h3 {
+    margin: 5px 0 0;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+#historique-compteur {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    color: white;
+    background: #6500a8;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.historique-carte {
+    margin-bottom: 10px;
+    padding: 14px;
+    background: rgba(255,255,255,.045);
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 12px;
+}
+
+.historique-carte-entete,
+.historique-carte-details {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.historique-carte-entete strong {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-size: 11px;
+}
+
+.historique-statut {
+    flex-shrink: 0;
+    padding: 5px 8px;
+    color: #d9a7ff;
+    background: rgba(160,0,255,.15);
+    border-radius: 20px;
+    font-size: 9px;
+    font-weight: 800;
+}
+
+.historique-carte-details {
+    margin-top: 12px;
+    color: rgba(255,255,255,.6);
+    font-size: 11px;
+}
+
+.historique-carte-details strong {
+    color: white;
+    font-size: 14px;
+}
+
+.historique-chargement,
+.historique-vide,
+.historique-erreur {
+    padding: 16px 10px;
+    color: rgba(255,255,255,.65);
+    text-align: center;
+    font-size: 12px;
+}
+
+.historique-vide a {
+    display: inline-block;
+    margin-top: 8px;
+    color: #c56aff;
+    font-weight: 800;
+    text-decoration: none;
+}
+
+.historique-erreur {
+    color: #ff8d8d;
+}
+
+@media (max-width: 480px) {
+    .compte-boite {
+        padding: 25px 18px;
+    }
+
+    .historique-carte {
+        padding: 12px;
+    }
+
+    .historique-carte-entete strong {
+        font-size: 10px;
+    }
+}
