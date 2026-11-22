@@ -1,8 +1,6 @@
-
 /* ==========================================
-   CALI29 V2 - AUTHENTIFICATION CLIENT
-   Inscription / Connexion / Session / Profil
-   Historique des commandes
+   CALI29 V2 - ESPACE CLIENT
+   Authentification / Adresse / Commandes
 ========================================== */
 
 (() => {
@@ -10,7 +8,6 @@
 
     const INSCRIPTION_FUNCTION = "auth-pseudo";
     const CONNEXION_FUNCTION = "connexion-pseudo";
-
     const $ = (selector) => document.querySelector(selector);
 
     const modal = $("#compte-modal");
@@ -21,6 +18,7 @@
     const connectedView = $("#compte-connecte");
     const formLogin = $("#form-connexion");
     const formSignup = $("#form-inscription");
+    const formAdresse = $("#form-adresse");
     const message = $("#compte-message");
     const title = $("#compte-titre");
     const description = $("#compte-description");
@@ -29,6 +27,8 @@
         console.error("CALI29 Auth : éléments ou client Supabase introuvables.");
         return;
     }
+
+    let profilActuel = null;
 
     /* ==========================================
        MESSAGES
@@ -90,37 +90,140 @@
     async function chargerProfil(user) {
         const { data, error } = await supabaseClient
             .from("profiles")
-            .select("id, pseudo, first_name, last_name, phone, delivery_address, postal_code, city")
+            .select("id, pseudo, delivery_address, postal_code, city")
             .eq("id", user.id)
             .maybeSingle();
 
         if (error) {
             console.error("CALI29 Auth - lecture profil :", error);
+
+            afficherMessage(
+                "Impossible de charger votre profil. Vérifiez les droits d'accès Supabase."
+            );
+
             return null;
         }
 
         return data;
     }
 
+    function afficherAdresse(profil) {
+        const rue = profil?.delivery_address?.trim() || "";
+        const codePostal = profil?.postal_code?.trim() || "";
+        const ville = profil?.city?.trim() || "";
+
+        const complete = Boolean(rue && codePostal && ville);
+
+        $("#adresse-rue").value = rue;
+        $("#adresse-code-postal").value = codePostal;
+        $("#adresse-ville").value = ville;
+
+        $("#adresse-rue-affichee").textContent = rue;
+
+        $("#adresse-ville-affichee").textContent = complete
+            ? `${codePostal} ${ville}`
+            : "";
+
+        $("#adresse-enregistree").hidden = !complete;
+        formAdresse.hidden = complete;
+
+        $("#annuler-adresse").hidden = true;
+
+        $("#enregistrer-adresse").textContent = complete
+            ? "Enregistrer les modifications"
+            : "Enregistrer mon adresse";
+    }
+
     function afficherProfil(profil, user) {
+        profilActuel = profil;
+
         const pseudo =
             profil?.pseudo ||
             user?.user_metadata?.pseudo ||
             "Client";
 
         labelCompte.textContent = pseudo;
-
         $("#compte-pseudo-connecte").textContent = pseudo;
-        $("#compte-prenom").textContent = profil?.first_name || "Non renseigné";
-        $("#compte-nom").textContent = profil?.last_name || "Non renseigné";
-        $("#compte-telephone").textContent = profil?.phone || "Non renseigné";
-        $("#compte-ville").textContent = profil?.city || "Non renseignée";
 
         authViews.hidden = true;
         connectedView.hidden = false;
 
         title.textContent = "Mon espace client";
-        description.textContent = "Votre session est active.";
+        description.textContent = "Retrouvez votre adresse et vos commandes.";
+
+        afficherAdresse(profil);
+    }
+
+    /* ==========================================
+       ENREGISTREMENT DE L'ADRESSE
+    ========================================== */
+
+    async function enregistrerAdresse(event) {
+        event.preventDefault();
+
+        afficherMessage("");
+
+        const { data: sessionData, error: sessionError } =
+            await supabaseClient.auth.getSession();
+
+        const user = sessionData?.session?.user;
+
+        if (sessionError || !user) {
+            afficherMessage("Votre session a expiré. Reconnectez-vous.");
+            return;
+        }
+
+        const adresse = $("#adresse-rue").value.trim();
+        const codePostal = $("#adresse-code-postal").value.trim();
+        const ville = $("#adresse-ville").value.trim();
+
+        if (!adresse || !codePostal || !ville) {
+            afficherMessage("Complétez les trois champs de l'adresse.");
+            return;
+        }
+
+        const bouton = $("#enregistrer-adresse");
+
+        bouton.disabled = true;
+        bouton.textContent = "Enregistrement...";
+
+        const { data, error } = await supabaseClient
+            .from("profiles")
+            .update({
+                delivery_address: adresse,
+                postal_code: codePostal,
+                city: ville,
+                updated_at: new Date().toISOString()
+            })
+            .eq("id", user.id)
+            .select("id, pseudo, delivery_address, postal_code, city")
+            .maybeSingle();
+
+        bouton.disabled = false;
+        bouton.textContent = "Enregistrer mon adresse";
+
+        if (error) {
+            console.error("CALI29 - Enregistrement adresse :", error);
+
+            afficherMessage(
+                "Adresse non enregistrée. Vérifiez les autorisations UPDATE de la table profiles."
+            );
+
+            return;
+        }
+
+        if (!data) {
+            afficherMessage(
+                "Aucun profil modifié. Vérifiez que votre profil existe et que la politique RLS autorise sa modification."
+            );
+
+            return;
+        }
+
+        profilActuel = data;
+
+        afficherAdresse(data);
+        afficherMessage("Adresse enregistrée.", true);
     }
 
     /* ==========================================
@@ -144,6 +247,7 @@
                     <span class="historique-surtitre">VOTRE ACTIVITÉ</span>
                     <h3>Mes commandes</h3>
                 </div>
+
                 <span id="historique-compteur">0</span>
             </div>
 
@@ -154,9 +258,10 @@
             </div>
         `;
 
-        const boutonDeconnexion = $("#bouton-deconnexion");
-
-        connectedView.insertBefore(historique, boutonDeconnexion);
+        connectedView.insertBefore(
+            historique,
+            $("#bouton-deconnexion")
+        );
 
         return historique;
     }
@@ -169,7 +274,9 @@
     }
 
     function formaterDate(date) {
-        if (!date) return "Date inconnue";
+        if (!date) {
+            return "Date inconnue";
+        }
 
         return new Date(date).toLocaleDateString("fr-FR", {
             day: "2-digit",
@@ -206,6 +313,7 @@
                     <a href="index.html">Découvrir la boutique</a>
                 </div>
             `;
+
             return;
         }
 
@@ -219,7 +327,8 @@
             entete.className = "historique-carte-entete";
 
             const numero = document.createElement("strong");
-            numero.textContent = commande.order_number || "Commande CALI29";
+            numero.textContent =
+                commande.order_number || "Commande CALI29";
 
             const statut = document.createElement("span");
             statut.className = "historique-statut";
@@ -285,9 +394,11 @@
             console.error("CALI29 Auth - session :", error.message);
         }
 
-        const session = data?.session;
+        const user = data?.session?.user;
 
-        if (!session?.user) {
+        if (!user) {
+            profilActuel = null;
+
             labelCompte.textContent = "Mon compte";
 
             authViews.hidden = false;
@@ -298,11 +409,11 @@
             return;
         }
 
-        const profil = await chargerProfil(session.user);
+        const profil = await chargerProfil(user);
 
-        afficherProfil(profil, session.user);
+        afficherProfil(profil, user);
 
-        await chargerHistorique(session.user);
+        await chargerHistorique(user);
     }
 
     /* ==========================================
@@ -315,7 +426,8 @@
         });
 
         if (error) {
-            let detail = error.message || "Erreur de communication avec le serveur.";
+            let detail =
+                error.message || "Erreur de communication avec le serveur.";
 
             if (error.context && typeof error.context.json === "function") {
                 try {
@@ -331,7 +443,9 @@
         }
 
         if (!data?.success) {
-            throw new Error(data?.error || "L'opération n'a pas abouti.");
+            throw new Error(
+                data?.error || "L'opération n'a pas abouti."
+            );
         }
 
         return data;
@@ -342,10 +456,10 @@
     ========================================== */
 
     async function connecter(pseudo, password) {
-        const resultat = await appelerFonction(CONNEXION_FUNCTION, {
-            pseudo,
-            password
-        });
+        const resultat = await appelerFonction(
+            CONNEXION_FUNCTION,
+            { pseudo, password }
+        );
 
         const { access_token, refresh_token } = resultat.session || {};
 
@@ -358,7 +472,9 @@
             refresh_token
         });
 
-        if (error) throw error;
+        if (error) {
+            throw error;
+        }
 
         await actualiserEtatCompte();
     }
@@ -379,9 +495,7 @@
             menu.hidden = true;
         }
 
-        const burger = $("#menu-burger");
-
-        burger?.setAttribute("aria-expanded", "false");
+        $("#menu-burger")?.setAttribute("aria-expanded", "false");
 
         await actualiserEtatCompte();
         ouvrirModal();
@@ -398,7 +512,7 @@
     });
 
     /* ==========================================
-       ONGLETS
+       ONGLETS CONNEXION / INSCRIPTION
     ========================================== */
 
     document.querySelectorAll(".compte-onglet").forEach((button) => {
@@ -418,11 +532,11 @@
 
         verrouillerFormulaire(formLogin, true, "Connexion...");
 
-        const pseudo = $("#connexion-pseudo").value.trim();
-        const password = $("#connexion-motdepasse").value;
-
         try {
-            await connecter(pseudo, password);
+            await connecter(
+                $("#connexion-pseudo").value.trim(),
+                $("#connexion-motdepasse").value
+            );
 
             afficherMessage("Connexion réussie.", true);
 
@@ -432,7 +546,11 @@
             afficherMessage(error.message || "Connexion impossible.");
 
         } finally {
-            verrouillerFormulaire(formLogin, false, "Se connecter");
+            verrouillerFormulaire(
+                formLogin,
+                false,
+                "Se connecter"
+            );
         }
     });
 
@@ -450,7 +568,10 @@
         const confirmation = $("#inscription-confirmation").value;
 
         if (password !== confirmation) {
-            afficherMessage("Les deux mots de passe ne correspondent pas.");
+            afficherMessage(
+                "Les deux mots de passe ne correspondent pas."
+            );
+
             return;
         }
 
@@ -464,16 +585,47 @@
 
             await connecter(pseudo, password);
 
-            afficherMessage("Compte créé et connexion réussie.", true);
+            afficherMessage(
+                "Compte créé et connexion réussie.",
+                true
+            );
 
             formSignup.reset();
 
         } catch (error) {
-            afficherMessage(error.message || "Création du compte impossible.");
+            afficherMessage(
+                error.message || "Création du compte impossible."
+            );
 
         } finally {
-            verrouillerFormulaire(formSignup, false, "Créer mon compte");
+            verrouillerFormulaire(
+                formSignup,
+                false,
+                "Créer mon compte"
+            );
         }
+    });
+
+    /* ==========================================
+       FORMULAIRE ADRESSE
+    ========================================== */
+
+    formAdresse.addEventListener("submit", enregistrerAdresse);
+
+    $("#modifier-adresse").addEventListener("click", () => {
+        formAdresse.hidden = false;
+        $("#adresse-enregistree").hidden = true;
+        $("#annuler-adresse").hidden = false;
+
+        $("#enregistrer-adresse").textContent =
+            "Enregistrer les modifications";
+
+        $("#adresse-rue").focus();
+    });
+
+    $("#annuler-adresse").addEventListener("click", () => {
+        afficherAdresse(profilActuel);
+        afficherMessage("");
     });
 
     /* ==========================================
@@ -490,7 +642,10 @@
         bouton.disabled = false;
 
         if (error) {
-            afficherMessage("Déconnexion impossible : " + error.message);
+            afficherMessage(
+                "Déconnexion impossible : " + error.message
+            );
+
             return;
         }
 
@@ -505,7 +660,10 @@
 
     supabaseClient.auth.onAuthStateChange((_event, session) => {
         if (!session) {
+            profilActuel = null;
+
             labelCompte.textContent = "Mon compte";
+
             authViews.hidden = false;
             connectedView.hidden = true;
         }

@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="css/panier.css?v=20261119-2">
     <link rel="stylesheet" href="css/footer.css?v=20261119-2">
     <link rel="stylesheet" href="css/responsive.css?v=20261120-1">
-    <link rel="stylesheet" href="css/compte.css?v=20261120-1">
+    <link rel="stylesheet" href="css/compte.css?v=20261122-2">
 </head>
 
 <body>
@@ -446,27 +446,100 @@
                     </div>
                 </div>
 
-                <div class="compte-informations">
-                    <div>
-                        <span>Prénom</span>
-                        <strong id="compte-prenom">Non renseigné</strong>
+                <!-- ADRESSE HABITUELLE -->
+
+                <section class="adresse-client" aria-labelledby="adresse-titre">
+
+                    <div class="adresse-client-entete">
+                        <div>
+                            <span class="adresse-surtitre">LIVRAISON</span>
+                            <h3 id="adresse-titre">Mon adresse habituelle</h3>
+                        </div>
+
+                        <span class="adresse-icone" aria-hidden="true">⌖</span>
                     </div>
 
-                    <div>
-                        <span>Nom</span>
-                        <strong id="compte-nom">Non renseigné</strong>
+                    <div id="adresse-enregistree" class="adresse-enregistree" hidden>
+                        <strong id="adresse-rue-affichee"></strong>
+                        <span id="adresse-ville-affichee"></span>
+
+                        <button
+                            type="button"
+                            id="modifier-adresse"
+                            class="adresse-modifier"
+                        >
+                            Modifier l'adresse
+                        </button>
                     </div>
 
-                    <div>
-                        <span>Téléphone</span>
-                        <strong id="compte-telephone">Non renseigné</strong>
-                    </div>
+                    <form id="form-adresse" class="form-adresse" hidden>
 
-                    <div>
-                        <span>Ville</span>
-                        <strong id="compte-ville">Non renseignée</strong>
-                    </div>
-                </div>
+                        <label for="adresse-rue">Adresse</label>
+
+                        <input
+                            type="text"
+                            id="adresse-rue"
+                            name="delivery_address"
+                            placeholder="Numéro et nom de rue"
+                            maxlength="180"
+                            autocomplete="street-address"
+                            required
+                        >
+
+                        <div class="adresse-champs-ligne">
+
+                            <div>
+                                <label for="adresse-code-postal">Code postal</label>
+
+                                <input
+                                    type="text"
+                                    id="adresse-code-postal"
+                                    name="postal_code"
+                                    placeholder="29200"
+                                    maxlength="10"
+                                    autocomplete="postal-code"
+                                    required
+                                >
+                            </div>
+
+                            <div>
+                                <label for="adresse-ville">Ville</label>
+
+                                <input
+                                    type="text"
+                                    id="adresse-ville"
+                                    name="city"
+                                    placeholder="Brest"
+                                    maxlength="100"
+                                    autocomplete="address-level2"
+                                    required
+                                >
+                            </div>
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            id="enregistrer-adresse"
+                            class="compte-submit"
+                        >
+                            Enregistrer mon adresse
+                        </button>
+
+                        <button
+                            type="button"
+                            id="annuler-adresse"
+                            class="adresse-annuler"
+                            hidden
+                        >
+                            Annuler
+                        </button>
+
+                    </form>
+
+                </section>
+
+                <!-- HISTORIQUE DES COMMANDES : AJOUTÉ PAR AUTH.JS -->
 
                 <button
                     type="button"
@@ -504,7 +577,7 @@
     <script src="js/catalogue.js?v=20261119-2" defer></script>
     <script src="js/panier.js?v=20261119-2" defer></script>
     <script src="js/commande.js?v=20261119-2" defer></script>
-    <script src="js/auth.js?v=20261120-1" defer></script>
+    <script src="js/auth.js?v=20261122-1" defer></script>
 
 </body>
 </html>
