@@ -2,23 +2,23 @@
 <!doctype html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mon panier | CALI29</title>
-    <meta name="description" content="Retrouvez votre sélection CALI29." />
+    <meta name="description" content="Retrouvez votre sélection CALI29.">
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="css/style.css?v=20261119-1" />
-    <link rel="stylesheet" href="css/header.css?v=20261119-1" />
-    <link rel="stylesheet" href="css/panier.css?v=20261119-1" />
-    <link rel="stylesheet" href="css/footer.css?v=20261119-1" />
-    <link rel="stylesheet" href="css/panierPage.css?v=20261119-1" />
-    <link rel="stylesheet" href="css/responsive.css?v=20261119-1" />
-    <link rel="stylesheet" href="css/compte.css?v=20261120-1" />
-    <link rel="stylesheet" href="css/order-popup.css?v=20261119-1" />
+    <link rel="stylesheet" href="css/style.css?v=20261122-2">
+    <link rel="stylesheet" href="css/header.css?v=20261122-2">
+    <link rel="stylesheet" href="css/panier.css?v=20261122-2">
+    <link rel="stylesheet" href="css/footer.css?v=20261122-2">
+    <link rel="stylesheet" href="css/panierPage.css?v=20261122-2">
+    <link rel="stylesheet" href="css/responsive.css?v=20261122-2">
+    <link rel="stylesheet" href="css/compte.css?v=20261122-2">
+    <link rel="stylesheet" href="css/order-popup.css?v=20261122-2">
 </head>
 
 <body>
@@ -124,7 +124,7 @@
 
                         <div class="panier-promo-champ">
                             <input type="text" id="code-promo"
-                                placeholder="Saisir un code promo" autocomplete="off" />
+                                placeholder="Saisir un code promo" autocomplete="off">
                             <button type="button" id="appliquer-code-promo">APPLIQUER</button>
                         </div>
 
@@ -185,7 +185,7 @@
                 <div class="delivery-field">
                     <label for="delivery-address">Adresse</label>
                     <input type="text" id="delivery-address" name="adresse"
-                        required autocomplete="street-address" />
+                        required autocomplete="street-address">
                 </div>
 
                 <div class="delivery-fields-row">
@@ -193,13 +193,13 @@
                     <div class="delivery-field">
                         <label for="delivery-postcode">Code postal</label>
                         <input type="text" id="delivery-postcode" name="codePostal"
-                            required autocomplete="postal-code" inputmode="numeric" />
+                            required autocomplete="postal-code" inputmode="numeric">
                     </div>
 
                     <div class="delivery-field">
                         <label for="delivery-city">Ville</label>
                         <input type="text" id="delivery-city" name="ville"
-                            required autocomplete="address-level2" />
+                            required autocomplete="address-level2">
                     </div>
 
                 </div>
@@ -334,12 +334,12 @@
                     <label for="connexion-pseudo">Pseudo</label>
                     <input type="text" id="connexion-pseudo"
                         placeholder="Votre pseudo" minlength="3" maxlength="24"
-                        autocomplete="username" required />
+                        autocomplete="username" required>
 
                     <label for="connexion-motdepasse">Mot de passe</label>
                     <input type="password" id="connexion-motdepasse"
                         placeholder="Votre mot de passe"
-                        autocomplete="current-password" required />
+                        autocomplete="current-password" required>
 
                     <button type="submit" class="compte-submit">Se connecter</button>
                 </form>
@@ -350,17 +350,17 @@
                     <input type="text" id="inscription-pseudo"
                         placeholder="3 à 24 caractères" minlength="3" maxlength="24"
                         pattern="[A-Za-z0-9_.\-]{3,24}"
-                        autocomplete="username" required />
+                        autocomplete="username" required>
 
                     <label for="inscription-motdepasse">Mot de passe</label>
                     <input type="password" id="inscription-motdepasse"
                         placeholder="8 caractères minimum" minlength="8" maxlength="72"
-                        autocomplete="new-password" required />
+                        autocomplete="new-password" required>
 
                     <label for="inscription-confirmation">Confirmer le mot de passe</label>
                     <input type="password" id="inscription-confirmation"
                         placeholder="Confirmer le mot de passe" minlength="8" maxlength="72"
-                        autocomplete="new-password" required />
+                        autocomplete="new-password" required>
 
                     <button type="submit" class="compte-submit">Créer mon compte</button>
                 </form>
@@ -397,17 +397,17 @@
 
     <!-- SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase/client.js"></script>
+    <script src="js/supabase/client.js?v=20261122-2"></script>
 
     <!-- SCRIPTS CALI29 -->
-    <script src="js/menu.js" defer></script>
-    <script src="js/acces.js" defer></script>
-    <script src="js/catalogue.js" defer></script>
-    <script src="js/promotions.js" defer></script>
-    <script src="js/panier.js" defer></script>
-    <script src="js/commande.js" defer></script>
-    <script src="js/order-popup.js?v=20261122-3" defer></script>
-    <script src="js/auth.js?v=20261120-1" defer></script>
+    <script src="js/menu.js?v=20261122-2" defer></script>
+    <script src="js/acces.js?v=20261122-2" defer></script>
+    <script src="js/catalogue.js?v=20261122-2" defer></script>
+    <script src="js/promotions.js?v=20261122-2" defer></script>
+    <script src="js/panier.js?v=20261122-2" defer></script>
+    <script src="js/commande.js?v=20261122-2" defer></script>
+    <script src="js/order-popup.js?v=20261122-2" defer></script>
+    <script src="js/auth.js?v=20261122-2" defer></script>
 
 </body>
 </html>

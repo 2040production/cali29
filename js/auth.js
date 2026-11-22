@@ -1,3 +1,4 @@
+
 /* ==========================================
    CALI29 V2 - ESPACE CLIENT
    Authentification / Adresse / Commandes
@@ -8,6 +9,7 @@
 
     const INSCRIPTION_FUNCTION = "auth-pseudo";
     const CONNEXION_FUNCTION = "connexion-pseudo";
+
     const $ = (selector) => document.querySelector(selector);
 
     const modal = $("#compte-modal");
@@ -23,7 +25,16 @@
     const title = $("#compte-titre");
     const description = $("#compte-description");
 
-    if (!modal || !window.supabase || typeof supabaseClient === "undefined") {
+    if (
+        !modal ||
+        !authViews ||
+        !connectedView ||
+        !formLogin ||
+        !formSignup ||
+        !message ||
+        !window.supabase ||
+        typeof supabaseClient === "undefined"
+    ) {
         console.error("CALI29 Auth : éléments ou client Supabase introuvables.");
         return;
     }
@@ -64,17 +75,23 @@
             button.classList.toggle("actif", button.dataset.vue === vue);
         });
 
-        title.textContent = inscription ? "Créer mon compte" : "Mon compte";
+        if (title) {
+            title.textContent = inscription ? "Créer mon compte" : "Mon compte";
+        }
 
-        description.textContent = inscription
-            ? "Choisissez un pseudo et un mot de passe."
-            : "Connectez-vous avec votre pseudo et votre mot de passe.";
+        if (description) {
+            description.textContent = inscription
+                ? "Choisissez un pseudo et un mot de passe."
+                : "Connectez-vous avec votre pseudo et votre mot de passe.";
+        }
 
         afficherMessage("");
     }
 
     function verrouillerFormulaire(form, verrouille, texteBouton) {
         const bouton = form.querySelector('button[type="submit"]');
+
+        if (!bouton) return;
 
         bouton.disabled = verrouille;
 
@@ -107,31 +124,63 @@
         return data;
     }
 
+    /* ==========================================
+       ADRESSE CLIENT
+       Présente uniquement sur les pages qui
+       possèdent le formulaire correspondant.
+    ========================================== */
+
     function afficherAdresse(profil) {
+        if (!formAdresse) return;
+
+        const champRue = $("#adresse-rue");
+        const champCodePostal = $("#adresse-code-postal");
+        const champVille = $("#adresse-ville");
+        const adresseEnregistree = $("#adresse-enregistree");
+        const rueAffichee = $("#adresse-rue-affichee");
+        const villeAffichee = $("#adresse-ville-affichee");
+        const boutonAnnuler = $("#annuler-adresse");
+        const boutonEnregistrer = $("#enregistrer-adresse");
+
+        if (
+            !champRue ||
+            !champCodePostal ||
+            !champVille ||
+            !adresseEnregistree ||
+            !rueAffichee ||
+            !villeAffichee
+        ) {
+            return;
+        }
+
         const rue = profil?.delivery_address?.trim() || "";
         const codePostal = profil?.postal_code?.trim() || "";
         const ville = profil?.city?.trim() || "";
 
         const complete = Boolean(rue && codePostal && ville);
 
-        $("#adresse-rue").value = rue;
-        $("#adresse-code-postal").value = codePostal;
-        $("#adresse-ville").value = ville;
+        champRue.value = rue;
+        champCodePostal.value = codePostal;
+        champVille.value = ville;
 
-        $("#adresse-rue-affichee").textContent = rue;
+        rueAffichee.textContent = rue;
 
-        $("#adresse-ville-affichee").textContent = complete
+        villeAffichee.textContent = complete
             ? `${codePostal} ${ville}`
             : "";
 
-        $("#adresse-enregistree").hidden = !complete;
+        adresseEnregistree.hidden = !complete;
         formAdresse.hidden = complete;
 
-        $("#annuler-adresse").hidden = true;
+        if (boutonAnnuler) {
+            boutonAnnuler.hidden = true;
+        }
 
-        $("#enregistrer-adresse").textContent = complete
-            ? "Enregistrer les modifications"
-            : "Enregistrer mon adresse";
+        if (boutonEnregistrer) {
+            boutonEnregistrer.textContent = complete
+                ? "Enregistrer les modifications"
+                : "Enregistrer mon adresse";
+        }
     }
 
     function afficherProfil(profil, user) {
@@ -142,14 +191,26 @@
             user?.user_metadata?.pseudo ||
             "Client";
 
-        labelCompte.textContent = pseudo;
-        $("#compte-pseudo-connecte").textContent = pseudo;
+        if (labelCompte) {
+            labelCompte.textContent = pseudo;
+        }
+
+        const pseudoConnecte = $("#compte-pseudo-connecte");
+
+        if (pseudoConnecte) {
+            pseudoConnecte.textContent = pseudo;
+        }
 
         authViews.hidden = true;
         connectedView.hidden = false;
 
-        title.textContent = "Mon espace client";
-        description.textContent = "Retrouvez votre adresse et vos commandes.";
+        if (title) {
+            title.textContent = "Mon espace client";
+        }
+
+        if (description) {
+            description.textContent = "Retrouvez votre adresse et vos commandes.";
+        }
 
         afficherAdresse(profil);
     }
@@ -258,10 +319,13 @@
             </div>
         `;
 
-        connectedView.insertBefore(
-            historique,
-            $("#bouton-deconnexion")
-        );
+        const boutonDeconnexion = $("#bouton-deconnexion");
+
+        if (boutonDeconnexion) {
+            connectedView.insertBefore(historique, boutonDeconnexion);
+        } else {
+            connectedView.appendChild(historique);
+        }
 
         return historique;
     }
@@ -274,9 +338,7 @@
     }
 
     function formaterDate(date) {
-        if (!date) {
-            return "Date inconnue";
-        }
+        if (!date) return "Date inconnue";
 
         return new Date(date).toLocaleDateString("fr-FR", {
             day: "2-digit",
@@ -303,6 +365,8 @@
         const liste = $("#historique-liste");
         const compteur = $("#historique-compteur");
 
+        if (!liste || !compteur) return;
+
         compteur.textContent = commandes.length;
 
         if (!commandes.length) {
@@ -327,8 +391,7 @@
             entete.className = "historique-carte-entete";
 
             const numero = document.createElement("strong");
-            numero.textContent =
-                commande.order_number || "Commande CALI29";
+            numero.textContent = commande.order_number || "Commande CALI29";
 
             const statut = document.createElement("span");
             statut.className = "historique-statut";
@@ -399,7 +462,9 @@
         if (!user) {
             profilActuel = null;
 
-            labelCompte.textContent = "Mon compte";
+            if (labelCompte) {
+                labelCompte.textContent = "Mon compte";
+            }
 
             authViews.hidden = false;
             connectedView.hidden = true;
@@ -443,9 +508,7 @@
         }
 
         if (!data?.success) {
-            throw new Error(
-                data?.error || "L'opération n'a pas abouti."
-            );
+            throw new Error(data?.error || "L'opération n'a pas abouti.");
         }
 
         return data;
@@ -529,7 +592,6 @@
         event.preventDefault();
 
         afficherMessage("");
-
         verrouillerFormulaire(formLogin, true, "Connexion...");
 
         try {
@@ -539,18 +601,13 @@
             );
 
             afficherMessage("Connexion réussie.", true);
-
             formLogin.reset();
 
         } catch (error) {
             afficherMessage(error.message || "Connexion impossible.");
 
         } finally {
-            verrouillerFormulaire(
-                formLogin,
-                false,
-                "Se connecter"
-            );
+            verrouillerFormulaire(formLogin, false, "Se connecter");
         }
     });
 
@@ -568,10 +625,7 @@
         const confirmation = $("#inscription-confirmation").value;
 
         if (password !== confirmation) {
-            afficherMessage(
-                "Les deux mots de passe ne correspondent pas."
-            );
-
+            afficherMessage("Les deux mots de passe ne correspondent pas.");
             return;
         }
 
@@ -585,24 +639,14 @@
 
             await connecter(pseudo, password);
 
-            afficherMessage(
-                "Compte créé et connexion réussie.",
-                true
-            );
-
+            afficherMessage("Compte créé et connexion réussie.", true);
             formSignup.reset();
 
         } catch (error) {
-            afficherMessage(
-                error.message || "Création du compte impossible."
-            );
+            afficherMessage(error.message || "Création du compte impossible.");
 
         } finally {
-            verrouillerFormulaire(
-                formSignup,
-                false,
-                "Créer mon compte"
-            );
+            verrouillerFormulaire(formSignup, false, "Créer mon compte");
         }
     });
 
@@ -610,20 +654,37 @@
        FORMULAIRE ADRESSE
     ========================================== */
 
-    formAdresse.addEventListener("submit", enregistrerAdresse);
+    if (formAdresse) {
+        formAdresse.addEventListener("submit", enregistrerAdresse);
+    }
 
-    $("#modifier-adresse").addEventListener("click", () => {
+    $("#modifier-adresse")?.addEventListener("click", () => {
+        if (!formAdresse) return;
+
         formAdresse.hidden = false;
-        $("#adresse-enregistree").hidden = true;
-        $("#annuler-adresse").hidden = false;
 
-        $("#enregistrer-adresse").textContent =
-            "Enregistrer les modifications";
+        const adresseEnregistree = $("#adresse-enregistree");
 
-        $("#adresse-rue").focus();
+        if (adresseEnregistree) {
+            adresseEnregistree.hidden = true;
+        }
+
+        const boutonAnnuler = $("#annuler-adresse");
+
+        if (boutonAnnuler) {
+            boutonAnnuler.hidden = false;
+        }
+
+        const boutonEnregistrer = $("#enregistrer-adresse");
+
+        if (boutonEnregistrer) {
+            boutonEnregistrer.textContent = "Enregistrer les modifications";
+        }
+
+        $("#adresse-rue")?.focus();
     });
 
-    $("#annuler-adresse").addEventListener("click", () => {
+    $("#annuler-adresse")?.addEventListener("click", () => {
         afficherAdresse(profilActuel);
         afficherMessage("");
     });
@@ -632,7 +693,7 @@
        DÉCONNEXION
     ========================================== */
 
-    $("#bouton-deconnexion").addEventListener("click", async () => {
+    $("#bouton-deconnexion")?.addEventListener("click", async () => {
         const bouton = $("#bouton-deconnexion");
 
         bouton.disabled = true;
@@ -642,10 +703,7 @@
         bouton.disabled = false;
 
         if (error) {
-            afficherMessage(
-                "Déconnexion impossible : " + error.message
-            );
-
+            afficherMessage("Déconnexion impossible : " + error.message);
             return;
         }
 
@@ -662,7 +720,9 @@
         if (!session) {
             profilActuel = null;
 
-            labelCompte.textContent = "Mon compte";
+            if (labelCompte) {
+                labelCompte.textContent = "Mon compte";
+            }
 
             authViews.hidden = false;
             connectedView.hidden = true;

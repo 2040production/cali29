@@ -1,89 +1,65 @@
+
 /* ==========================================
    PROMOTIONS - CALI29 V2
    CODES PROMO ET OFFRES SPÉCIALES
 ========================================== */
-
 
 /* ==========================================
    1. CODES PROMO
 ========================================== */
 
 const PROMOTIONS = [
-
     {
         code: "BIENVENUE10",
-
         actif: true,
-
         type: "pourcentage",
-
         valeur: 10,
-
         montantMinimum: 0,
-
         villesAutorisees: [],
-
         produitsAutorises: [],
-
         categoriesAutorisees: [],
-
         dateDebut: null,
-
         dateFin: null
     }
-
 ];
-
 
 /* ==========================================
    2. OFFRES SPÉCIALES
 ========================================== */
 
-// Aucune offre spéciale active pour le moment.
-
 const OFFRES_SPECIALES = [];
-
 
 /* ==========================================
    3. NORMALISER UN TEXTE
 ========================================== */
 
 function normaliserTexte(texte) {
-
     return String(texte || "")
         .trim()
         .toLowerCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "");
-
 }
 
-
 /* ==========================================
-   4. OBTENIR LA DATE DU JOUR
+   4. OBTENIR LA DATE LOCALE
 ========================================== */
 
 function obtenirDateLocale() {
-
     const maintenant = new Date();
 
     const annee = maintenant.getFullYear();
-
     const mois = String(maintenant.getMonth() + 1).padStart(2, "0");
-
     const jour = String(maintenant.getDate()).padStart(2, "0");
 
     return `${annee}-${mois}-${jour}`;
-
 }
-
 
 /* ==========================================
    5. VÉRIFIER LES DATES
 ========================================== */
 
 function promotionDansPeriode(promotion) {
-
     const aujourdHui = obtenirDateLocale();
 
     if (promotion.dateDebut && aujourdHui < promotion.dateDebut) {
@@ -95,26 +71,21 @@ function promotionDansPeriode(promotion) {
     }
 
     return true;
-
 }
-
 
 /* ==========================================
    6. TROUVER UN CODE PROMO
 ========================================== */
 
 function trouverPromotion(code) {
-
     const codeNormalise = String(code || "")
         .trim()
         .toUpperCase();
 
     return PROMOTIONS.find(promotion =>
-        String(promotion.code || "").toUpperCase() === codeNormalise
+        String(promotion.code || "").trim().toUpperCase() === codeNormalise
     ) || null;
-
 }
-
 
 /* ==========================================
    7. CALCULER LE MONTANT ÉLIGIBLE
@@ -125,31 +96,32 @@ function calculerMontantEligible(
     sousTotal,
     articles = []
 ) {
+    const produitsAutorises = Array.isArray(promotion.produitsAutorises)
+        ? promotion.produitsAutorises
+        : [];
 
-    const produitsAutorises = promotion.produitsAutorises || [];
-
-    const categoriesAutorisees = promotion.categoriesAutorisees || [];
-
+    const categoriesAutorisees = Array.isArray(promotion.categoriesAutorisees)
+        ? promotion.categoriesAutorisees
+        : [];
 
     if (
         produitsAutorises.length === 0 &&
         categoriesAutorisees.length === 0
     ) {
-        return Number(sousTotal) || 0;
+        return Math.max(0, Number(sousTotal) || 0);
     }
 
     if (!Array.isArray(articles)) {
         return 0;
     }
 
+    const catalogue = Array.isArray(window.produits)
+        ? window.produits
+        : [];
+
     let montantEligible = 0;
 
     articles.forEach(article => {
-
-        const catalogue = Array.isArray(window.produits)
-            ? window.produits
-            : [];
-
         const produit = catalogue.find(
             p => String(p.id) === String(article.id)
         );
@@ -158,7 +130,7 @@ function calculerMontantEligible(
 
         const produitAutorise =
             produitsAutorises.length === 0 ||
-            produitsAutorises.includes(article.id);
+            produitsAutorises.some(id => String(id) === String(article.id));
 
         const categorieAutorisee =
             categoriesAutorisees.length === 0 ||
@@ -166,22 +138,18 @@ function calculerMontantEligible(
                 normaliserTexte(cat) === normaliserTexte(categorie)
             );
 
-        if (produitAutorise && categorieAutorisee) {
-
-            const prix = Number(article.prix) || 0;
-
-            const quantite = Number(article.quantite) || 0;
-
-            montantEligible += prix * quantite;
-
+        if (!produitAutorise || !categorieAutorisee) {
+            return;
         }
 
+        const prix = Math.max(0, Number(article.prix) || 0);
+        const quantite = Math.max(0, Number(article.quantite) || 0);
+
+        montantEligible += prix * quantite;
     });
 
-    return montantEligible;
-
+    return Math.round(montantEligible * 100) / 100;
 }
-
 
 /* ==========================================
    8. CALCULER UNE RÉDUCTION
@@ -192,7 +160,6 @@ function calculerReductionPromo(
     sousTotal,
     articles = []
 ) {
-
     if (!promotion) return 0;
 
     const montantEligible = calculerMontantEligible(
@@ -201,17 +168,22 @@ function calculerReductionPromo(
         articles
     );
 
+    const valeur = Number(promotion.valeur);
+
+    if (!Number.isFinite(valeur) || valeur <= 0) {
+        return 0;
+    }
+
     let reduction = 0;
 
     if (promotion.type === "pourcentage") {
-
-        reduction =
-            montantEligible * (Number(promotion.valeur) / 100);
+        reduction = montantEligible * (Math.min(valeur, 100) / 100);
 
     } else if (promotion.type === "fixe") {
+        reduction = valeur;
 
-        reduction = Number(promotion.valeur);
-
+    } else {
+        return 0;
     }
 
     reduction = Math.min(reduction, montantEligible);
@@ -220,9 +192,7 @@ function calculerReductionPromo(
         0,
         Math.round(reduction * 100) / 100
     );
-
 }
-
 
 /* ==========================================
    9. VÉRIFIER UN CODE PROMO
@@ -235,100 +205,91 @@ function verifierCodePromo(
     articles = [],
     offresAppliquees = []
 ) {
-
     const promotion = trouverPromotion(code);
 
     if (!promotion) {
-
         return {
             valide: false,
             message: "Code promo invalide.",
             promotion: null,
             montantReduction: 0
         };
-
     }
 
     if (!promotion.actif) {
-
         return {
             valide: false,
             message: "Ce code promo n'est pas actif.",
             promotion: null,
             montantReduction: 0
         };
-
     }
 
     if (!promotionDansPeriode(promotion)) {
-
         return {
             valide: false,
             message: "Ce code promo n'est pas valable à cette date.",
             promotion: null,
             montantReduction: 0
         };
-
     }
-
 
     // MONTANT MINIMUM
 
-    const total = Number(sousTotal) || 0;
+    const total = Math.max(0, Number(sousTotal) || 0);
+    const montantMinimum = Math.max(
+        0,
+        Number(promotion.montantMinimum) || 0
+    );
 
-    if (total < Number(promotion.montantMinimum || 0)) {
-
+    if (total < montantMinimum) {
         return {
             valide: false,
-            message: `Montant minimum requis : ${promotion.montantMinimum} €.`,
+            message: `Montant minimum requis : ${montantMinimum} €.`,
             promotion: null,
             montantReduction: 0
         };
-
     }
-
 
     // VILLE
 
-    const villesAutorisees = promotion.villesAutorisees || [];
+    const villesAutorisees = Array.isArray(promotion.villesAutorisees)
+        ? promotion.villesAutorisees
+        : [];
 
     if (villesAutorisees.length > 0) {
-
         const villeAutorisee = villesAutorisees.some(v =>
             normaliserTexte(v) === normaliserTexte(ville)
         );
 
         if (!villeAutorisee) {
-
             return {
                 valide: false,
                 message: "Ce code promo n'est pas valable dans cette ville.",
                 promotion: null,
                 montantReduction: 0
             };
-
         }
-
     }
-
 
     // CUMUL AVEC OFFRES SPÉCIALES
 
-    const offreNonCumulable = offresAppliquees.find(
+    const offres = Array.isArray(offresAppliquees)
+        ? offresAppliquees
+        : [];
+
+    const offreNonCumulable = offres.find(
         offre => offre.cumulableCodePromo === false
     );
 
     if (offreNonCumulable) {
-
         return {
             valide: false,
             message: `L'offre "${offreNonCumulable.nom}" n'est pas cumulable avec un code promo.`,
             promotion: null,
             montantReduction: 0
         };
-
     }
-
 
     // CALCUL
 
@@ -339,14 +300,12 @@ function verifierCodePromo(
     );
 
     if (montantReduction <= 0) {
-
         return {
             valide: false,
             message: "Aucun produit de ce panier n'est éligible à cette promotion.",
             promotion: null,
             montantReduction: 0
         };
-
     }
 
     return {
@@ -355,37 +314,29 @@ function verifierCodePromo(
         promotion,
         montantReduction
     };
-
 }
-
 
 /* ==========================================
    10. VÉRIFIER LA ZONE D'UNE OFFRE
 ========================================== */
 
 function offreAutoriseeDansVille(offre, ville) {
-
     if (offre.zone === "toutes") {
         return true;
     }
 
     if (offre.zone === "ville") {
-
         return normaliserTexte(offre.ville) === normaliserTexte(ville);
-
     }
 
     return false;
-
 }
-
 
 /* ==========================================
    11. CALCULER LES OFFRES SPÉCIALES
 ========================================== */
 
 function calculerOffresSpeciales(articles = [], ville = "") {
-
     const resultat = {
         montantReduction: 0,
         offresAppliquees: [],
@@ -396,49 +347,38 @@ function calculerOffresSpeciales(articles = [], ville = "") {
         return resultat;
     }
 
-    // OFFRES_SPECIALES est actuellement vide.
-    // Cette fonction reste disponible pour de futures offres.
-
     articles.forEach(article => {
-
-        const quantite = Number(article.quantite) || 0;
-
-        const prix = Number(article.prix) || 0;
-
+        const quantite = Math.max(0, Number(article.quantite) || 0);
+        const prix = Math.max(0, Number(article.prix) || 0);
         const grammage = Number(article.grammage) || 0;
 
         if (quantite <= 0 || prix <= 0) return;
 
         const offresEligibles = OFFRES_SPECIALES.filter(offre => {
-
             if (!offre.actif) return false;
-
             if (!promotionDansPeriode(offre)) return false;
-
-            if (offre.produitId !== article.id) return false;
-
+            if (String(offre.produitId) !== String(article.id)) return false;
             if (Number(offre.grammage) !== grammage) return false;
-
             if (!offreAutoriseeDansVille(offre, ville)) return false;
 
             return true;
-
         });
 
         offresEligibles.forEach(offre => {
+            const valeur = Number(offre.valeur);
+
+            if (!Number.isFinite(valeur) || valeur <= 0) return;
 
             let reductionUnitaire = 0;
 
             if (offre.type === "fixe") {
-
-                reductionUnitaire = Number(offre.valeur) || 0;
+                reductionUnitaire = valeur;
 
             } else if (offre.type === "pourcentage") {
+                reductionUnitaire = prix * (Math.min(valeur, 100) / 100);
 
-                reductionUnitaire = prix * (
-                    Number(offre.valeur) / 100
-                );
-
+            } else {
+                return;
             }
 
             reductionUnitaire = Math.min(reductionUnitaire, prix);
@@ -465,9 +405,7 @@ function calculerOffresSpeciales(articles = [], ville = "") {
                 nomOffre: offre.nom,
                 montantReduction: reductionTotale
             });
-
         });
-
     });
 
     resultat.montantReduction = Math.round(
@@ -475,5 +413,4 @@ function calculerOffresSpeciales(articles = [], ville = "") {
     ) / 100;
 
     return resultat;
-
 }

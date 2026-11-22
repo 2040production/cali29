@@ -1,6 +1,6 @@
 
 /* ==========================================
-   ORDER POPUP - CALI29
+   ORDER POPUP - CALI29 V2
    LIVRAISON > RÉCAPITULATIF > CONTACT
    ENREGISTREMENT SUPABASE
 ========================================== */
@@ -38,19 +38,28 @@ let coordonneesLivraison = null;
 let commandeEnCours = false;
 let commandeEnregistree = null;
 
+
 /* ==========================================
    FORMATAGE
 ========================================== */
 
 function formatOrderPrice(price) {
-    return Number(price).toFixed(2).replace(".", ",") + " €";
+    const montant = Number(price);
+
+    if (!Number.isFinite(montant)) {
+        return "0,00 €";
+    }
+
+    return montant.toFixed(2).replace(".", ",") + " €";
 }
+
 
 /* ==========================================
    RÉCAPITULATIF VISUEL
 ========================================== */
 
 function ajouterLigneRecapitulatif(label, valeur, classe = "") {
+    if (!orderItems) return;
 
     const ligne = document.createElement("div");
     ligne.className = "order-popup-item";
@@ -71,7 +80,9 @@ function ajouterLigneRecapitulatif(label, valeur, classe = "") {
     orderItems.appendChild(ligne);
 }
 
+
 function ajouterTitreRecapitulatif(texte) {
+    if (!orderItems) return;
 
     const titre = document.createElement("div");
     titre.className = "order-popup-delivery";
@@ -80,11 +91,15 @@ function ajouterTitreRecapitulatif(texte) {
     orderItems.appendChild(titre);
 }
 
+
 /* ==========================================
    AFFICHER LES ÉTAPES
 ========================================== */
 
 function afficherEtapeLivraison() {
+    if (!deliveryForm || !orderSummary || !orderOptions || !orderSuccess) {
+        return;
+    }
 
     deliveryForm.hidden = false;
     orderSummary.hidden = true;
@@ -95,26 +110,38 @@ function afficherEtapeLivraison() {
         orderFooter.hidden = false;
     }
 
-    orderDescription.textContent =
-        "Renseignez votre adresse pour préparer votre commande.";
+    if (orderDescription) {
+        orderDescription.textContent =
+            "Renseignez votre adresse pour préparer votre commande.";
+    }
 
     document.getElementById("delivery-address")?.focus();
 }
 
+
 function afficherEtapeFinale() {
+    if (!deliveryForm || !orderSummary || !orderOptions || !orderSuccess) {
+        return;
+    }
 
     deliveryForm.hidden = true;
     orderSummary.hidden = false;
     orderOptions.hidden = false;
     orderSuccess.hidden = true;
 
-    orderDescription.textContent =
-        "Vérifiez votre commande et choisissez votre moyen de communication.";
+    if (orderDescription) {
+        orderDescription.textContent =
+            "Vérifiez votre commande et choisissez votre moyen de communication.";
+    }
 
-    orderPopup.querySelector("[data-contact]")?.focus();
+    orderPopup?.querySelector("[data-contact]")?.focus();
 }
 
-function afficherConfirmation(reference, platform) {
+
+function afficherConfirmation(reference, platform, commandeEnregistreeDansCompte) {
+    if (!deliveryForm || !orderSummary || !orderOptions || !orderSuccess) {
+        return;
+    }
 
     deliveryForm.hidden = true;
     orderSummary.hidden = true;
@@ -125,34 +152,51 @@ function afficherConfirmation(reference, platform) {
         orderFooter.hidden = true;
     }
 
-    orderDescription.textContent = "";
+    if (orderDescription) {
+        orderDescription.textContent = "";
+    }
 
-    if (reference) {
-        orderSuccessReference.textContent =
-            "Référence : " + reference;
+    if (orderSuccessReference) {
+        orderSuccessReference.textContent = reference
+            ? "Référence : " + reference
+            : "Commande préparée";
+    }
+
+    let message = "";
+
+    if (commandeEnregistreeDansCompte) {
+        message = "Votre commande a été enregistrée dans votre compte CALI29. ";
     } else {
-        orderSuccessReference.textContent =
-            "Commande préparée";
+        message = "Votre commande est préparée, mais elle n'est pas enregistrée dans un compte client. ";
     }
 
     if (platform === "signal") {
-        orderSuccessMessage.textContent =
-            "Votre commande est enregistrée. Le récapitulatif a été copié. Ouvrez Signal, collez le message dans la conversation et appuyez sur Envoyer.";
+        message +=
+            "Le récapitulatif a été copié. Ouvrez Signal, collez le message dans la conversation et appuyez sur Envoyer.";
     } else {
-        orderSuccessMessage.textContent =
-            "Votre commande est enregistrée. Telegram a été ouvert avec votre récapitulatif préparé. Vérifiez le message puis appuyez sur Envoyer dans Telegram.";
+        message +=
+            "Telegram a été ouvert avec votre récapitulatif préparé. Vérifiez le message puis appuyez sur Envoyer dans Telegram.";
+    }
+
+    if (orderSuccessMessage) {
+        orderSuccessMessage.textContent = message;
     }
 
     orderSuccessClose?.focus();
 }
+
 
 /* ==========================================
    RÉCAPITULATIF DU PANIER
 ========================================== */
 
 function afficherRecapitulatifPopup() {
-
     if (!Array.isArray(panier) || panier.length === 0) {
+        return false;
+    }
+
+    if (!orderItems || !orderTotal) {
+        console.error("Éléments du récapitulatif introuvables.");
         return false;
     }
 
@@ -170,7 +214,6 @@ function afficherRecapitulatifPopup() {
     orderItems.innerHTML = "";
 
     details.articles.forEach(article => {
-
         const ligne = document.createElement("div");
         ligne.className = "order-popup-item";
 
@@ -184,7 +227,6 @@ function afficherRecapitulatifPopup() {
         }
 
         texteNom += " × " + article.quantite;
-
         nom.textContent = texteNom;
 
         const prix = document.createElement("strong");
@@ -211,17 +253,13 @@ function afficherRecapitulatifPopup() {
     }
 
     if (details.codePromo) {
-
         if (details.promoValide) {
-
             ajouterLigneRecapitulatif(
                 "Code promo (" + details.codePromo + ")",
                 "-" + formatOrderPrice(details.montantReduction),
                 "order-popup-promo"
             );
-
         } else {
-
             ajouterLigneRecapitulatif(
                 "Code promo non applicable",
                 details.codePromo,
@@ -230,7 +268,7 @@ function afficherRecapitulatifPopup() {
 
             const messagePromo = document.createElement("p");
             messagePromo.className = "order-popup-promo-message";
-            messagePromo.textContent = details.messagePromo;
+            messagePromo.textContent = details.messagePromo || "";
 
             orderItems.appendChild(messagePromo);
         }
@@ -246,7 +284,6 @@ function afficherRecapitulatifPopup() {
     orderTotal.textContent = formatOrderPrice(details.total);
 
     if (coordonneesLivraison) {
-
         ajouterTitreRecapitulatif("COORDONNÉES DE LIVRAISON");
 
         const informations = [
@@ -263,12 +300,12 @@ function afficherRecapitulatifPopup() {
     return true;
 }
 
+
 /* ==========================================
    CHARGER L'ADRESSE DU CLIENT CONNECTÉ
 ========================================== */
 
 async function chargerAdresseClientConnecte() {
-
     const champAdresse = document.getElementById("delivery-address");
     const champCodePostal = document.getElementById("delivery-postcode");
     const champVille = document.getElementById("delivery-city");
@@ -282,7 +319,6 @@ async function chargerAdresseClientConnecte() {
     }
 
     try {
-
         const { data: sessionData, error: sessionError } =
             await supabaseClient.auth.getSession();
 
@@ -293,9 +329,7 @@ async function chargerAdresseClientConnecte() {
 
         const user = sessionData?.session?.user;
 
-        if (!user) {
-            return;
-        }
+        if (!user) return;
 
         const { data: profil, error } = await supabaseClient
             .from("profiles")
@@ -308,25 +342,24 @@ async function chargerAdresseClientConnecte() {
             return;
         }
 
-        if (!profil) {
-            return;
-        }
+        if (!profil) return;
 
         champAdresse.value = profil.delivery_address || "";
         champCodePostal.value = profil.postal_code || "";
         champVille.value = profil.city || "";
 
     } catch (error) {
-
         console.warn("CALI29 - Préremplissage adresse :", error);
     }
 }
+
 
 /* ==========================================
    OUVRIR LA POPUP
 ========================================== */
 
 async function ouvrirOrderPopup() {
+    if (!orderPopup) return;
 
     if (!Array.isArray(panier) || panier.length === 0) {
         alert("Ton panier est vide.");
@@ -337,9 +370,13 @@ async function ouvrirOrderPopup() {
     commandeEnregistree = null;
     commandeEnCours = false;
 
-    document.getElementById("delivery-address").value = "";
-    document.getElementById("delivery-postcode").value = "";
-    document.getElementById("delivery-city").value = "";
+    const champAdresse = document.getElementById("delivery-address");
+    const champCodePostal = document.getElementById("delivery-postcode");
+    const champVille = document.getElementById("delivery-city");
+
+    if (champAdresse) champAdresse.value = "";
+    if (champCodePostal) champCodePostal.value = "";
+    if (champVille) champVille.value = "";
 
     effacerErreurMinimum();
     afficherEtapeLivraison();
@@ -352,11 +389,13 @@ async function ouvrirOrderPopup() {
     await chargerAdresseClientConnecte();
 }
 
+
 /* ==========================================
    FERMER LA POPUP
 ========================================== */
 
 function fermerOrderPopup() {
+    if (!orderPopup) return;
 
     orderPopup.classList.remove("active");
     orderPopup.setAttribute("aria-hidden", "true");
@@ -368,29 +407,34 @@ function fermerOrderPopup() {
     }
 }
 
+
 /* ==========================================
    RÉCUPÉRER L'ADRESSE
 ========================================== */
 
 function recupererCoordonneesLivraison() {
+    const adresse = document.getElementById("delivery-address");
+    const codePostal = document.getElementById("delivery-postcode");
+    const ville = document.getElementById("delivery-city");
 
     return {
-        adresse: document.getElementById("delivery-address").value.trim(),
-        codePostal: document.getElementById("delivery-postcode").value.trim(),
-        ville: document.getElementById("delivery-city").value.trim()
+        adresse: adresse?.value.trim() || "",
+        codePostal: codePostal?.value.trim() || "",
+        ville: ville?.value.trim() || ""
     };
 }
+
 
 /* ==========================================
    GESTION DES ERREURS
 ========================================== */
 
 function afficherErreurMinimum(message) {
+    if (!deliveryForm) return;
 
     let erreur = document.getElementById("order-minimum-error");
 
     if (!erreur) {
-
         erreur = document.createElement("div");
         erreur.id = "order-minimum-error";
         erreur.className = "order-minimum-error";
@@ -398,23 +442,28 @@ function afficherErreurMinimum(message) {
 
         const bouton = deliveryForm.querySelector(".delivery-continue");
 
-        deliveryForm.insertBefore(erreur, bouton);
+        if (bouton) {
+            deliveryForm.insertBefore(erreur, bouton);
+        } else {
+            deliveryForm.appendChild(erreur);
+        }
     }
 
     erreur.textContent = message;
     erreur.hidden = false;
 }
 
+
 function effacerErreurMinimum() {
     document.getElementById("order-minimum-error")?.remove();
 }
+
 
 /* ==========================================
    VÉRIFIER LE MINIMUM DE COMMANDE
 ========================================== */
 
 function verifierMinimumAvantCommande() {
-
     if (!coordonneesLivraison || !coordonneesLivraison.ville) {
         afficherErreurMinimum("Renseigne ta ville de livraison.");
         return false;
@@ -433,7 +482,6 @@ function verifierMinimumAvantCommande() {
     }
 
     if (details.commandeMinimumAtteint === false) {
-
         afficherErreurMinimum(
             "Minimum de commande non atteint.\n\n" +
             "Minimum requis : " +
@@ -451,15 +499,15 @@ function verifierMinimumAvantCommande() {
     return true;
 }
 
+
 /* ==========================================
    VALIDER LA LIVRAISON
 ========================================== */
 
 function validerLivraison(event) {
-
     event.preventDefault();
 
-    if (!deliveryForm.reportValidity()) {
+    if (!deliveryForm || !deliveryForm.reportValidity()) {
         return;
     }
 
@@ -477,6 +525,7 @@ function validerLivraison(event) {
     afficherEtapeFinale();
 }
 
+
 /* ==========================================
    RETOUR AUX COORDONNÉES
 ========================================== */
@@ -485,12 +534,12 @@ function retournerLivraison() {
     afficherEtapeLivraison();
 }
 
+
 /* ==========================================
    COPIER LE MESSAGE POUR SIGNAL
 ========================================== */
 
 async function copierMessageCommande(message) {
-
     if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(message);
         return true;
@@ -503,7 +552,6 @@ async function copierMessageCommande(message) {
     textarea.style.opacity = "0";
 
     document.body.appendChild(textarea);
-
     textarea.select();
 
     const resultat = document.execCommand("copy");
@@ -517,12 +565,12 @@ async function copierMessageCommande(message) {
     return true;
 }
 
+
 /* ==========================================
    RÉCUPÉRER LA SESSION CLIENT
 ========================================== */
 
 async function recupererSessionClient() {
-
     if (typeof supabaseClient === "undefined") {
         return null;
     }
@@ -536,12 +584,12 @@ async function recupererSessionClient() {
     return data?.session || null;
 }
 
+
 /* ==========================================
    ENREGISTRER LA COMMANDE CÔTÉ SERVEUR
 ========================================== */
 
 async function enregistrerCommandeServeur(session) {
-
     if (commandeEnregistree) {
         return commandeEnregistree;
     }
@@ -574,18 +622,15 @@ async function enregistrerCommandeServeur(session) {
     );
 
     if (error) {
-
         let message = error.message || "Erreur lors de l'enregistrement.";
 
         if (error.context && typeof error.context.json === "function") {
-
             try {
                 const body = await error.context.json();
 
                 if (body?.error) {
                     message = body.error;
                 }
-
             } catch (_) {}
         }
 
@@ -603,26 +648,26 @@ async function enregistrerCommandeServeur(session) {
     return data;
 }
 
+
 /* ==========================================
    VERROUILLER LES BOUTONS
 ========================================== */
 
 function verrouillerBoutonsContact(verrouille) {
+    if (!orderPopup) return;
 
     orderPopup.querySelectorAll("[data-contact]").forEach(button => {
         button.disabled = verrouille;
     });
 }
 
+
 /* ==========================================
    CHOIX DU MOYEN DE CONTACT
 ========================================== */
 
 async function envoyerCommande(platform) {
-
-    if (commandeEnCours) {
-        return;
-    }
+    if (commandeEnCours) return;
 
     if (!verifierMinimumAvantCommande()) {
         afficherEtapeLivraison();
@@ -633,19 +678,17 @@ async function envoyerCommande(platform) {
         coordonneesLivraison
     );
 
-    if (!messageInitial) {
-        return;
-    }
+    if (!messageInitial) return;
 
     let fenetreContact = null;
 
-    // Ouverture immédiate pour éviter le blocage des fenêtres par le navigateur.
     if (platform === "telegram") {
-
         fenetreContact = window.open("about:blank", "_blank");
 
         if (!fenetreContact) {
-            alert("Le navigateur a bloqué l'ouverture de Telegram. Autorise les fenêtres surgissantes puis réessaie.");
+            alert(
+                "Le navigateur a bloqué l'ouverture de Telegram. Autorise les fenêtres surgissantes puis réessaie."
+            );
             return;
         }
     }
@@ -654,15 +697,13 @@ async function envoyerCommande(platform) {
     verrouillerBoutonsContact(true);
 
     try {
-
         const session = await recupererSessionClient();
 
         let message = messageInitial;
         let referenceCommande = null;
+        let commandeEnregistreeDansCompte = false;
 
-        // Enregistrement uniquement pour les clients connectés.
         if (session?.user) {
-
             const resultat = await enregistrerCommandeServeur(session);
 
             referenceCommande =
@@ -671,18 +712,20 @@ async function envoyerCommande(platform) {
                 resultat.order?.id ||
                 null;
 
+            commandeEnregistreeDansCompte = true;
+
             if (referenceCommande) {
                 message += "\n\nRÉFÉRENCE CALI29 : " + referenceCommande;
             }
-
         }
 
         if (platform === "telegram") {
-
             const username = ORDER_CONTACTS.telegram.replace("@", "");
 
             if (!username) {
-                throw new Error("Configure ton identifiant Telegram dans order-popup.js.");
+                throw new Error(
+                    "Configure ton identifiant Telegram dans order-popup.js."
+                );
             }
 
             const encodedMessage = encodeURIComponent(message);
@@ -691,11 +734,12 @@ async function envoyerCommande(platform) {
                 "https://t.me/" + username + "?text=" + encodedMessage;
 
         } else if (platform === "signal") {
-
             const lienSignal = ORDER_CONTACTS.signal;
 
             if (!lienSignal || !lienSignal.startsWith("https://signal.me/")) {
-                throw new Error("Configure ton lien Signal dans order-popup.js.");
+                throw new Error(
+                    "Configure ton lien Signal dans order-popup.js."
+                );
             }
 
             await copierMessageCommande(message);
@@ -703,15 +747,16 @@ async function envoyerCommande(platform) {
             window.open(lienSignal, "_blank");
 
         } else {
-
             throw new Error("Moyen de contact inconnu.");
         }
 
-        // Confirmation visuelle après préparation du message.
-        afficherConfirmation(referenceCommande, platform);
+        afficherConfirmation(
+            referenceCommande,
+            platform,
+            commandeEnregistreeDansCompte
+        );
 
     } catch (error) {
-
         if (fenetreContact && !fenetreContact.closed) {
             fenetreContact.close();
         }
@@ -724,18 +769,17 @@ async function envoyerCommande(platform) {
         );
 
     } finally {
-
         commandeEnCours = false;
         verrouillerBoutonsContact(false);
     }
 }
+
 
 /* ==========================================
    INITIALISATION
 ========================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
-
     if (!orderPopup) {
         console.error("Popup de commande introuvable dans panier.html.");
         return;
@@ -758,26 +802,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.addEventListener("keydown", event => {
-
         if (
             event.key === "Escape" &&
             orderPopup.classList.contains("active") &&
-            orderSuccess.hidden
+            orderSuccess?.hidden
         ) {
             fermerOrderPopup();
         }
     });
 
     orderPopup.querySelectorAll("[data-contact]").forEach(button => {
-
         button.addEventListener("click", () => {
             envoyerCommande(button.dataset.contact);
         });
-
     });
 
     if (orderSuccessClose) {
         orderSuccessClose.addEventListener("click", fermerOrderPopup);
     }
-
 });
