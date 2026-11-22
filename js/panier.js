@@ -1,7 +1,7 @@
-
 /* ==========================================
    PANIER CALI29 V2
    Catalogue synchronisé avec Supabase
+   Reconstruction des anciennes commandes
 ========================================== */
 
 let panier = [];
@@ -194,6 +194,170 @@ function ajouterAuPanier(
 
 
 /* ==========================================
+   COMMANDER À NOUVEAU
+========================================== */
+
+function normaliserNomProduit(nom) {
+    return String(nom || "")
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s+/g, " ");
+}
+
+function trouverProduitAncienneCommande(article) {
+    if (!Array.isArray(window.produits)) return null;
+
+    const id = String(article.product_id || "");
+    const nom = normaliserNomProduit(article.product_name);
+
+    return window.produits.find(produit => {
+        return (
+            String(produit.id) === id ||
+            String(produit.product_id || "") === id ||
+            String(produit.uuid || "") === id
+        );
+    }) || window.produits.find(produit => {
+        return normaliserNomProduit(produit.nom) === nom;
+    }) || null;
+}
+
+function extraireGrammage(description) {
+    const texte = String(description || "");
+    const correspondance = texte.match(
+        /(?:^|[—–-]\s*)(\d+(?:[.,]\d+)?)\s*g\s*$/i
+    );
+
+    if (!correspondance) return null;
+
+    const grammage = Number(correspondance[1].replace(",", "."));
+
+    return Number.isFinite(grammage) && grammage > 0
+        ? grammage
+        : null;
+}
+
+async function recommanderCommande(anciensArticles) {
+    if (!Array.isArray(anciensArticles) || anciensArticles.length === 0) {
+        throw new Error("Cette commande ne contient aucun article.");
+    }
+
+    if (window.cataloguePret) {
+        await window.cataloguePret;
+    }
+
+    if (!Array.isArray(window.produits) || window.produits.length === 0) {
+        throw new Error("Le catalogue n'est pas disponible.");
+    }
+
+    if (
+        panier.length > 0 &&
+        !window.confirm(
+            "Votre panier actuel va être remplacé par les articles de cette ancienne commande. Continuer ?"
+        )
+    ) {
+        return;
+    }
+
+    const nouveauPanier = [];
+    const indisponibles = [];
+
+    anciensArticles.forEach(article => {
+        const produit = trouverProduitAncienneCommande(article);
+
+        if (!produit) {
+            indisponibles.push(article.product_name || "Produit inconnu");
+            return;
+        }
+
+        const quantite = Math.floor(Number(article.quantity));
+
+        if (!Number.isInteger(quantite) || quantite < 1) {
+            indisponibles.push(article.product_name || produit.nom);
+            return;
+        }
+
+        const grammage = extraireGrammage(article.product_description);
+
+        let prix = Number(produit.prix);
+
+        if (grammage !== null) {
+            const tarif = produit.tarifs?.find(
+                t => Number(t.grammage) === grammage
+            );
+
+            if (!tarif) {
+                indisponibles.push(
+                    `${produit.nom} (${grammage} g : tarif indisponible)`
+                );
+                return;
+            }
+
+            prix = Number(tarif.prix);
+        }
+
+        if (!Number.isFinite(prix) || prix < 0) {
+            indisponibles.push(produit.nom);
+            return;
+        }
+
+        const nouvelArticle = {
+            id: produit.id,
+            nom: produit.nom,
+            image: produit.image || "",
+            grammage,
+            prix,
+            quantite
+        };
+
+        const existant = nouveauPanier.find(
+            item => obtenirCleArticle(item) === obtenirCleArticle(nouvelArticle)
+        );
+
+        if (existant) {
+            existant.quantite += quantite;
+        } else {
+            nouveauPanier.push(nouvelArticle);
+        }
+    });
+
+    if (nouveauPanier.length === 0) {
+        throw new Error(
+            "Aucun article de cette ancienne commande n'est actuellement disponible."
+        );
+    }
+
+    panier = nettoyerPanier(nouveauPanier);
+
+    codePromoActif = "";
+    montantReductionActive = 0;
+    messagePromoActuel = "";
+    statutPromoActuel = "";
+
+    const champCodePromo = document.getElementById("code-promo");
+
+    if (champCodePromo) {
+        champCodePromo.value = "";
+    }
+
+    sauvegarderPanier();
+    actualiserPanier();
+
+    if (indisponibles.length > 0) {
+        alert(
+            "Certains articles n'ont pas été ajoutés car ils ne sont plus disponibles :\n\n" +
+            indisponibles.join("\n")
+        );
+    }
+
+    window.location.href = "panier.html";
+}
+
+window.recommanderCommande = recommanderCommande;
+
+
+/* ==========================================
    MODIFIER LA QUANTITÉ
 ========================================== */
 
@@ -298,7 +462,6 @@ function afficherMessagePromo(message, statut = "") {
     }
 }
 
-
 function recalculerPromotionActive() {
     const sousTotal = calculerTotalPanier();
 
@@ -336,7 +499,6 @@ function recalculerPromotionActive() {
 
     return montantReductionActive;
 }
-
 
 function appliquerCodePromo() {
     const champ = document.getElementById("code-promo");

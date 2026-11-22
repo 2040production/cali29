@@ -126,8 +126,6 @@
 
     /* ==========================================
        ADRESSE CLIENT
-       Présente uniquement sur les pages qui
-       possèdent le formulaire correspondant.
     ========================================== */
 
     function afficherAdresse(profil) {
@@ -164,17 +162,12 @@
         champVille.value = ville;
 
         rueAffichee.textContent = rue;
-
-        villeAffichee.textContent = complete
-            ? `${codePostal} ${ville}`
-            : "";
+        villeAffichee.textContent = complete ? `${codePostal} ${ville}` : "";
 
         adresseEnregistree.hidden = !complete;
         formAdresse.hidden = complete;
 
-        if (boutonAnnuler) {
-            boutonAnnuler.hidden = true;
-        }
+        if (boutonAnnuler) boutonAnnuler.hidden = true;
 
         if (boutonEnregistrer) {
             boutonEnregistrer.textContent = complete
@@ -204,9 +197,7 @@
         authViews.hidden = true;
         connectedView.hidden = false;
 
-        if (title) {
-            title.textContent = "Mon espace client";
-        }
+        if (title) title.textContent = "Mon espace client";
 
         if (description) {
             description.textContent = "Retrouvez votre adresse et vos commandes.";
@@ -282,7 +273,6 @@
         }
 
         profilActuel = data;
-
         afficherAdresse(data);
         afficherMessage("Adresse enregistrée.", true);
     }
@@ -294,9 +284,7 @@
     function preparerHistorique() {
         let historique = $("#historique-commandes");
 
-        if (historique) {
-            return historique;
-        }
+        if (historique) return historique;
 
         historique = document.createElement("section");
         historique.id = "historique-commandes";
@@ -307,11 +295,10 @@
                 <div>
                     <span class="historique-surtitre">VOTRE ACTIVITÉ</span>
                     <h3>Mes commandes</h3>
+                    <p>Vos 5 dernières commandes.</p>
                 </div>
-
                 <span id="historique-compteur">0</span>
             </div>
-
             <div id="historique-liste">
                 <p class="historique-chargement">
                     Chargement de vos commandes...
@@ -361,13 +348,27 @@
         return statuts[statut] || statut || "Inconnue";
     }
 
+    function ajouterLigneDetail(conteneur, libelle, valeur, classe = "") {
+        const ligne = document.createElement("div");
+        ligne.className = `historique-detail-ligne ${classe}`.trim();
+
+        const nom = document.createElement("span");
+        nom.textContent = libelle;
+
+        const montant = document.createElement("strong");
+        montant.textContent = valeur;
+
+        ligne.append(nom, montant);
+        conteneur.appendChild(ligne);
+    }
+
     function afficherCommandes(commandes) {
         const liste = $("#historique-liste");
         const compteur = $("#historique-compteur");
 
         if (!liste || !compteur) return;
 
-        compteur.textContent = commandes.length;
+        compteur.textContent = `${commandes.length}/5`;
 
         if (!commandes.length) {
             liste.innerHTML = `
@@ -377,40 +378,144 @@
                     <a href="index.html">Découvrir la boutique</a>
                 </div>
             `;
-
             return;
         }
 
         liste.innerHTML = "";
 
-        commandes.forEach((commande) => {
+        commandes.forEach((commande, index) => {
             const carte = document.createElement("article");
             carte.className = "historique-carte";
 
-            const entete = document.createElement("div");
-            entete.className = "historique-carte-entete";
+            const details = document.createElement("details");
+            details.className = "historique-commande-details";
 
-            const numero = document.createElement("strong");
-            numero.textContent = commande.order_number || "Commande CALI29";
+            if (index === 0) details.open = true;
+
+            const resume = document.createElement("summary");
+            resume.className = "historique-carte-resume";
+
+            const informations = document.createElement("div");
+            informations.className = "historique-resume-informations";
+
+            const nom = document.createElement("strong");
+            nom.textContent = "CALI29";
+
+            const date = document.createElement("span");
+            date.textContent = formaterDate(commande.created_at);
+
+            informations.append(nom, date);
+
+            const chiffres = document.createElement("div");
+            chiffres.className = "historique-resume-chiffres";
 
             const statut = document.createElement("span");
             statut.className = "historique-statut";
             statut.textContent = traduireStatut(commande.status);
 
-            entete.append(numero, statut);
-
-            const details = document.createElement("div");
-            details.className = "historique-carte-details";
-
-            const date = document.createElement("span");
-            date.textContent = formaterDate(commande.created_at);
-
             const total = document.createElement("strong");
             total.textContent = formaterPrix(commande.total);
 
-            details.append(date, total);
+            chiffres.append(statut, total);
+            resume.append(informations, chiffres);
 
-            carte.append(entete, details);
+            const contenu = document.createElement("div");
+            contenu.className = "historique-commande-contenu";
+
+            const titreDetail = document.createElement("strong");
+            titreDetail.className = "historique-detail-titre";
+            titreDetail.textContent = "Détail de la commande";
+            contenu.appendChild(titreDetail);
+
+            const articles = Array.isArray(commande.order_items)
+                ? commande.order_items
+                : [];
+
+            if (!articles.length) {
+                const vide = document.createElement("p");
+                vide.textContent = "Le détail des articles n'est pas disponible.";
+                contenu.appendChild(vide);
+            } else {
+                articles.forEach((article) => {
+                    const ligne = document.createElement("div");
+                    ligne.className = "historique-article-ligne";
+
+                    const produit = document.createElement("span");
+                    const description = article.product_description || "";
+                    produit.textContent = description
+                        ? `${article.product_name} – ${description}`
+                        : article.product_name;
+
+                    const quantite = document.createElement("span");
+                    quantite.textContent = `× ${article.quantity}`;
+
+                    const prix = document.createElement("strong");
+                    prix.textContent = formaterPrix(article.total_price);
+
+                    ligne.append(produit, quantite, prix);
+                    contenu.appendChild(ligne);
+                });
+            }
+
+            const separateur = document.createElement("div");
+            separateur.className = "historique-detail-separateur";
+            contenu.appendChild(separateur);
+
+            ajouterLigneDetail(
+                contenu,
+                "Sous-total",
+                formaterPrix(commande.subtotal)
+            );
+
+            ajouterLigneDetail(
+                contenu,
+                "Frais de livraison",
+                formaterPrix(commande.delivery_fee)
+            );
+
+            if (Number(commande.discount) > 0) {
+                ajouterLigneDetail(
+                    contenu,
+                    "Réduction",
+                    `− ${formaterPrix(commande.discount)}`
+                );
+            }
+
+            ajouterLigneDetail(
+                contenu,
+                "Total",
+                formaterPrix(commande.total),
+                "historique-detail-total"
+            );
+
+            const boutonRecommander = document.createElement("button");
+            boutonRecommander.type = "button";
+            boutonRecommander.className = "historique-recommander";
+            boutonRecommander.textContent = "Commander à nouveau";
+
+            boutonRecommander.addEventListener("click", async () => {
+                if (typeof window.recommanderCommande !== "function") {
+                    alert("Le panier n'est pas encore disponible. Rechargez la page.");
+                    return;
+                }
+
+                boutonRecommander.disabled = true;
+                boutonRecommander.textContent = "Préparation du panier...";
+
+                try {
+                    await window.recommanderCommande(articles);
+                } catch (error) {
+                    console.error("CALI29 - Nouvelle commande :", error);
+                    alert(error.message || "Impossible de préparer cette commande.");
+                } finally {
+                    boutonRecommander.disabled = false;
+                    boutonRecommander.textContent = "Commander à nouveau";
+                }
+            });
+
+            contenu.appendChild(boutonRecommander);
+            details.append(resume, contenu);
+            carte.appendChild(details);
             liste.appendChild(carte);
         });
     }
@@ -427,9 +532,27 @@
 
         const { data, error } = await supabaseClient
             .from("orders")
-            .select("id, order_number, status, total, created_at")
+            .select(`
+                id,
+                order_number,
+                status,
+                subtotal,
+                delivery_fee,
+                discount,
+                total,
+                created_at,
+                order_items (
+                    product_id,
+                    product_name,
+                    product_description,
+                    quantity,
+                    unit_price,
+                    total_price
+                )
+            `)
             .eq("customer_id", user.id)
-            .order("created_at", { ascending: false });
+            .order("created_at", { ascending: false })
+            .limit(5);
 
         if (error) {
             console.error("CALI29 - Erreur historique :", error);
@@ -439,7 +562,6 @@
                     Impossible de charger vos commandes.
                 </p>
             `;
-
             return;
         }
 
@@ -468,16 +590,13 @@
 
             authViews.hidden = false;
             connectedView.hidden = true;
-
             changerVue("connexion");
-
             return;
         }
 
         const profil = await chargerProfil(user);
 
         afficherProfil(profil, user);
-
         await chargerHistorique(user);
     }
 
@@ -497,10 +616,7 @@
             if (error.context && typeof error.context.json === "function") {
                 try {
                     const body = await error.context.json();
-
-                    if (body?.error) {
-                        detail = body.error;
-                    }
+                    if (body?.error) detail = body.error;
                 } catch (_) {}
             }
 
@@ -535,33 +651,30 @@
             refresh_token
         });
 
-        if (error) {
-            throw error;
-        }
+        if (error) throw error;
 
         await actualiserEtatCompte();
     }
 
     /* ==========================================
        OUVERTURE DU COMPTE
+       Ouverture immédiate, actualisation ensuite
     ========================================== */
 
-    openDesktop?.addEventListener("click", async () => {
-        await actualiserEtatCompte();
+    openDesktop?.addEventListener("click", () => {
         ouvrirModal();
+        actualiserEtatCompte();
     });
 
-    openMobile?.addEventListener("click", async () => {
+    openMobile?.addEventListener("click", () => {
         const menu = $("#menu-mobile");
 
-        if (menu) {
-            menu.hidden = true;
-        }
+        if (menu) menu.hidden = true;
 
         $("#menu-burger")?.setAttribute("aria-expanded", "false");
 
-        await actualiserEtatCompte();
         ouvrirModal();
+        actualiserEtatCompte();
     });
 
     modal.querySelectorAll("[data-fermer-compte]").forEach((element) => {
@@ -708,7 +821,6 @@
         }
 
         afficherMessage("Vous êtes déconnecté.", true);
-
         await actualiserEtatCompte();
     });
 

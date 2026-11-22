@@ -1,19 +1,27 @@
 
 /* ==========================================
-   CALI29 - ESPACE COMPTE CLIENT
-   Connexion / Inscription / Profil
+   CALI29 V2 — ESPACE COMPTE CLIENT
+   DESIGN AMÉLIORÉ — DESKTOP / MOBILE
+   Compatible avec auth.js existant
 ========================================== */
 
-/* Respect de l'attribut hidden */
+/* RESPECT DE L'ATTRIBUT HIDDEN */
+
 .compte-modal[hidden],
 #compte-auth-vues[hidden],
 #compte-connecte[hidden],
 #form-connexion[hidden],
-#form-inscription[hidden] {
+#form-inscription[hidden],
+.form-adresse[hidden],
+.adresse-enregistree[hidden],
+.adresse-annuler[hidden] {
     display: none !important;
 }
 
-/* FOND DE LA FENÊTRE */
+/* ==========================================
+   MODALE
+========================================== */
+
 .compte-modal {
     position: fixed;
     inset: 0;
@@ -21,91 +29,94 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: clamp(10px, 2.5vw, 34px);
+    padding: 20px;
 }
 
 .compte-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(3, 2, 10, 0.88);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    background: rgba(3, 2, 10, .90);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }
 
-/* FENÊTRE PRINCIPALE */
 .compte-fenetre {
     position: relative;
     z-index: 1;
-    width: min(1120px, 96vw);
-    max-width: 1120px;
+    width: min(1180px, 96vw);
     height: min(900px, 94vh);
     max-height: 94vh;
     overflow-y: auto;
     overscroll-behavior: contain;
     scrollbar-width: none;
-    -ms-overflow-style: none;
-    padding: clamp(25px, 4vw, 54px);
-    color: #ffffff;
+    padding: clamp(26px, 4vw, 54px);
+    color: #fff;
+    font-family: 'Manrope', sans-serif;
     background:
-        radial-gradient(ellipse at 12% 0%, rgba(137, 0, 220, 0.13), transparent 38%),
-        linear-gradient(145deg, #100a25 0%, #0b071a 100%);
-    border: 1px solid rgba(174, 54, 255, 0.42);
+        radial-gradient(ellipse at 10% 0%, rgba(137, 0, 220, .20), transparent 42%),
+        radial-gradient(ellipse at 100% 100%, rgba(80, 20, 130, .10), transparent 40%),
+        linear-gradient(145deg, #100a25 0%, #090615 100%);
+    border: 1px solid rgba(174, 54, 255, .42);
     border-radius: 26px;
     box-shadow:
-        0 35px 110px rgba(0, 0, 0, 0.72),
-        0 0 65px rgba(145, 0, 255, 0.12);
-    font-family: 'Manrope', sans-serif;
+        0 35px 110px rgba(0, 0, 0, .72),
+        0 0 65px rgba(145, 0, 255, .14);
 }
 
 .compte-fenetre::-webkit-scrollbar {
     display: none;
 }
 
-/* FERMETURE */
+/* ==========================================
+   FERMETURE
+========================================== */
+
 .compte-fermer {
     position: sticky;
     top: 0;
     float: right;
     z-index: 5;
+    width: 40px;
+    height: 40px;
     margin: -12px -12px 0 12px;
-    width: 35px;
-    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.075);
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #fff;
+    background: rgba(255, 255, 255, .07);
+    border: 1px solid rgba(255, 255, 255, .14);
     border-radius: 50%;
     font-size: 24px;
     cursor: pointer;
-    backdrop-filter: blur(8px);
-    transition: 0.2s ease;
+    transition: .2s ease;
 }
 
 .compte-fermer:hover {
-    background: #A000FF;
+    background: #9200e8;
+    border-color: #c16aff;
+    transform: rotate(90deg);
 }
 
-/* IDENTITÉ */
+/* ==========================================
+   IDENTITÉ
+========================================== */
+
 .compte-logo {
     margin: 0 0 13px;
     color: #c36aff;
     font-size: 27px;
     font-weight: 800;
     letter-spacing: 5px;
-    text-align: center;
-    text-shadow: 0 0 24px rgba(183, 65, 255, 0.24);
+    text-shadow: 0 0 24px rgba(183, 65, 255, .24);
 }
 
 .compte-fenetre > h2 {
     clear: both;
     margin: 0 0 8px;
-    color: #ffffff;
-    font-size: clamp(25px, 3vw, 34px);
+    color: #fff;
+    font-size: clamp(27px, 3vw, 36px);
     font-weight: 800;
-    letter-spacing: -0.8px;
-    text-align: center;
+    letter-spacing: -1px;
 }
 
 #compte-description {
@@ -113,18 +124,21 @@
     margin: 0 auto 32px;
     color: #aaa1c1;
     font-size: 13px;
-    line-height: 1.6;
-    text-align: center;
+    line-height: 1.7;
 }
 
-/* CONNEXION / INSCRIPTION */
+/* ==========================================
+   CONNEXION / INSCRIPTION
+========================================== */
+
 #compte-auth-vues {
     width: min(100%, 470px);
     margin: 0 auto;
-    padding: 26px;
-    background: rgba(255, 255, 255, 0.035);
-    border: 1px solid rgba(255, 255, 255, 0.075);
+    padding: 28px;
+    background: linear-gradient(145deg, rgba(31, 19, 51, .96), rgba(15, 9, 28, .96));
+    border: 1px solid rgba(255, 255, 255, .09);
     border-radius: 20px;
+    box-shadow: 0 20px 55px rgba(0, 0, 0, .22);
 }
 
 .compte-onglets {
@@ -134,12 +148,12 @@
     padding: 5px;
     margin-bottom: 24px;
     background: #08051a;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, .06);
     border-radius: 12px;
 }
 
 .compte-onglet {
-    padding: 11px 8px;
+    padding: 12px 8px;
     color: #9990b0;
     background: transparent;
     border: 0;
@@ -148,24 +162,19 @@
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
-    transition: 0.2s ease;
+    transition: .2s ease;
 }
 
 .compte-onglet.actif {
-    color: #ffffff;
+    color: #fff;
     background: linear-gradient(135deg, #8000d7, #b000ff);
-    box-shadow: 0 4px 15px rgba(160, 0, 255, 0.25);
+    box-shadow: 0 4px 15px rgba(160, 0, 255, .25);
 }
 
 #form-connexion,
 #form-inscription {
     display: flex;
     flex-direction: column;
-}
-
-#form-connexion[hidden],
-#form-inscription[hidden] {
-    display: none !important;
 }
 
 #form-connexion label,
@@ -179,18 +188,17 @@
 #form-connexion input,
 #form-inscription input {
     width: 100%;
-    min-width: 0;
-    min-height: 48px;
+    min-height: 49px;
     margin-bottom: 19px;
     padding: 0 14px;
-    color: #ffffff;
+    color: #fff;
     background: #08051a;
-    border: 1px solid rgba(160, 0, 255, 0.25);
-    border-radius: 10px;
+    border: 1px solid rgba(160, 0, 255, .28);
+    border-radius: 11px;
     outline: none;
     font-family: inherit;
     font-size: 13px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition: border-color .2s ease, box-shadow .2s ease;
 }
 
 #form-connexion input::placeholder,
@@ -200,42 +208,50 @@
 
 #form-connexion input:focus,
 #form-inscription input:focus {
-    border-color: #A000FF;
-    box-shadow: 0 0 0 3px rgba(160, 0, 255, 0.13);
+    border-color: #b14aff;
+    box-shadow: 0 0 0 3px rgba(160, 0, 255, .14);
 }
 
-/* BOUTONS */
+/* ==========================================
+   BOUTONS
+========================================== */
+
 .compte-submit {
     width: 100%;
-    min-height: 49px;
+    min-height: 50px;
     margin-top: 5px;
     padding: 12px;
-    color: #ffffff;
-    background: linear-gradient(135deg, #8500e0, #b000ff);
+    color: #fff;
+    background: linear-gradient(110deg, #8500e0, #b000ff);
     border: 0;
-    border-radius: 10px;
+    border-radius: 11px;
     font-family: inherit;
     font-size: 13px;
     font-weight: 800;
     cursor: pointer;
-    transition: 0.2s ease;
+    box-shadow: 0 7px 20px rgba(150, 0, 220, .18);
+    transition: .2s ease;
 }
 
 .compte-submit:hover {
     filter: brightness(1.15);
     transform: translateY(-1px);
+    box-shadow: 0 10px 25px rgba(150, 0, 220, .28);
 }
 
 .compte-submit:disabled {
-    opacity: 0.55;
+    opacity: .55;
     cursor: wait;
     transform: none;
 }
 
-/* MESSAGES */
+/* ==========================================
+   MESSAGES
+========================================== */
+
 .compte-message {
     min-height: 18px;
-    margin: 20px 0 0;
+    margin: 16px 0 0;
     color: #ff7777;
     font-size: 12px;
     line-height: 1.5;
@@ -246,16 +262,19 @@
     color: #69dfaa;
 }
 
-/* ESPACE CLIENT CONNECTÉ */
+/* ==========================================
+   ESPACE CLIENT CONNECTÉ
+========================================== */
+
 #compte-connecte {
     display: grid;
-    grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+    grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
     grid-template-areas:
         "welcome welcome"
         "address history"
         "logout logout";
-    align-items: start;
-    gap: 22px;
+    align-items: stretch;
+    gap: 20px;
 }
 
 #compte-connecte[hidden] {
@@ -264,86 +283,64 @@
 
 .compte-bienvenue {
     grid-area: welcome;
+    min-height: 96px;
+    margin: 0;
+    padding: 22px 25px;
     display: flex;
     align-items: center;
-    gap: 14px;
-    min-height: 88px;
-    margin: 0;
-    padding: 20px 24px;
-    background: linear-gradient(105deg, rgba(137, 0, 220, 0.19), rgba(137, 0, 220, 0.045));
-    border: 1px solid rgba(160, 0, 255, 0.27);
-    border-radius: 17px;
+    gap: 16px;
+    background: linear-gradient(105deg, rgba(137, 0, 220, .22), rgba(137, 0, 220, .045));
+    border: 1px solid rgba(160, 0, 255, .32);
+    border-radius: 18px;
+    box-shadow: inset 0 1px rgba(255, 255, 255, .035);
 }
 
 .compte-avatar {
-    width: 52px;
-    height: 52px;
-    flex: 0 0 52px;
+    width: 54px;
+    height: 54px;
+    flex: 0 0 54px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff;
+    color: #fff;
     background: linear-gradient(145deg, #a100ef, #6500a8);
     border-radius: 50%;
     font-size: 23px;
-    box-shadow: 0 7px 22px rgba(145, 0, 255, 0.25);
+    box-shadow: 0 7px 22px rgba(145, 0, 255, .28);
 }
 
 .compte-bienvenue p {
     margin: 0 0 5px;
-    color: #a99fbe;
+    color: #aaa1c1;
     font-size: 12px;
 }
 
 .compte-bienvenue strong {
-    color: #ffffff;
-    font-size: 17px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 800;
 }
 
-/* INFORMATIONS CLIENT */
-.compte-informations {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    margin-bottom: 20px;
-}
+/* Anciennes informations personnelles masquées */
 
-.compte-informations div {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 13px 4px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.compte-informations span {
-    color: #9288aa;
-    font-size: 12px;
-}
-
-.compte-informations strong {
-    color: #ffffff;
-    font-size: 12px;
-    font-weight: 700;
-    text-align: right;
-}
-
-/* Anciennes informations masquées dans la nouvelle présentation */
 #compte-connecte > .compte-informations {
     display: none !important;
 }
 
-/* ADRESSE CLIENT */
+/* ==========================================
+   ADRESSE CLIENT
+========================================== */
+
 .adresse-client {
     grid-area: address;
     min-width: 0;
     height: 100%;
     margin: 0;
-    padding: 24px;
-    background: linear-gradient(145deg, rgba(31, 19, 51, 0.96), rgba(20, 13, 36, 0.96));
-    border: 1px solid rgba(160, 0, 255, 0.25);
-    border-radius: 18px;
-    box-shadow: inset 0 1px rgba(255, 255, 255, 0.025);
+    padding: 25px;
+    background: linear-gradient(145deg, rgba(31, 19, 51, .98), rgba(20, 13, 36, .98));
+    border: 1px solid rgba(160, 0, 255, .30);
+    border-radius: 19px;
+    box-shadow: inset 0 1px rgba(255, 255, 255, .035);
 }
 
 .adresse-client-entete {
@@ -351,7 +348,7 @@
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    margin-bottom: 22px;
+    margin-bottom: 23px;
 }
 
 .adresse-surtitre {
@@ -363,20 +360,20 @@
 
 .adresse-client-entete h3 {
     margin: 5px 0 0;
-    color: #ffffff;
-    font-size: 18px;
+    color: #fff;
+    font-size: 19px;
     font-weight: 800;
 }
 
 .adresse-icone {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #d9a7ff;
-    background: rgba(160, 0, 255, 0.15);
-    border: 1px solid rgba(160, 0, 255, 0.22);
+    background: rgba(160, 0, 255, .15);
+    border: 1px solid rgba(160, 0, 255, .24);
     border-radius: 13px;
     font-size: 21px;
 }
@@ -385,24 +382,29 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 5px;
+    gap: 6px;
 }
 
 .adresse-enregistree strong {
-    color: #ffffff;
-    font-size: 13px;
+    color: #fff;
+    font-size: 14px;
     font-weight: 800;
+    line-height: 1.5;
     overflow-wrap: anywhere;
 }
 
 .adresse-enregistree span {
     color: #aaa1c1;
     font-size: 12px;
+    line-height: 1.5;
 }
 
 .adresse-modifier,
 .adresse-annuler {
-    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    min-height: 34px;
+    margin-top: 12px;
     padding: 0;
     color: #c56aff;
     background: transparent;
@@ -411,18 +413,20 @@
     font-size: 11px;
     font-weight: 800;
     cursor: pointer;
+    transition: .2s ease;
+}
+
+.adresse-modifier:hover,
+.adresse-annuler:hover {
+    color: #fff;
+    text-decoration: underline;
+    text-underline-offset: 3px;
 }
 
 .form-adresse {
     display: flex;
     flex-direction: column;
     gap: 8px;
-}
-
-.form-adresse[hidden],
-.adresse-enregistree[hidden],
-.adresse-annuler[hidden] {
-    display: none !important;
 }
 
 .form-adresse label {
@@ -435,12 +439,12 @@
 .form-adresse input {
     width: 100%;
     min-width: 0;
-    min-height: 44px;
+    min-height: 45px;
     padding: 0 12px;
-    color: #ffffff;
+    color: #fff;
     background: #08051a;
-    border: 1px solid rgba(160, 0, 255, 0.25);
-    border-radius: 9px;
+    border: 1px solid rgba(160, 0, 255, .28);
+    border-radius: 10px;
     outline: none;
     font-family: inherit;
     font-size: 12px;
@@ -451,13 +455,13 @@
 }
 
 .form-adresse input:focus {
-    border-color: #a000ff;
-    box-shadow: 0 0 0 3px rgba(160, 0, 255, 0.13);
+    border-color: #b14aff;
+    box-shadow: 0 0 0 3px rgba(160, 0, 255, .13);
 }
 
 .adresse-champs-ligne {
     display: grid;
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
     gap: 10px;
 }
 
@@ -478,23 +482,28 @@
     color: #aaa1c1;
 }
 
-/* HISTORIQUE DES COMMANDES */
+/* ==========================================
+   HISTORIQUE DES COMMANDES
+========================================== */
+
 .historique-commandes {
     grid-area: history;
     min-width: 0;
     min-height: 100%;
     margin: 0;
-    padding: 24px;
-    background: linear-gradient(145deg, rgba(31, 19, 51, 0.96), rgba(20, 13, 36, 0.96));
-    border: 1px solid rgba(255, 255, 255, 0.085);
-    border-radius: 18px;
+    padding: 25px;
+    background: linear-gradient(145deg, rgba(31, 19, 51, .98), rgba(20, 13, 36, .98));
+    border: 1px solid rgba(255, 255, 255, .10);
+    border-radius: 19px;
+    box-shadow: inset 0 1px rgba(255, 255, 255, .035);
 }
 
 .historique-entete {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    gap: 12px;
+    margin-bottom: 22px;
 }
 
 .historique-surtitre {
@@ -506,34 +515,43 @@
 
 .historique-entete h3 {
     margin: 5px 0 0;
-    font-size: 19px;
+    color: #fff;
+    font-size: 20px;
     font-weight: 800;
 }
 
+.historique-entete p {
+    margin: 5px 0 0;
+    color: #aaa1c1;
+    font-size: 11px;
+}
+
 #historique-compteur {
-    width: 30px;
-    height: 30px;
+    width: 32px;
+    height: 32px;
+    flex: 0 0 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ffffff;
-    background: #6500a8;
+    color: #fff;
+    background: linear-gradient(145deg, #a000ed, #6500a8);
     border-radius: 50%;
     font-size: 12px;
     font-weight: 800;
+    box-shadow: 0 4px 14px rgba(128, 0, 220, .25);
 }
 
 .historique-carte {
     margin-bottom: 12px;
     padding: 17px;
-    background: rgba(7, 4, 18, 0.42);
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    border-radius: 13px;
-    transition: border-color 0.2s ease, transform 0.2s ease;
+    background: rgba(7, 4, 18, .55);
+    border: 1px solid rgba(255, 255, 255, .09);
+    border-radius: 14px;
+    transition: border-color .2s ease, transform .2s ease;
 }
 
 .historique-carte:hover {
-    border-color: rgba(177, 72, 255, 0.38);
+    border-color: rgba(177, 72, 255, .42);
     transform: translateY(-1px);
 }
 
@@ -548,6 +566,7 @@
 .historique-carte-entete strong {
     min-width: 0;
     overflow-wrap: anywhere;
+    color: #fff;
     font-size: 12px;
 }
 
@@ -555,7 +574,8 @@
     flex-shrink: 0;
     padding: 6px 10px;
     color: #d9a7ff;
-    background: rgba(160, 0, 255, 0.15);
+    background: rgba(160, 0, 255, .15);
+    border: 1px solid rgba(184, 91, 255, .15);
     border-radius: 20px;
     font-size: 10px;
     font-weight: 800;
@@ -563,22 +583,25 @@
 
 .historique-carte-details {
     margin-top: 15px;
-    color: rgba(255, 255, 255, 0.6);
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, .07);
+    color: rgba(255, 255, 255, .65);
     font-size: 12px;
 }
 
 .historique-carte-details strong {
-    color: #ffffff;
+    color: #fff;
     font-size: 16px;
 }
 
 .historique-chargement,
 .historique-vide,
 .historique-erreur {
-    padding: 16px 10px;
-    color: rgba(255, 255, 255, 0.65);
+    padding: 18px 10px;
+    color: rgba(255, 255, 255, .65);
     text-align: center;
     font-size: 12px;
+    line-height: 1.6;
 }
 
 .historique-vide a {
@@ -589,48 +612,65 @@
     text-decoration: none;
 }
 
+.historique-vide a:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
 .historique-erreur {
     color: #ff8d8d;
 }
 
-/* DÉCONNEXION */
-#bouton-deconnexion {
+/* ==========================================
+   DÉCONNEXION
+========================================== */
+
+#bouton-deconnexion,
+.compte-deconnexion {
     grid-area: logout;
     width: auto;
     min-width: 190px;
+    min-height: 46px;
     justify-self: end;
     padding: 0 22px;
-}
-
-.compte-deconnexion {
-    min-height: 45px;
-    color: #ff8585;
-    background: rgba(255, 70, 70, 0.08);
-    border: 1px solid rgba(255, 90, 90, 0.25);
-    border-radius: 10px;
+    color: #ff9299;
+    background: rgba(255, 70, 70, .08);
+    border: 1px solid rgba(255, 90, 90, .28);
+    border-radius: 11px;
     font-family: inherit;
     font-size: 12px;
     font-weight: 700;
     cursor: pointer;
-    transition: 0.2s ease;
+    transition: .2s ease;
 }
 
+#bouton-deconnexion:hover,
 .compte-deconnexion:hover {
-    background: rgba(255, 70, 70, 0.16);
+    color: #fff;
+    background: rgba(255, 70, 70, .18);
+    border-color: rgba(255, 90, 90, .48);
 }
 
+#bouton-deconnexion:disabled,
 .compte-deconnexion:disabled {
-    opacity: 0.5;
+    opacity: .5;
     cursor: wait;
 }
 
-/* SCROLL DE PAGE BLOQUÉ QUAND LA FENÊTRE EST OUVERTE */
+/* ==========================================
+   SCROLL PAGE
+========================================== */
+
 body.compte-modal-ouvert {
     overflow: hidden;
 }
 
-/* TABLETTE */
+/* ==========================================
+   TABLETTE
+========================================== */
+
 @media (max-width: 760px) {
+
     .compte-modal {
         padding: 12px;
     }
@@ -639,7 +679,7 @@ body.compte-modal-ouvert {
         width: 100%;
         height: 94dvh;
         max-height: 94dvh;
-        padding: 28px;
+        padding: 27px 22px;
         border-radius: 22px;
     }
 
@@ -655,17 +695,23 @@ body.compte-modal-ouvert {
 
     .adresse-client,
     .historique-commandes {
-        padding: 20px;
+        min-height: 0;
+        padding: 21px;
     }
 
-    #bouton-deconnexion {
+    #bouton-deconnexion,
+    .compte-deconnexion {
         width: 100%;
         justify-self: stretch;
     }
 }
 
-/* MOBILE */
+/* ==========================================
+   MOBILE
+========================================== */
+
 @media (max-width: 480px) {
+
     .compte-modal {
         align-items: stretch;
         padding: 6px;
@@ -675,22 +721,22 @@ body.compte-modal-ouvert {
         width: 100%;
         height: calc(100dvh - 12px);
         max-height: calc(100dvh - 12px);
-        padding: 25px 17px 22px;
+        padding: 23px 16px 20px;
         border-radius: 19px;
     }
 
     .compte-logo {
         margin-bottom: 12px;
         font-size: 22px;
-        letter-spacing: 4px;
     }
 
     .compte-fenetre > h2 {
-        font-size: 23px;
+        max-width: calc(100% - 42px);
+        font-size: 25px;
     }
 
     #compte-description {
-        margin-bottom: 22px;
+        margin-bottom: 23px;
         font-size: 11px;
     }
 
@@ -704,15 +750,41 @@ body.compte-modal-ouvert {
         border-radius: 16px;
     }
 
+    #form-connexion input,
+    #form-inscription input {
+        min-height: 46px;
+        font-size: 13px;
+    }
+
     .compte-bienvenue {
-        min-height: 76px;
+        min-height: 78px;
         padding: 16px;
+        gap: 12px;
+    }
+
+    .compte-avatar {
+        width: 46px;
+        height: 46px;
+        flex-basis: 46px;
+        font-size: 20px;
+    }
+
+    .compte-bienvenue strong {
+        font-size: 16px;
     }
 
     .adresse-client,
     .historique-commandes {
-        padding: 17px;
+        padding: 18px 15px;
         border-radius: 15px;
+    }
+
+    .historique-commandes {
+        margin-top: 0;
+    }
+
+    .historique-entete h3 {
+        font-size: 18px;
     }
 
     .historique-carte {
@@ -727,40 +799,276 @@ body.compte-modal-ouvert {
         font-size: 10px;
     }
 
-    .adresse-champs-ligne {
-        grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
-        gap: 8px;
-    }
-}
-
-/* PETITS ÉCRANS */
-@media (max-width: 360px) {
-    .compte-fenetre {
-        padding: 22px 13px 18px;
-    }
-
-    #compte-auth-vues {
-        padding: 17px 12px;
-    }
-
-    .adresse-champs-ligne {
-        grid-template-columns: 1fr;
-    }
-
-    .historique-carte-entete,
     .historique-carte-details {
-        flex-wrap: wrap;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .adresse-champs-ligne {
+        grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+    }
+
+    #bouton-deconnexion,
+    .compte-deconnexion {
+        min-height: 46px;
     }
 }
 
-/* ACCESSIBILITÉ : RÉDUCTION DES ANIMATIONS */
+/* ==========================================
+   ACCESSIBILITÉ
+========================================== */
+
 @media (prefers-reduced-motion: reduce) {
-    .compte-fenetre *,
-    .compte-fenetre *::before,
-    .compte-fenetre *::after {
-        scroll-behavior: auto !important;
-        transition-duration: 0.01ms !important;
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
+
+    .historique-carte,
+    .compte-submit,
+    .compte-fermer,
+    .adresse-modifier,
+    .adresse-annuler {
+        transition: none;
+    }
+}
+
+
+/* ==========================================
+   HISTORIQUE — STRUCTURE GÉNÉRÉE PAR auth.js
+   Ces sélecteurs correspondent aux classes réellement
+   créées dans afficherCommandes().
+========================================== */
+
+.historique-commande-details {
+    width: 100%;
+    margin: 0;
+}
+
+.historique-carte-resume {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0;
+    color: #fff;
+    list-style: none;
+    cursor: pointer;
+}
+
+.historique-carte-resume::-webkit-details-marker {
+    display: none;
+}
+
+.historique-carte-resume::marker {
+    content: "";
+}
+
+.historique-carte-resume::before {
+    content: "›";
+    flex: 0 0 auto;
+    color: #c56aff;
+    font-size: 22px;
+    font-weight: 800;
+    transition: transform .2s ease;
+}
+
+.historique-commande-details[open] .historique-carte-resume::before {
+    transform: rotate(90deg);
+}
+
+.historique-resume-informations {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 5px 9px;
+}
+
+.historique-resume-informations strong {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.historique-resume-informations span {
+    color: #aaa1c1;
+    font-size: 12px;
+}
+
+.historique-resume-chiffres {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 7px;
+}
+
+.historique-resume-chiffres > strong {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.historique-commande-contenu {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    margin-top: 17px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, .08);
+    color: #d9d2e5;
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.historique-detail-titre {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.historique-article-ligne {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: start;
+    gap: 8px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+
+.historique-article-ligne > span:first-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    color: #d9d2e5;
+}
+
+.historique-article-ligne > span:nth-child(2) {
+    color: #aaa1c1;
+    white-space: nowrap;
+}
+
+.historique-article-ligne > strong {
+    color: #fff;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+.historique-detail-separateur {
+    height: 1px;
+    margin: 3px 0;
+    background: rgba(255, 255, 255, .10);
+}
+
+.historique-detail-ligne {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    color: #aaa1c1;
+    font-size: 12px;
+}
+
+.historique-detail-ligne span {
+    min-width: 0;
+}
+
+.historique-detail-ligne strong {
+    color: #fff;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.historique-detail-ligne.historique-detail-total {
+    margin-top: 2px;
+    padding-top: 11px;
+    border-top: 1px solid rgba(255, 255, 255, .08);
+    color: #fff;
+    font-weight: 800;
+}
+
+.historique-detail-ligne.historique-detail-total strong {
+    color: #d9a7ff;
+    font-size: 16px;
+}
+
+.historique-recommander {
+    align-self: flex-start;
+    min-height: 40px;
+    margin-top: 5px;
+    padding: 0 16px;
+    color: #fff;
+    background: linear-gradient(110deg, #8500e0, #b000ff);
+    border: 1px solid rgba(205, 145, 255, .25);
+    border-radius: 9px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: filter .2s ease, transform .2s ease, opacity .2s ease;
+}
+
+.historique-recommander:hover {
+    filter: brightness(1.15);
+    transform: translateY(-1px);
+}
+
+.historique-recommander:disabled {
+    opacity: .55;
+    cursor: wait;
+    transform: none;
+}
+
+@media (max-width: 480px) {
+    .historique-carte-resume {
+        align-items: flex-start;
+        gap: 9px;
+    }
+
+    .historique-resume-informations {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 3px;
+    }
+
+    .historique-resume-informations strong {
+        font-size: 12px;
+    }
+
+    .historique-resume-informations span {
+        font-size: 11px;
+    }
+
+    .historique-resume-chiffres > strong {
+        font-size: 13px;
+    }
+
+    .historique-article-ligne {
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 5px 8px;
+    }
+
+    .historique-article-ligne > span:first-child {
+        grid-column: 1 / -1;
+    }
+
+    .historique-article-ligne > span:nth-child(2) {
+        grid-column: 1;
+    }
+
+    .historique-article-ligne > strong {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    .historique-recommander {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .historique-carte-resume::before,
+    .historique-recommander {
+        transition: none;
     }
 }

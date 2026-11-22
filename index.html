@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- CSS -->
+    <!-- CSS GÉNÉRAL -->
     <link rel="stylesheet" href="css/style.css?v=20261122-2">
     <link rel="stylesheet" href="css/header.css?v=20261122-2">
     <link rel="stylesheet" href="css/accueil.css?v=20261122-2">
@@ -22,7 +22,9 @@
     <link rel="stylesheet" href="css/panier.css?v=20261122-2">
     <link rel="stylesheet" href="css/footer.css?v=20261122-2">
     <link rel="stylesheet" href="css/responsive.css?v=20261122-2">
-    <link rel="stylesheet" href="css/compte.css?v=20261122-2">
+
+    <!-- CSS COMPTE CLIENT : TOUJOURS EN DERNIER -->
+    <link rel="stylesheet" href="css/compte.css?v=20261122-5">
 </head>
 
 <body>
@@ -69,8 +71,6 @@
 
         <a href="index.html" class="logo">CALI29</a>
 
-        <!-- NAVIGATION ORDINATEUR -->
-
         <nav class="navigation-desktop">
             <a href="index.html" class="lien-navigation">Accueil</a>
 
@@ -93,8 +93,6 @@
             </div>
         </nav>
 
-        <!-- ACTIONS HEADER -->
-
         <div class="header-actions">
 
             <button
@@ -112,8 +110,6 @@
             </a>
 
         </div>
-
-        <!-- MENU MOBILE -->
 
         <nav id="menu-mobile" class="menu-mobile" hidden>
             <a href="index.html">Accueil</a>
@@ -139,8 +135,6 @@
 
     <main id="contenu-principal">
 
-        <!-- HERO -->
-
         <section id="hero" class="hero">
             <div class="hero-contenu">
                 <p class="hero-surtitre">SMART COFFEE</p>
@@ -164,8 +158,6 @@
             </div>
         </section>
 
-        <!-- AVANTAGES -->
-
         <section id="avantages" class="avantages">
             <div class="avantages-container">
 
@@ -186,8 +178,6 @@
 
             </div>
         </section>
-
-        <!-- CATÉGORIES -->
 
         <section id="categories" class="categories">
             <div class="section-titre">
@@ -215,8 +205,6 @@
             </div>
         </section>
 
-        <!-- CATALOGUE PRODUITS -->
-
         <section id="produits" class="produits">
             <div class="section-titre">
                 <p class="section-surtitre">LA SÉLECTION CALI29</p>
@@ -230,8 +218,6 @@
                 <p>Chargement du catalogue...</p>
             </div>
         </section>
-
-        <!-- UNIVERS CALI29 -->
 
         <section id="univers" class="univers">
             <div class="univers-image">
@@ -324,8 +310,6 @@
                 Connectez-vous avec votre pseudo et votre mot de passe.
             </p>
 
-            <!-- FORMULAIRES -->
-
             <div id="compte-auth-vues">
 
                 <div class="compte-onglets">
@@ -345,8 +329,6 @@
                         Inscription
                     </button>
                 </div>
-
-                <!-- CONNEXION -->
 
                 <form id="form-connexion">
 
@@ -379,8 +361,6 @@
                     </button>
 
                 </form>
-
-                <!-- INSCRIPTION -->
 
                 <form id="form-inscription" hidden>
 
@@ -445,8 +425,6 @@
                         <strong id="compte-pseudo-connecte">Client</strong>
                     </div>
                 </div>
-
-                <!-- ADRESSE HABITUELLE -->
 
                 <section class="adresse-client" aria-labelledby="adresse-titre">
 
@@ -539,7 +517,7 @@
 
                 </section>
 
-                <!-- HISTORIQUE DES COMMANDES : AJOUTÉ PAR AUTH.JS -->
+                <!-- HISTORIQUE AJOUTÉ DYNAMIQUEMENT PAR auth.js -->
 
                 <button
                     type="button"
@@ -565,19 +543,15 @@
          07 - JAVASCRIPT
     ================================== -->
 
-    <!-- SUPABASE -->
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase/client.js?v=20261122-2"></script>
-
-    <!-- SCRIPTS CALI29 -->
 
     <script src="js/menu.js?v=20261122-2" defer></script>
     <script src="js/acces.js?v=20261122-2" defer></script>
     <script src="js/catalogue.js?v=20261122-2" defer></script>
     <script src="js/panier.js?v=20261122-2" defer></script>
     <script src="js/commande.js?v=20261122-2" defer></script>
-    <script src="js/auth.js?v=20261122-2" defer></script>
+    <script src="js/auth.js?v=20261122-3" defer></script>
 
 </body>
 </html>
