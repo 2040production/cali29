@@ -4,6 +4,10 @@
 ========================================== */
 
 const SLUG_BOUTIQUE = "cali29";
+const VIDEOS_PROMOTIONS = {
+    "promo-lemon-mint-5g": "assets/videos/190-390u.mp4",
+    "promo-rmf-10g": "assets/videos/rmfvid.mp4"
+};
 
 window.produits = [];
 
@@ -137,7 +141,7 @@ async function obtenirCatalogue() {
 
             image: produit.image_url || "",
 
-            video: produit.video_url || "",
+            video: produit.video_url || VIDEOS_PROMOTIONS[produit.slug] || "",
 
             prix: Number(produit.price) || 0,
 
