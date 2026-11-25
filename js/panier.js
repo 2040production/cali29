@@ -1,3 +1,4 @@
+
 /* ==========================================
    PANIER CALI29 V2
    Catalogue synchronisé avec Supabase
@@ -793,6 +794,45 @@ function actualiserPanier() {
 
 
 /* ==========================================
+   ANIMATION APRÈS AJOUT AU PANIER
+   Utilise l'API Web Animations : aucun CSS supplémentaire requis.
+========================================== */
+
+function animerAjoutPanier(bouton) {
+    if (!bouton || typeof bouton.animate !== "function") return;
+
+    bouton.animate(
+        [
+            { transform: "scale(1)", filter: "brightness(1)" },
+            { transform: "scale(1.06)", filter: "brightness(1.18)" },
+            { transform: "scale(0.98)", filter: "brightness(1.05)" },
+            { transform: "scale(1)", filter: "brightness(1)" }
+        ],
+        {
+            duration: 360,
+            easing: "cubic-bezier(0.22, 1, 0.36, 1)"
+        }
+    );
+
+    const compteur = document.getElementById("nombre-articles");
+
+    if (compteur && typeof compteur.animate === "function") {
+        compteur.animate(
+            [
+                { transform: "scale(1)" },
+                { transform: "scale(1.35)" },
+                { transform: "scale(1)" }
+            ],
+            {
+                duration: 420,
+                easing: "cubic-bezier(0.22, 1, 0.36, 1)"
+            }
+        );
+    }
+}
+
+
+/* ==========================================
    BRANCHER LE BOUTON DE LA FICHE PRODUIT
 ========================================== */
 
@@ -852,7 +892,12 @@ function connecterBoutonFicheProduit() {
             if (Array.isArray(produit?.tarifs) && produit.tarifs.length > 0) {
                 alert("Sélectionne un volume proposé pour ce produit.");
             }
+
+            return;
         }
+
+        // Animation uniquement si l'ajout a réussi.
+        animerAjoutPanier(boutonFiche);
     });
 }
 
