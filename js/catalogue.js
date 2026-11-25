@@ -9,6 +9,11 @@ const VIDEOS_PROMOTIONS = {
     "promo-rmf-10g": "assets/videos/rmfvid.mp4"
 };
 
+const VIDEOS_PROMOTIONS = {
+    "promo-lemon-mint-5g": "assets/videos/190-390u.mp4",
+    "promo-rmf-10g": "assets/videos/rmfvid.mp4"
+};
+
 window.produits = [];
 
 
@@ -206,7 +211,6 @@ function creerCarteProduit(produit) {
                 href="produit.html?id=${encodeURIComponent(produit.id)}"
                 class="lien-produit"
             >
-
                 <img
                     src="${echapperHTML(produit.image)}"
                     alt="${echapperHTML(produit.nom)}"

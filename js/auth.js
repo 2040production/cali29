@@ -279,6 +279,7 @@
 
     /* ==========================================
        HISTORIQUE DES COMMANDES
+       Affichage de la dernière commande uniquement
     ========================================== */
 
     function preparerHistorique() {
@@ -294,8 +295,8 @@
             <div class="historique-entete">
                 <div>
                     <span class="historique-surtitre">VOTRE ACTIVITÉ</span>
-                    <h3>Mes commandes</h3>
-                    <p>Vos 5 dernières commandes.</p>
+                    <h3>Dernière commande</h3>
+                    <p>Retrouvez votre dernière commande.</p>
                 </div>
                 <span id="historique-compteur">0</span>
             </div>
@@ -368,7 +369,10 @@
 
         if (!liste || !compteur) return;
 
-        compteur.textContent = `${commandes.length}/5`;
+        // Sécurité d'affichage : une seule commande, la plus récente.
+        commandes = Array.isArray(commandes) ? commandes.slice(0, 1) : [];
+
+        compteur.textContent = commandes.length ? "1" : "0";
 
         if (!commandes.length) {
             liste.innerHTML = `
@@ -552,7 +556,7 @@
             `)
             .eq("customer_id", user.id)
             .order("created_at", { ascending: false })
-            .limit(5);
+            .limit(1);
 
         if (error) {
             console.error("CALI29 - Erreur historique :", error);
