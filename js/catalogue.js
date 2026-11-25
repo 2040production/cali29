@@ -9,11 +9,6 @@ const VIDEOS_PROMOTIONS = {
     "promo-rmf-10g": "assets/videos/rmfvid.mp4"
 };
 
-const VIDEOS_PROMOTIONS = {
-    "promo-lemon-mint-5g": "assets/videos/190-390u.mp4",
-    "promo-rmf-10g": "assets/videos/rmfvid.mp4"
-};
-
 window.produits = [];
 
 
