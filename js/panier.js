@@ -1,4 +1,3 @@
-
 /* ==========================================
    PANIER CALI29 V2
    Catalogue synchronisé avec Supabase
@@ -795,40 +794,108 @@ function actualiserPanier() {
 
 /* ==========================================
    ANIMATION APRÈS AJOUT AU PANIER
-   Utilise l'API Web Animations : aucun CSS supplémentaire requis.
+   Popup centré, plus grand, visible 2,5 secondes.
 ========================================== */
 
-function animerAjoutPanier(bouton) {
-    if (!bouton || typeof bouton.animate !== "function") return;
+function animerAjoutPanier(bouton, nomProduit = "Produit ajouté") {
+    // Crée le style du popup une seule fois.
+    if (!document.getElementById("cali29-toast-style")) {
+        const style = document.createElement("style");
+        style.id = "cali29-toast-style";
+        style.textContent = `
+            .cali29-toast {
+                position: fixed;
+                left: 50%;
+                top: 50%;
+                bottom: auto;
+                z-index: 99999;
+                display: flex;
+                align-items: center;
+                gap: 13px;
+                width: max-content;
+                max-width: calc(100vw - 28px);
+                padding: 17px 22px;
+                border: 1px solid rgba(173, 112, 255, .55);
+                border-radius: 14px;
+                background: #130b24;
+                color: #fff;
+                box-shadow: 0 12px 36px rgba(0, 0, 0, .38), 0 0 18px rgba(145, 70, 255, .18);
+                font: 700 16px/1.4 Manrope, Arial, sans-serif;
+                opacity: 0;
+                pointer-events: none;
+                transform: translate(-50%, -50%) scale(.94);
+            }
+            .cali29-toast__check {
+                display: grid;
+                place-items: center;
+                flex: 0 0 32px;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: #8b4dff;
+                color: #fff;
+                font-size: 19px;
+                line-height: 1;
+            }
+            .cali29-toast__text {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
+            .cali29-toast__sub {
+                display: block;
+                margin-top: 2px;
+                color: #c9b8e8;
+                font-size: 13px;
+                font-weight: 600;
+            }
+        `;
+        document.head.appendChild(style);
+    }
 
-    bouton.animate(
+    // Réutilise le popup s'il y en a déjà un, afin d'éviter les doublons.
+    let toast = document.getElementById("cali29-toast");
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "cali29-toast";
+        toast.className = "cali29-toast";
+        toast.setAttribute("role", "status");
+        toast.setAttribute("aria-live", "polite");
+        document.body.appendChild(toast);
+    }
+
+    const nom = String(nomProduit || "Produit ajouté");
+
+    toast.innerHTML = `
+        <span class="cali29-toast__check" aria-hidden="true">✓</span>
+        <span class="cali29-toast__text">
+            ${nom.replace(/[&<>"']/g, caractere => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            })[caractere])}
+            <span class="cali29-toast__sub">Ajouté au panier</span>
+        </span>
+    `;
+
+    // Annule les animations en cours pour relancer le popup à chaque ajout.
+    toast.getAnimations().forEach(animation => animation.cancel());
+
+    toast.animate(
         [
-            { transform: "scale(1)", filter: "brightness(1)" },
-            { transform: "scale(1.06)", filter: "brightness(1.18)" },
-            { transform: "scale(0.98)", filter: "brightness(1.05)" },
-            { transform: "scale(1)", filter: "brightness(1)" }
+            { opacity: 0, transform: "translate(-50%, -50%) scale(.92)" },
+            { opacity: 1, transform: "translate(-50%, -50%) scale(1.08)", offset: 0.22 },
+            { opacity: 1, transform: "translate(-50%, -50%) scale(1)" },
+            { opacity: 1, transform: "translate(-50%, -50%) scale(1)", offset: 0.78 },
+            { opacity: 0, transform: "translate(-50%, -50%) scale(.97)" }
         ],
         {
-            duration: 360,
-            easing: "cubic-bezier(0.22, 1, 0.36, 1)"
+            duration: 6500,
+            easing: "cubic-bezier(.22, 1, .36, 1)"
         }
     );
-
-    const compteur = document.getElementById("nombre-articles");
-
-    if (compteur && typeof compteur.animate === "function") {
-        compteur.animate(
-            [
-                { transform: "scale(1)" },
-                { transform: "scale(1.35)" },
-                { transform: "scale(1)" }
-            ],
-            {
-                duration: 420,
-                easing: "cubic-bezier(0.22, 1, 0.36, 1)"
-            }
-        );
-    }
 }
 
 
@@ -896,8 +963,11 @@ function connecterBoutonFicheProduit() {
             return;
         }
 
-        // Animation uniquement si l'ajout a réussi.
-        animerAjoutPanier(boutonFiche);
+        // Popup uniquement si l'ajout a réussi.
+        animerAjoutPanier(
+            boutonFiche,
+            obtenirProduitPanier(idProduit)?.nom || "Produit ajouté au panier"
+        );
     });
 }
 
