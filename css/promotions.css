@@ -1,0 +1,809 @@
+
+/* =========================================================
+   CALI29 — PROMOTIONS
+   Remplacer entièrement css/promotions.css
+========================================================= */
+
+.page-promotions {
+    --promo-bg: #090a16;
+    --promo-purple: #b77aff;
+    --promo-purple-light: #d0a5ff;
+    --promo-cyan: #54e5d5;
+    --promo-white: #f7f8ff;
+    --promo-muted: #a4aec5;
+
+    width: min(1120px, calc(100% - 36px)) !important;
+    max-width: 1120px !important;
+
+    margin: 24px auto 60px !important;
+    padding: 30px 34px 34px !important;
+
+    box-sizing: border-box;
+
+    color: var(--promo-white);
+    font-family: "Manrope", sans-serif;
+
+    border: 1px solid rgba(177, 119, 255, 0.27);
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            ellipse at 100% 0%,
+            rgba(117, 63, 177, 0.15),
+            transparent 38%
+        ),
+        radial-gradient(
+            ellipse at 0% 100%,
+            rgba(40, 145, 151, 0.07),
+            transparent 35%
+        ),
+        linear-gradient(135deg, #0b1020 0%, #090815 65%, #100a20 100%);
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.page-promotions *,
+.page-promotions *::before,
+.page-promotions *::after {
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   HERO — intégré au conteneur principal
+========================================================= */
+
+.page-promotions .promo-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 8px 20px 25px !important;
+
+    border: none !important;
+    border-radius: 0 !important;
+
+    background: transparent !important;
+    box-shadow: none !important;
+
+    text-align: center;
+}
+
+.page-promotions .promo-hero::before {
+    content: "";
+    position: absolute;
+    inset: -30px;
+    z-index: -1;
+    pointer-events: none;
+
+    background-image:
+        linear-gradient(
+            rgba(255, 255, 255, 0.018) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.018) 1px,
+            transparent 1px
+        );
+
+    background-size: 36px 36px;
+
+    mask-image: linear-gradient(to bottom, #000, transparent 85%);
+}
+
+.page-promotions .promo-hero::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+
+    width: 270px;
+    height: 270px;
+
+    top: -185px;
+    right: -100px;
+
+    border: 1px solid rgba(193, 148, 255, 0.12);
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 0 24px rgba(193, 148, 255, 0.025),
+        0 0 0 52px rgba(193, 148, 255, 0.018);
+}
+
+.page-promotions .promo-hero-decoration {
+    position: absolute;
+    z-index: -1;
+    pointer-events: none;
+
+    border: 1px solid rgba(82, 229, 213, 0.08);
+    border-radius: 50%;
+}
+
+.page-promotions .promo-hero-decoration-1 {
+    width: 180px;
+    height: 180px;
+
+    bottom: -145px;
+    left: -100px;
+}
+
+.page-promotions .promo-hero-decoration-2 {
+    width: 90px;
+    height: 90px;
+
+    top: 15px;
+    left: 7%;
+
+    border-color: rgba(169, 104, 255, 0.08);
+}
+
+/* =========================================================
+   TITRE
+========================================================= */
+
+.page-promotions .promo-hero-content {
+    position: relative;
+    z-index: 2;
+
+    width: 100%;
+    max-width: 650px;
+}
+
+.page-promotions .promo-hero-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    margin: 0 0 13px !important;
+
+    color: var(--promo-purple-light);
+
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.page-promotions .promo-label-line {
+    display: block;
+
+    width: 18px;
+    height: 1px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--promo-cyan)
+    );
+}
+
+.page-promotions .promo-label-line:last-child {
+    background: linear-gradient(
+        90deg,
+        var(--promo-purple),
+        transparent
+    );
+}
+
+.page-promotions .promo-hero-title {
+    display: block;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    color: #fff !important;
+
+    font-family: "Manrope", sans-serif !important;
+    font-size: clamp(34px, 4vw, 46px) !important;
+    font-weight: 800 !important;
+
+    line-height: 1.02 !important;
+    letter-spacing: -2px !important;
+
+    text-transform: uppercase;
+    text-align: center !important;
+}
+
+.page-promotions .promo-hero-title span {
+    display: block;
+    margin-top: 4px;
+
+    background: linear-gradient(
+        90deg,
+        #a16bff,
+        #d0a5ff 55%,
+        #75dcd7
+    );
+
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.page-promotions .promo-hero-description {
+    max-width: 510px;
+
+    margin: 14px auto 0 !important;
+
+    color: #b7c0d5 !important;
+
+    font-family: "Manrope", sans-serif;
+    font-size: 11px !important;
+    font-weight: 400;
+
+    line-height: 1.75 !important;
+    text-align: center;
+}
+
+/* =========================================================
+   BOUTON
+========================================================= */
+
+.page-promotions .promo-hero-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+
+    min-height: 38px;
+
+    margin-top: 17px;
+    padding: 0 18px;
+
+    border: 1px solid rgba(82, 229, 213, 0.25);
+    border-radius: 7px;
+
+    background: linear-gradient(
+        105deg,
+        #167f85,
+        #386fb3 48%,
+        #7743bd
+    );
+
+    color: #fff !important;
+
+    font-family: "Manrope", sans-serif;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 0.7px;
+
+    text-decoration: none !important;
+
+    transition:
+        transform 0.2s ease,
+        filter 0.2s ease;
+}
+
+.page-promotions .promo-hero-button span {
+    font-size: 14px;
+}
+
+.page-promotions .promo-hero-button:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* =========================================================
+   BAS DU HERO
+========================================================= */
+
+.page-promotions .promo-hero-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    margin-top: 19px !important;
+
+    color: rgba(166, 179, 204, 0.58);
+
+    font-size: 6px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.page-promotions .promo-hero-bottom-dot {
+    width: 4px;
+    height: 4px;
+
+    border-radius: 50%;
+
+    background: var(--promo-cyan);
+    box-shadow: 0 0 7px rgba(82, 229, 213, 0.4);
+}
+
+/* =========================================================
+   CONDITIONS — dans le même conteneur
+========================================================= */
+
+.page-promotions .promo-conditions {
+    margin: 0 !important;
+    padding: 20px 0 0 !important;
+
+    border: none !important;
+    border-top: 1px solid rgba(163, 175, 205, 0.13) !important;
+    border-radius: 0 !important;
+
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.page-promotions .promo-conditions-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    border: none !important;
+}
+
+.page-promotions .promo-conditions-icon {
+    flex: 0 0 36px;
+
+    width: 36px;
+    height: 36px;
+
+    display: grid;
+    place-items: center;
+
+    border: 1px solid rgba(169, 104, 255, 0.22);
+    border-radius: 10px;
+
+    background: rgba(169, 104, 255, 0.08);
+
+    color: var(--promo-purple-light);
+    font-size: 17px;
+}
+
+.page-promotions .promo-conditions-heading {
+    min-width: 0;
+}
+
+.page-promotions .promo-section-eyebrow {
+    margin: 0 0 5px !important;
+
+    color: var(--promo-cyan) !important;
+
+    font-family: "Manrope", sans-serif;
+    font-size: 7px !important;
+    font-weight: 800 !important;
+    letter-spacing: 1.4px;
+
+    line-height: 1.4;
+}
+
+.page-promotions .promo-conditions-heading h2 {
+    margin: 0 !important;
+
+    color: #f7f8ff !important;
+
+    font-family: "Manrope", sans-serif !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+
+    line-height: 1.3 !important;
+    letter-spacing: -0.3px;
+}
+
+.page-promotions .promo-conditions-heading > p:last-child {
+    margin: 4px 0 0 !important;
+
+    color: var(--promo-muted) !important;
+
+    font-family: "Manrope", sans-serif;
+    font-size: 9px !important;
+
+    line-height: 1.5 !important;
+}
+
+/* =========================================================
+   CONDITION BREST — simple ligne, pas une carte
+========================================================= */
+
+.page-promotions .promo-condition-card {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+
+    margin: 15px 0 0 !important;
+    padding: 0 !important;
+
+    border: none !important;
+    border-radius: 0 !important;
+
+    background: transparent !important;
+    box-shadow: none !important;
+
+    transition: none !important;
+}
+
+.page-promotions .promo-condition-card:hover {
+    transform: none !important;
+    border: none !important;
+}
+
+.page-promotions .promo-condition-check {
+    flex: 0 0 27px;
+
+    width: 27px;
+    height: 27px;
+
+    display: grid;
+    place-items: center;
+
+    border: 1px solid rgba(82, 229, 213, 0.17);
+    border-radius: 8px;
+
+    background: rgba(82, 229, 213, 0.07);
+
+    color: var(--promo-cyan);
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.page-promotions .promo-condition-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.page-promotions .promo-condition-content h3 {
+    margin: 0 !important;
+
+    color: #f7f8ff !important;
+
+    font-family: "Manrope", sans-serif !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+
+    line-height: 1.5 !important;
+}
+
+.page-promotions .promo-condition-content p {
+    margin: 4px 0 0 !important;
+
+    color: #aab6cc !important;
+
+    font-family: "Manrope", sans-serif;
+    font-size: 9px !important;
+    font-weight: 400;
+
+    line-height: 1.65 !important;
+}
+
+.page-promotions .promo-condition-content strong {
+    color: var(--promo-purple-light) !important;
+    font-weight: 800 !important;
+}
+
+.page-promotions .promo-condition-location {
+    flex: 0 0 auto;
+
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    padding-left: 12px;
+    margin-left: 8px;
+
+    border-left: 1px solid rgba(163, 175, 205, 0.12);
+
+    background: transparent !important;
+    border-radius: 0 !important;
+
+    color: var(--promo-purple-light);
+
+    font-size: 7px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+}
+
+.page-promotions .promo-condition-location span:first-child {
+    font-size: 12px;
+}
+
+/* =========================================================
+   CATALOGUE — conserve le catalogue existant
+========================================================= */
+
+.page-promotions .promo-catalogue-section {
+    margin: 25px 0 0 !important;
+    padding: 22px 0 0 !important;
+
+    border: none !important;
+    border-top: 1px solid rgba(163, 175, 205, 0.13) !important;
+    border-radius: 0 !important;
+
+    background: transparent !important;
+    box-shadow: none !important;
+
+    scroll-margin-top: 80px;
+}
+
+.page-promotions .promo-catalogue-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+
+    margin: 0 0 18px !important;
+}
+
+.page-promotions .promo-catalogue-header .promo-section-eyebrow {
+    margin-bottom: 7px !important;
+}
+
+.page-promotions .promo-catalogue-header h2 {
+    margin: 0 !important;
+
+    color: #f7f8ff !important;
+
+    font-family: "Manrope", sans-serif !important;
+    font-size: clamp(22px, 3vw, 28px) !important;
+    font-weight: 800 !important;
+
+    line-height: 1.2 !important;
+    letter-spacing: -0.7px;
+}
+
+.page-promotions .promo-catalogue-decoration {
+    flex: 0 0 36px;
+
+    width: 36px;
+    height: 36px;
+
+    display: grid;
+    place-items: center;
+
+    border: 1px solid rgba(169, 104, 255, 0.18);
+    border-radius: 9px;
+
+    background: rgba(169, 104, 255, 0.06);
+
+    color: var(--promo-purple-light);
+    font-size: 16px;
+}
+
+.page-promotions #catalogue-produits {
+    width: 100%;
+    min-height: 10px;
+}
+
+/* =========================================================
+   TABLETTE
+========================================================= */
+
+@media (max-width: 900px) {
+    .page-promotions {
+        width: calc(100% - 30px) !important;
+        margin: 18px auto 45px !important;
+        padding: 25px 25px 28px !important;
+    }
+
+    .page-promotions .promo-hero {
+        padding: 5px 15px 22px !important;
+    }
+
+    .page-promotions .promo-hero-title {
+        font-size: clamp(32px, 5vw, 42px) !important;
+    }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 600px) {
+    .page-promotions {
+        width: calc(100% - 22px) !important;
+
+        margin: 12px auto 35px !important;
+        padding: 20px 16px 22px !important;
+
+        border-radius: 15px;
+    }
+
+    .page-promotions .promo-hero {
+        padding: 4px 4px 18px !important;
+    }
+
+    .page-promotions .promo-hero-label {
+        gap: 7px;
+        margin-bottom: 11px !important;
+
+        font-size: 7px;
+        letter-spacing: 1.5px;
+    }
+
+    .page-promotions .promo-label-line {
+        width: 13px;
+    }
+
+    .page-promotions .promo-hero-title {
+        font-size: clamp(30px, 8.5vw, 39px) !important;
+        letter-spacing: -1.5px !important;
+        line-height: 1.03 !important;
+    }
+
+    .page-promotions .promo-hero-title span {
+        margin-top: 3px;
+    }
+
+    .page-promotions .promo-hero-description {
+        max-width: 340px;
+
+        margin-top: 12px !important;
+
+        font-size: 10px !important;
+        line-height: 1.7 !important;
+    }
+
+    .page-promotions .promo-hero-button {
+        min-height: 36px;
+
+        margin-top: 15px;
+        padding: 0 15px;
+        gap: 11px;
+
+        font-size: 7px;
+    }
+
+    .page-promotions .promo-hero-bottom {
+        gap: 6px;
+        margin-top: 16px !important;
+
+        font-size: 5px;
+        letter-spacing: 0.5px;
+    }
+
+    .page-promotions .promo-hero-decoration-1 {
+        width: 145px;
+        height: 145px;
+
+        bottom: -120px;
+        left: -100px;
+    }
+
+    .page-promotions .promo-hero-decoration-2 {
+        width: 65px;
+        height: 65px;
+
+        top: 10px;
+        left: 3%;
+    }
+
+    /* Conditions */
+
+    .page-promotions .promo-conditions {
+        padding-top: 16px !important;
+    }
+
+    .page-promotions .promo-conditions-header {
+        gap: 10px;
+    }
+
+    .page-promotions .promo-conditions-icon {
+        flex-basis: 32px;
+
+        width: 32px;
+        height: 32px;
+
+        border-radius: 9px;
+        font-size: 15px;
+    }
+
+    .page-promotions .promo-section-eyebrow {
+        font-size: 6px !important;
+        letter-spacing: 1.1px;
+    }
+
+    .page-promotions .promo-conditions-heading h2 {
+        font-size: 13px !important;
+    }
+
+    .page-promotions .promo-conditions-heading > p:last-child {
+        font-size: 8px !important;
+    }
+
+    .page-promotions .promo-condition-card {
+        gap: 9px;
+        margin-top: 12px !important;
+    }
+
+    .page-promotions .promo-condition-check {
+        flex-basis: 25px;
+
+        width: 25px;
+        height: 25px;
+
+        border-radius: 7px;
+        font-size: 13px;
+    }
+
+    .page-promotions .promo-condition-content h3 {
+        font-size: 9px !important;
+    }
+
+    .page-promotions .promo-condition-content p {
+        margin-top: 3px !important;
+        font-size: 8px !important;
+        line-height: 1.6 !important;
+    }
+
+    .page-promotions .promo-condition-location {
+        display: none;
+    }
+
+    /* Catalogue */
+
+    .page-promotions .promo-catalogue-section {
+        margin-top: 19px !important;
+        padding-top: 18px !important;
+        scroll-margin-top: 65px;
+    }
+
+    .page-promotions .promo-catalogue-header {
+        margin-bottom: 15px !important;
+    }
+
+    .page-promotions .promo-catalogue-header h2 {
+        font-size: 21px !important;
+        letter-spacing: -0.5px;
+    }
+
+    .page-promotions .promo-catalogue-decoration {
+        flex-basis: 31px;
+
+        width: 31px;
+        height: 31px;
+
+        border-radius: 8px;
+        font-size: 14px;
+    }
+}
+
+/* =========================================================
+   PETITS MOBILES
+========================================================= */
+
+@media (max-width: 380px) {
+    .page-promotions {
+        width: calc(100% - 16px) !important;
+        padding: 17px 12px 19px !important;
+    }
+
+    .page-promotions .promo-hero-title {
+        font-size: 29px !important;
+        letter-spacing: -1.3px !important;
+    }
+
+    .page-promotions .promo-hero-bottom {
+        font-size: 4.5px;
+        letter-spacing: 0.25px;
+    }
+}
+
+/* =========================================================
+   ACCESSIBILITÉ
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .page-promotions *,
+    .page-promotions *::before,
+    .page-promotions *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+    }
+}

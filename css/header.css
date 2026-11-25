@@ -405,3 +405,106 @@
         background: rgba(160, 0, 255, 0.18);
     }
 }
+
+/* ==========================================
+   BANDEAU PROMOTIONS DÉFILANT
+========================================== */
+
+.bandeau-promo {
+    display: block;
+    position: relative;
+    z-index: 101;
+    width: 100%;
+    overflow: hidden;
+    color: #ffffff;
+    background: linear-gradient(90deg, #2a0752 0%, #5b12a3 50%, #2a0752 100%);
+    border-bottom: 1px solid rgba(197, 106, 255, 0.45);
+    text-decoration: none;
+    font-family: 'Manrope', sans-serif;
+}
+
+.bandeau-promo-piste {
+    display: flex;
+    width: max-content;
+    align-items: center;
+    animation: cali29-defilement-promo 32s linear infinite;
+    will-change: transform;
+}
+
+.bandeau-promo-contenu {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-around;
+    gap: 28px;
+    min-height: 38px;
+    padding: 0 22px;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.bandeau-promo-label {
+    color: #e5c6ff;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.bandeau-promo-separateur {
+    color: #d9a7ff;
+    font-size: 13px;
+}
+
+.bandeau-promo-action {
+    font-weight: 800;
+    letter-spacing: 0.6px;
+}
+
+.bandeau-promo:hover .bandeau-promo-piste,
+.bandeau-promo:focus-visible .bandeau-promo-piste {
+    animation-play-state: paused;
+}
+
+.bandeau-promo:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: -3px;
+}
+
+@keyframes cali29-defilement-promo {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@media (max-width: 768px) {
+    .bandeau-promo-contenu {
+        min-height: 35px;
+        gap: 18px;
+        padding: 0 16px;
+        font-size: 11px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bandeau-promo-piste {
+        animation: none;
+    }
+
+    .bandeau-promo-contenu[aria-hidden="true"] {
+        display: none;
+    }
+
+    .bandeau-promo-contenu:first-child {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        white-space: normal;
+        text-align: center;
+        gap: 8px 12px;
+        padding: 8px 12px;
+    }
+}

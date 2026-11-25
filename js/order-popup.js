@@ -1,4 +1,3 @@
-
 /* ==========================================
    ORDER POPUP - CALI29 V2
    LIVRAISON > RÉCAPITULATIF > CONTACT
@@ -135,54 +134,6 @@ function afficherEtapeFinale() {
     }
 
     orderPopup?.querySelector("[data-contact]")?.focus();
-}
-
-
-function afficherConfirmation(reference, platform, commandeEnregistreeDansCompte) {
-    if (!deliveryForm || !orderSummary || !orderOptions || !orderSuccess) {
-        return;
-    }
-
-    deliveryForm.hidden = true;
-    orderSummary.hidden = true;
-    orderOptions.hidden = true;
-    orderSuccess.hidden = false;
-
-    if (orderFooter) {
-        orderFooter.hidden = true;
-    }
-
-    if (orderDescription) {
-        orderDescription.textContent = "";
-    }
-
-    if (orderSuccessReference) {
-        orderSuccessReference.textContent = reference
-            ? "Référence : " + reference
-            : "Commande préparée";
-    }
-
-    let message = "";
-
-    if (commandeEnregistreeDansCompte) {
-        message = "Votre commande a été enregistrée dans votre compte CALI29. ";
-    } else {
-        message = "Votre commande est préparée, mais elle n'est pas enregistrée dans un compte client. ";
-    }
-
-    if (platform === "signal") {
-        message +=
-            "Le récapitulatif a été copié. Ouvrez Signal, collez le message dans la conversation et appuyez sur Envoyer.";
-    } else {
-        message +=
-            "Telegram a été ouvert avec votre récapitulatif préparé. Vérifiez le message puis appuyez sur Envoyer dans Telegram.";
-    }
-
-    if (orderSuccessMessage) {
-        orderSuccessMessage.textContent = message;
-    }
-
-    orderSuccessClose?.focus();
 }
 
 
@@ -381,6 +332,8 @@ async function ouvrirOrderPopup() {
     effacerErreurMinimum();
     afficherEtapeLivraison();
 
+    orderPopup.hidden = false;
+    orderPopup.style.display = "";
     orderPopup.classList.add("active");
     orderPopup.setAttribute("aria-hidden", "false");
 
@@ -399,6 +352,8 @@ function fermerOrderPopup() {
 
     orderPopup.classList.remove("active");
     orderPopup.setAttribute("aria-hidden", "true");
+    orderPopup.hidden = true;
+    orderPopup.style.display = "none";
 
     document.body.style.overflow = "";
 
@@ -713,10 +668,6 @@ async function envoyerCommande(platform) {
                 null;
 
             commandeEnregistreeDansCompte = true;
-
-            if (referenceCommande) {
-                message += "\n\nRÉFÉRENCE CALI29 : " + referenceCommande;
-            }
         }
 
         if (platform === "telegram") {
@@ -750,11 +701,30 @@ async function envoyerCommande(platform) {
             throw new Error("Moyen de contact inconnu.");
         }
 
-        afficherConfirmation(
-            referenceCommande,
-            platform,
-            commandeEnregistreeDansCompte
-        );
+        // Le transfert vers Telegram/Signal a réussi.
+        // Vider le panier via la fonction existante de panier.js.
+        if (typeof viderPanier === "function") {
+            viderPanier();
+        } else {
+            // Repli si la fonction du panier n'est pas chargée.
+            panier = [];
+
+            try {
+                localStorage.setItem("panierCali29", JSON.stringify(panier));
+            } catch (storageError) {
+                console.warn(
+                    "CALI29 - Impossible de sauvegarder le panier vide :",
+                    storageError
+                );
+            }
+
+            if (typeof actualiserPanier === "function") {
+                actualiserPanier();
+            }
+        }
+
+        // Fermer la popup de commande sans afficher de message.
+        fermerOrderPopup();
 
     } catch (error) {
         if (fenetreContact && !fenetreContact.closed) {
@@ -816,8 +786,4 @@ document.addEventListener("DOMContentLoaded", () => {
             envoyerCommande(button.dataset.contact);
         });
     });
-
-    if (orderSuccessClose) {
-        orderSuccessClose.addEventListener("click", fermerOrderPopup);
-    }
 });

@@ -1,0 +1,318 @@
+
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CALI29 | Promotions</title>
+    <meta name="description" content="Découvrez les offres promotionnelles CALI29.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css?v=20261125-3">
+    <link rel="stylesheet" href="css/header.css?v=20261125-3">
+    <link rel="stylesheet" href="css/accueil.css?v=20261125-3">
+    <link rel="stylesheet" href="css/categories.css?v=20261125-3">
+    <link rel="stylesheet" href="css/produits.css?v=20261125-3">
+    <link rel="stylesheet" href="css/panier.css?v=20261125-3">
+    <link rel="stylesheet" href="css/footer.css?v=20261125-3">
+    <link rel="stylesheet" href="css/responsive.css?v=20261125-3">
+    <link rel="stylesheet" href="css/compte.css?v=20261122-5">
+
+    <!-- CSS DE CETTE PAGE : À CHARGER EN DERNIER -->
+    <link rel="stylesheet" href="css/promotions.css?v=20261125-4">
+</head>
+
+<body>
+
+    <div id="ecran-acces" class="ecran-acces">
+        <div class="acces-contenu">
+            <div class="acces-logo">CALI29</div>
+            <p>ACCÈS RÉSERVÉ</p>
+            <h1>Bienvenue</h1>
+
+            <input type="password" id="code-acces" placeholder="Votre code d'accès" autocomplete="off">
+            <button id="valider-acces">ENTRER →</button>
+            <p id="message-erreur"></p>
+        </div>
+    </div>
+
+    <header id="header" class="header">
+        <button id="menu-burger" class="menu-burger" type="button" aria-label="Ouvrir le menu" aria-controls="menu-mobile" aria-expanded="false">
+            <span class="burger-icone">☰</span>
+        </button>
+
+        <a href="index.html" class="logo">CALI29</a>
+
+        <nav class="navigation-desktop">
+            <a href="index.html" class="lien-navigation">Accueil</a>
+
+            <div id="boutique-dropdown" class="boutique-dropdown">
+                <button id="boutique-toggle" class="lien-navigation boutique-toggle" type="button" aria-expanded="false" aria-haspopup="true">
+                    Boutique
+                </button>
+
+                <div class="boutique-sous-menu">
+                    <a href="fleur.html">Fleurs</a>
+                    <a href="resine.html">Résines</a>
+                    <a href="accessoires.html">Accessoires</a>
+                    <a href="promotions.html">Promotions</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="header-actions">
+            <button id="ouvrir-compte" class="bouton-compte" type="button">
+                <span class="compte-icone">♙</span>
+                <span id="libelle-compte">Mon compte</span>
+            </button>
+
+            <a href="panier.html" id="ouvrir-panier" class="bouton-panier">
+                Panier <span id="nombre-articles">0</span>
+            </a>
+        </div>
+
+        <nav id="menu-mobile" class="menu-mobile" hidden>
+            <a href="index.html">Accueil</a>
+            <a href="fleur.html">Fleurs</a>
+            <a href="resine.html">Résines</a>
+            <a href="accessoires.html">Accessoires</a>
+            <a href="promotions.html">Promotions</a>
+            <a href="panier.html">Mon panier</a>
+
+            <button type="button" id="ouvrir-compte-mobile" class="menu-mobile-compte">
+                Mon compte
+            </button>
+        </nav>
+    </header>
+
+    <main id="contenu-principal" class="page-promotions">
+
+        <section class="promo-hero">
+            <div class="promo-hero-decoration promo-hero-decoration-1"></div>
+            <div class="promo-hero-decoration promo-hero-decoration-2"></div>
+
+            <div class="promo-hero-content">
+                <div class="promo-hero-label">
+                    <span class="promo-label-line"></span>
+                    CALI29 COLLECTION
+                    <span class="promo-label-line"></span>
+                </div>
+
+                <h1 class="promo-hero-title">
+                    DÉCOUVREZ
+                    <span>NOS OFFRES</span>
+                </h1>
+
+                <p class="promo-hero-description">
+                    Des offres spéciales, sélectionnées pour vous.
+                    Profitez des promotions CALI29 pendant leur période de validité.
+                </p>
+
+                <a href="#offres-cali29" class="promo-hero-button">
+                    VOIR LES OFFRES
+                    <span aria-hidden="true">↓</span>
+                </a>
+            </div>
+
+            <div class="promo-hero-bottom">
+                <span>OFFRES CALI29</span>
+                <span class="promo-hero-bottom-dot"></span>
+                <span>QUANTITÉS ET DURÉES LIMITÉES</span>
+            </div>
+        </section>
+
+        <section class="promo-conditions" aria-labelledby="promo-conditions-title">
+            <div class="promo-conditions-header">
+                <div class="promo-conditions-icon" aria-hidden="true">
+                    <span>✦</span>
+                </div>
+
+                <div class="promo-conditions-heading">
+                    <p class="promo-section-eyebrow">À SAVOIR</p>
+                    <h2 id="promo-conditions-title">Conditions des offres</h2>
+                    <p>Consultez les conditions avant de passer commande.</p>
+                </div>
+            </div>
+
+            <div class="promo-condition-card">
+                <div class="promo-condition-check" aria-hidden="true">✓</div>
+
+                <div class="promo-condition-content">
+                    <h3>Promotions valables à Brest</h3>
+                    <p>
+                        Les offres promotionnelles sont réservées
+                        <strong>aux livraisons à Brest.</strong>
+                    </p>
+                </div>
+
+                <div class="promo-condition-location" aria-hidden="true">
+                    <span>⌖</span>
+                    <span>BREST</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="offres-cali29" class="promo-catalogue-section" data-categorie="promotions">
+            <div class="promo-catalogue-header">
+                <div>
+                    <p class="promo-section-eyebrow">SÉLECTION CALI29</p>
+                    <h2>Les offres du moment</h2>
+                </div>
+
+                <div class="promo-catalogue-decoration" aria-hidden="true">
+                    <span>✦</span>
+                </div>
+            </div>
+
+            <div id="catalogue-produits" class="produits-container promo-produits-container"></div>
+        </section>
+
+    </main>
+
+    <footer id="footer" class="footer">
+        <div class="footer-logo">CALI29</div>
+
+        <nav class="footer-liens">
+            <a href="index.html">Accueil</a>
+            <a href="fleur.html">Fleurs</a>
+            <a href="resine.html">Résines</a>
+            <a href="accessoires.html">Produits</a>
+            <a href="promotions.html">Promotions</a>
+            <a href="#">Contact</a>
+            <a href="#">Mentions légales</a>
+            <a href="#">Politique de confidentialité</a>
+        </nav>
+
+        <p class="footer-copyright">© CALI29 - Tous droits réservés</p>
+    </footer>
+
+    <div id="panier-fixe" class="panier-fixe">
+        <div class="panier-informations">
+            <span>MON PANIER</span>
+            <strong id="panier-total">0,00 €</strong>
+        </div>
+
+        <a href="panier.html" class="bouton-commander">VOIR MON PANIER →</a>
+    </div>
+
+    <div id="compte-modal" class="compte-modal" hidden>
+        <div class="compte-overlay" data-fermer-compte></div>
+
+        <section class="compte-fenetre" role="dialog" aria-modal="true" aria-labelledby="compte-titre">
+            <button type="button" class="compte-fermer" data-fermer-compte aria-label="Fermer">×</button>
+
+            <div class="compte-logo">CALI29</div>
+            <h2 id="compte-titre">Mon compte</h2>
+
+            <p id="compte-description">
+                Connectez-vous avec votre pseudo et votre mot de passe.
+            </p>
+
+            <div id="compte-auth-vues">
+                <div class="compte-onglets">
+                    <button type="button" class="compte-onglet actif" data-vue="connexion">Connexion</button>
+                    <button type="button" class="compte-onglet" data-vue="inscription">Inscription</button>
+                </div>
+
+                <form id="form-connexion">
+                    <label for="connexion-pseudo">Pseudo</label>
+                    <input type="text" id="connexion-pseudo" placeholder="Votre pseudo" minlength="3" maxlength="24" autocomplete="username" required>
+
+                    <label for="connexion-motdepasse">Mot de passe</label>
+                    <input type="password" id="connexion-motdepasse" placeholder="Votre mot de passe" autocomplete="current-password" required>
+
+                    <button type="submit" class="compte-submit">Se connecter</button>
+                </form>
+
+                <form id="form-inscription" hidden>
+                    <label for="inscription-pseudo">Choisir un pseudo</label>
+                    <input type="text" id="inscription-pseudo" placeholder="3 à 24 caractères" minlength="3" maxlength="24" pattern="[A-Za-z0-9_.\-]{3,24}" autocomplete="username" required>
+
+                    <label for="inscription-motdepasse">Mot de passe</label>
+                    <input type="password" id="inscription-motdepasse" placeholder="8 caractères minimum" minlength="8" maxlength="72" autocomplete="new-password" required>
+
+                    <label for="inscription-confirmation">Confirmer le mot de passe</label>
+                    <input type="password" id="inscription-confirmation" placeholder="Confirmer le mot de passe" minlength="8" maxlength="72" autocomplete="new-password" required>
+
+                    <button type="submit" class="compte-submit">Créer mon compte</button>
+                </form>
+            </div>
+
+            <div id="compte-connecte" hidden>
+                <div class="compte-bienvenue">
+                    <span class="compte-avatar">♙</span>
+                    <div>
+                        <p>Bienvenue</p>
+                        <strong id="compte-pseudo-connecte">Client</strong>
+                    </div>
+                </div>
+
+                <section class="adresse-client" aria-labelledby="adresse-titre">
+                    <div class="adresse-client-entete">
+                        <div>
+                            <span class="adresse-surtitre">LIVRAISON</span>
+                            <h3 id="adresse-titre">Mon adresse habituelle</h3>
+                        </div>
+                        <span class="adresse-icone" aria-hidden="true">⌖</span>
+                    </div>
+
+                    <div id="adresse-enregistree" class="adresse-enregistree" hidden>
+                        <strong id="adresse-rue-affichee"></strong>
+                        <span id="adresse-ville-affichee"></span>
+
+                        <button type="button" id="modifier-adresse" class="adresse-modifier">
+                            Modifier l'adresse
+                        </button>
+                    </div>
+
+                    <form id="form-adresse" class="form-adresse" hidden>
+                        <label for="adresse-rue">Adresse</label>
+                        <input type="text" id="adresse-rue" name="delivery_address" placeholder="Numéro et nom de rue" maxlength="180" autocomplete="street-address" required>
+
+                        <div class="adresse-champs-ligne">
+                            <div>
+                                <label for="adresse-code-postal">Code postal</label>
+                                <input type="text" id="adresse-code-postal" name="postal_code" placeholder="29200" maxlength="10" autocomplete="postal-code" required>
+                            </div>
+
+                            <div>
+                                <label for="adresse-ville">Ville</label>
+                                <input type="text" id="adresse-ville" name="city" placeholder="Brest" maxlength="100" autocomplete="address-level2" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" id="enregistrer-adresse" class="compte-submit">
+                            Enregistrer mon adresse
+                        </button>
+
+                        <button type="button" id="annuler-adresse" class="adresse-annuler" hidden>
+                            Annuler
+                        </button>
+                    </form>
+                </section>
+
+                <button type="button" id="bouton-deconnexion" class="compte-deconnexion">
+                    Se déconnecter
+                </button>
+            </div>
+
+            <p id="compte-message" class="compte-message" aria-live="polite"></p>
+        </section>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase/client.js?v=20261122-2"></script>
+
+    <script src="js/menu.js?v=20261122-2" defer></script>
+    <script src="js/acces.js?v=20261122-2" defer></script>
+    <script src="js/catalogue.js?v=20261122-2" defer></script>
+    <script src="js/panier.js?v=20261122-2" defer></script>
+    <script src="js/commande.js?v=20261122-2" defer></script>
+    <script src="js/auth.js?v=20261122-3" defer></script>
+
+</body>
+</html>

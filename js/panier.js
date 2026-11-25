@@ -92,33 +92,50 @@ function obtenirProduitPanier(idProduit) {
 ========================================== */
 
 function synchroniserPrixPanier() {
-    panier = panier.map(article => {
-        const produit = obtenirProduitPanier(article.id);
+    panier = panier
+        .map(article => {
+            const produit = obtenirProduitPanier(article.id);
 
-        if (!produit) return article;
+            // Si le produit a des volumes définis, une ligne sans volume valide
+            // ne doit pas rester dans le panier (anciens ajouts incorrects).
+            if (!produit) return article;
 
-        if (article.grammage === null) {
+            const tarifs = Array.isArray(produit.tarifs)
+                ? produit.tarifs
+                : [];
+
+            if (tarifs.length > 0) {
+                if (article.grammage === null || article.grammage === undefined) {
+                    return null;
+                }
+
+                const tarif = tarifs.find(
+                    t => Number(t.grammage) === Number(article.grammage)
+                );
+
+                if (!tarif) return null;
+
+                return {
+                    ...article,
+                    nom: produit.nom,
+                    prix: Number(tarif.prix),
+                    image: produit.image || ""
+                };
+            }
+
+            // Un produit vendu à l'unité ne doit pas conserver un grammage.
+            if (article.grammage !== null && article.grammage !== undefined) {
+                return null;
+            }
+
             return {
                 ...article,
                 nom: produit.nom,
                 prix: Number(produit.prix),
                 image: produit.image || ""
             };
-        }
-
-        const tarif = produit.tarifs?.find(
-            t => Number(t.grammage) === Number(article.grammage)
-        );
-
-        if (!tarif) return article;
-
-        return {
-            ...article,
-            nom: produit.nom,
-            prix: Number(tarif.prix),
-            image: produit.image || ""
-        };
-    });
+        })
+        .filter(Boolean);
 
     sauvegarderPanier();
 }
@@ -138,7 +155,7 @@ function ajouterAuPanier(
 
     if (!produit) {
         console.error("Produit introuvable :", idProduit);
-        return;
+        return false;
     }
 
     const quantiteValide = Math.max(
@@ -146,26 +163,45 @@ function ajouterAuPanier(
         Math.floor(Number(quantite) || 1)
     );
 
+    const tarifs = Array.isArray(produit.tarifs)
+        ? produit.tarifs
+        : [];
+
     let prix = Number(produit.prix);
 
-    if (grammage !== null && produit.tarifs) {
-        const tarif = produit.tarifs.find(
-            t => Number(t.grammage) === Number(grammage)
+    if (tarifs.length > 0) {
+        // Produit à volumes : grammage obligatoire et strictement prévu au catalogue.
+        if (grammage === null || grammage === undefined || grammage === "") {
+            console.error("Ajout refusé : choisissez un volume pour", produit.nom);
+            return false;
+        }
+
+        const grammageValide = Number(grammage);
+
+        const tarif = tarifs.find(
+            t => Number(t.grammage) === grammageValide
         );
 
         if (!tarif) {
-            console.error("Grammage introuvable :", grammage);
-            return;
+            console.error("Ajout refusé : grammage non proposé :", grammage);
+            return false;
         }
 
+        grammage = grammageValide;
         prix = Number(tarif.prix);
-    } else if (prixSelectionne !== null) {
-        prix = Number(prixSelectionne);
+    } else {
+        // Produit vendu à l'unité : ne jamais accepter un grammage ou un prix injecté.
+        if (grammage !== null && grammage !== undefined) {
+            console.error("Ajout refusé : ce produit ne propose pas de grammage.");
+            return false;
+        }
+
+        grammage = null;
     }
 
     if (!Number.isFinite(prix) || prix < 0) {
         console.error("Prix invalide :", prix);
-        return;
+        return false;
     }
 
     const nouvelArticle = {
@@ -190,6 +226,7 @@ function ajouterAuPanier(
 
     sauvegarderPanier();
     actualiserPanier();
+    return true;
 }
 
 
@@ -279,11 +316,21 @@ async function recommanderCommande(anciensArticles) {
         }
 
         const grammage = extraireGrammage(article.product_description);
+        const tarifs = Array.isArray(produit.tarifs)
+            ? produit.tarifs
+            : [];
 
         let prix = Number(produit.prix);
 
-        if (grammage !== null) {
-            const tarif = produit.tarifs?.find(
+        if (tarifs.length > 0) {
+            if (grammage === null) {
+                indisponibles.push(
+                    `${produit.nom} (volume non identifiable dans l'ancienne commande)`
+                );
+                return;
+            }
+
+            const tarif = tarifs.find(
                 t => Number(t.grammage) === grammage
             );
 
@@ -295,6 +342,9 @@ async function recommanderCommande(anciensArticles) {
             }
 
             prix = Number(tarif.prix);
+        } else if (grammage !== null) {
+            indisponibles.push(`${produit.nom} (volume non proposé)`);
+            return;
         }
 
         if (!Number.isFinite(prix) || prix < 0) {
@@ -737,55 +787,9 @@ function actualiserPanier() {
 
 
 /* ==========================================
-   BRANCHER LES BOUTONS DU CATALOGUE
+   AJOUT AU PANIER DEPUIS LES CARTES
+   Désactivé : le choix du volume se fait sur la fiche produit.
 ========================================== */
-
-function connecterBoutonsCatalogue() {
-    const boutonsCatalogue = document.querySelectorAll(
-        ".carte-produit .bouton-ajouter"
-    );
-
-    boutonsCatalogue.forEach(bouton => {
-        if (bouton.dataset.panierConnecte === "true") return;
-
-        bouton.dataset.panierConnecte = "true";
-
-        bouton.addEventListener("click", () => {
-            const carte = bouton.closest(".carte-produit");
-            const lienProduit = carte?.querySelector(".lien-produit");
-
-            if (!lienProduit) return;
-
-            const url = new URL(lienProduit.href);
-            const idProduit = url.searchParams.get("id");
-
-            if (!idProduit) return;
-
-            const produit = obtenirProduitPanier(idProduit);
-
-            if (!produit) return;
-
-            const tarifs = Array.isArray(produit.tarifs)
-                ? [...produit.tarifs].sort(
-                    (a, b) => Number(a.grammage) - Number(b.grammage)
-                )
-                : [];
-
-            if (tarifs.length > 0) {
-                const premierTarif = tarifs[0];
-
-                ajouterAuPanier(
-                    idProduit,
-                    1,
-                    Number(premierTarif.grammage),
-                    Number(premierTarif.prix)
-                );
-            } else {
-                ajouterAuPanier(idProduit, 1);
-            }
-        });
-    });
-}
 
 
 /* ==========================================
@@ -827,12 +831,28 @@ function connecterBoutonFicheProduit() {
                 t => Number(t.grammage) === grammage
             );
 
-            if (!tarif) return;
+            if (!tarif) {
+                alert("Sélectionne un volume proposé pour ce produit.");
+                return;
+            }
 
             prix = Number(tarif.prix);
         }
 
-        ajouterAuPanier(idProduit, quantite, grammage, prix);
+        const ajoutEffectue = ajouterAuPanier(
+            idProduit,
+            quantite,
+            grammage,
+            prix
+        );
+
+        if (!ajoutEffectue) {
+            const produit = obtenirProduitPanier(idProduit);
+
+            if (Array.isArray(produit?.tarifs) && produit.tarifs.length > 0) {
+                alert("Sélectionne un volume proposé pour ce produit.");
+            }
+        }
     });
 }
 
@@ -850,7 +870,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         synchroniserPrixPanier();
         actualiserPanier();
 
-        connecterBoutonsCatalogue();
+        // Aucun ajout direct depuis les cartes de catégorie.
         connecterBoutonFicheProduit();
 
     } catch (erreur) {

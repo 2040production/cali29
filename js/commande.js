@@ -379,69 +379,51 @@ function genererRecapitulatifCommande(livraison = null) {
     }
 
 
-    let message =
-        "Bonjour, je souhaite passer commande chez CALI29.\n\n";
-
-    message += "MA COMMANDE\n\n";
+    let message = "**MA COMMANDE**\n\n";
 
 
     /* ARTICLES */
 
     details.articles.forEach(article => {
-        message += "• " + article.nom + "\n";
+        const nom = article.nom || "Produit";
+
+        message += "• **" + nom + "**";
 
         if (
             article.grammage !== null &&
             article.grammage !== undefined
         ) {
-            message +=
-                "  Grammage : " + article.grammage + " g\n";
+            message += " — **" + article.grammage + " g**";
         }
 
         message +=
-            "  Quantité : " + article.quantite + "\n" +
-            "  Prix unitaire : " + formaterPrix(article.prix) + "\n" +
-            "  Sous-total : " + formaterPrix(article.sousTotal) + "\n\n";
+            " × " +
+            article.quantite +
+            " : " +
+            formaterPrix(article.sousTotal) +
+            "\n";
     });
-
-
-    /* RÉCAPITULATIF FINANCIER */
-
-    message += "--------------------------\n";
-
-    message +=
-        "SOUS-TOTAL PRODUITS : " +
-        formaterPrix(details.sousTotal) + "\n";
 
 
     /* OFFRES SPÉCIALES */
 
     details.offresAppliquees.forEach(offre => {
         message +=
-            "OFFRE SPÉCIALE (" +
+            "\nOffre spéciale (" +
             (offre.nom || "Promotion") +
             ") : -" +
-            formaterPrix(offre.montantReduction) +
-            "\n";
+            formaterPrix(offre.montantReduction);
     });
 
 
     /* CODE PROMO */
 
-    if (details.codePromo) {
-        if (details.promoValide) {
-            message +=
-                "CODE PROMO (" + details.codePromo + ") : -" +
-                formaterPrix(details.montantReduction) + "\n";
-        } else {
-            message +=
-                "CODE PROMO NON APPLIQUÉ (" +
-                details.codePromo +
-                ")\n";
-
-            message +=
-                "Motif : " + details.messagePromo + "\n";
-        }
+    if (details.codePromo && details.promoValide) {
+        message +=
+            "\nCode promo (" +
+            details.codePromo +
+            ") : -" +
+            formaterPrix(details.montantReduction);
     }
 
 
@@ -449,38 +431,32 @@ function genererRecapitulatifCommande(livraison = null) {
 
     if (livraison) {
         message +=
-            "LIVRAISON : " +
+            "\n\nLivraison : " +
             (
                 details.fraisLivraison === 0
                     ? "Gratuite (Brest)"
                     : formaterPrix(details.fraisLivraison)
-            ) +
-            "\n";
-    } else {
-        message += "LIVRAISON : À confirmer\n";
+            );
     }
-
-
-    /* TOTAL */
-
-    message += "--------------------------\n";
-
-    message +=
-        "TOTAL : " + formaterPrix(details.total) + "\n";
 
 
     /* ADRESSE */
 
     if (livraison) {
-        message += "\nADRESSE DE LIVRAISON\n\n";
+        message += "\n\n**ADRESSE DE LIVRAISON**\n\n";
 
         message += "Adresse : " + (livraison.adresse || "") + "\n";
         message += "Code postal : " + (livraison.codePostal || "") + "\n";
-        message += "Ville : " + (livraison.ville || "") + "\n";
+        message += "Ville : " + (livraison.ville || "");
     }
 
+
+    /* TOTAL UNIQUE */
+
     message +=
-        "\nMerci de me confirmer la disponibilité et les modalités de commande.";
+        "\n\n**TOTAL : " +
+        formaterPrix(details.total) +
+        "**";
 
     return message;
 }

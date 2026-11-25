@@ -1,3 +1,4 @@
+
 /* ==========================================
    FICHE PRODUIT DYNAMIQUE - CALI29 V2
    Source des données : Supabase
@@ -44,13 +45,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const prixTotalTarif = document.getElementById("prix-total-tarif");
 
-        const blocEconomie = document.getElementById("bloc-economie");
-
-        const economieRealisee = document.getElementById("economie-realisee");
-
-        const pourcentageEconomie = document.getElementById(
-            "pourcentage-economie"
-        );
+        // Bloc économies supprimé de l'affichage
 
 
         /* ======================================
@@ -188,15 +183,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 const prixGramme = prixTotal / grammage;
 
-                const prixReference =
-                    Number(produitSelectionne.prix) * grammage;
 
-                const economie = prixReference - prixTotal;
-
-                const pourcentage = prixReference > 0
-                    ? economie / prixReference * 100
-                    : 0;
-
+                /* ==================================
+                   AFFICHAGE DES PRIX
+                ================================== */
 
                 if (prixProduit) {
                     prixProduit.textContent = formaterPrix(prixTotal);
@@ -209,34 +199,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 if (prixTotalTarif) {
                     prixTotalTarif.textContent = formaterPrix(prixTotal);
-                }
-
-
-                /* ==================================
-                   ÉCONOMIES
-                ================================== */
-
-                if (economie > 0.005 && pourcentage > 0) {
-
-                    if (blocEconomie) {
-                        blocEconomie.hidden = false;
-                    }
-
-                    if (economieRealisee) {
-                        economieRealisee.textContent = formaterPrix(economie);
-                    }
-
-                    if (pourcentageEconomie) {
-                        pourcentageEconomie.textContent =
-                            "-" + pourcentage.toFixed(1).replace(".", ",") + " %";
-                    }
-
-                } else {
-
-                    if (blocEconomie) {
-                        blocEconomie.hidden = true;
-                    }
-
                 }
 
             }
@@ -257,10 +219,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (infosTarifs) {
                 infosTarifs.hidden = true;
-            }
-
-            if (blocEconomie) {
-                blocEconomie.hidden = true;
             }
 
             if (prixProduit) {
