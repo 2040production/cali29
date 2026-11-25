@@ -1,42 +1,31 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="fr">
-
 <head>
-
-    <!-- =================================
-         01 - CONFIGURATION DU DOCUMENT
-    ================================== -->
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>CALI29 | Boutique</title>
-
     <meta name="description" content="Bienvenue dans l'univers CALI29.">
 
     <!-- POLICE MANROPE -->
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
+    <!-- CSS GÉNÉRAL -->
+    <link rel="stylesheet" href="css/style.css?v=20261122-2">
+    <link rel="stylesheet" href="css/header.css?v=20261125-2">
+    <link rel="stylesheet" href="css/accueil.css?v=20261122-2">
+    <link rel="stylesheet" href="css/categories.css?v=20261122-2">
+    <link rel="stylesheet" href="css/produits.css?v=20261122-2">
+    <link rel="stylesheet" href="css/panier.css?v=20261122-2">
+    <link rel="stylesheet" href="css/footer.css?v=20261122-2">
+    <link rel="stylesheet" href="css/responsive.css?v=20261122-2">
 
-    <!-- FEUILLES DE STYLE -->
-
-    <link rel="stylesheet" href="css/style.css?v=20261119-1">
-    <link rel="stylesheet" href="css/header.css?v=20261119-1">
-    <link rel="stylesheet" href="css/accueil.css?v=20261119-1">
-    <link rel="stylesheet" href="css/categories.css?v=20261119-1">
-    <link rel="stylesheet" href="css/produits.css?v=20261119-1">
-    <link rel="stylesheet" href="css/panier.css?v=20261119-1">
-    <link rel="stylesheet" href="css/footer.css?v=20261119-1">
-    <link rel="stylesheet" href="css/responsive.css?v=20261119-1">
-
+    <!-- CSS COMPTE CLIENT : TOUJOURS EN DERNIER -->
+    <link rel="stylesheet" href="css/compte.css?v=20261122-5">
 </head>
-
 
 <body>
 
@@ -45,13 +34,10 @@
     ================================== -->
 
     <div id="ecran-acces" class="ecran-acces">
-
         <div class="acces-contenu">
-
             <div class="acces-logo">CALI29</div>
 
             <p>ACCÈS RÉSERVÉ</p>
-
             <h1>Bienvenue</h1>
 
             <input
@@ -61,24 +47,36 @@
                 autocomplete="off"
             >
 
-            <button id="valider-acces">
-                ENTRER →
-            </button>
-
+            <button id="valider-acces">ENTRER →</button>
             <p id="message-erreur"></p>
-
         </div>
-
     </div>
 
+    <!-- BANDEAU PROMOTIONS DÉFILANT -->
+    <a href="promotions.html" class="bandeau-promo" aria-label="Découvrir les promotions CALI29 du 25 novembre au 1er décembre">
+        <span class="bandeau-promo-piste">
+            <span class="bandeau-promo-contenu">
+                <span class="bandeau-promo-label">PROMO DU 25 NOVEMBRE AU 1ER DÉCEMBRE</span>
+                <span>5 g de Lemon Mint à 50 €</span>
+                <span class="bandeau-promo-separateur" aria-hidden="true">✦</span>
+                <span>10 g de RMF à 50 €</span>
+                <span class="bandeau-promo-action">DÉCOUVRIR LES PROMOS →</span>
+            </span>
+            <span class="bandeau-promo-contenu" aria-hidden="true">
+                <span class="bandeau-promo-label">PROMO DU 25 NOVEMBRE AU 1ER DÉCEMBRE</span>
+                <span>5 g de Lemon Mint à 50 €</span>
+                <span class="bandeau-promo-separateur" aria-hidden="true">✦</span>
+                <span>10 g de RMF à 50 €</span>
+                <span class="bandeau-promo-action">DÉCOUVRIR LES PROMOS →</span>
+            </span>
+        </span>
+    </a>
 
     <!-- =================================
          02 - HEADER / NAVIGATION
     ================================== -->
 
     <header id="header" class="header">
-
-        <!-- BURGER MOBILE -->
 
         <button
             id="menu-burger"
@@ -91,27 +89,12 @@
             <span class="burger-icone">☰</span>
         </button>
 
-
-        <!-- LOGO -->
-
-        <a href="index.html" class="logo">
-            CALI29
-        </a>
-
-
-        <!-- NAVIGATION ORDINATEUR -->
+        <a href="index.html" class="logo">CALI29</a>
 
         <nav class="navigation-desktop">
-
-            <a href="index.html" class="lien-navigation">
-                Accueil
-            </a>
-
-
-            <!-- MENU DÉROULANT BOUTIQUE -->
+            <a href="index.html" class="lien-navigation">Accueil</a>
 
             <div id="boutique-dropdown" class="boutique-dropdown">
-
                 <button
                     id="boutique-toggle"
                     class="lien-navigation boutique-toggle"
@@ -122,76 +105,49 @@
                     Boutique
                 </button>
 
-
-                <!-- SOUS-MENU -->
-
                 <div class="boutique-sous-menu">
-
-                    <a href="fleur.html">
-                        Fleurs
-                    </a>
-
-                    <a href="resine.html">
-                        Résines
-                    </a>
-
-                    <a href="accessoires.html">
-                        Accessoires
-                    </a>
-
+                    <a href="fleur.html">Fleurs</a>
+                    <a href="resine.html">Résines</a>
+                    <a href="accessoires.html">Accessoires</a>
                 </div>
-
             </div>
-
         </nav>
 
+        <div class="header-actions">
 
-        <!-- PANIER -->
+            <button
+                id="ouvrir-compte"
+                class="bouton-compte"
+                type="button"
+            >
+                <span class="compte-icone">♙</span>
+                <span id="libelle-compte">Mon compte</span>
+            </button>
 
-        <a
-            href="panier.html"
-            id="ouvrir-panier"
-            class="bouton-panier"
-        >
-            Panier
-
-            <span id="nombre-articles">0</span>
-
-        </a>
-
-
-        <!-- MENU MOBILE -->
-
-        <nav
-            id="menu-mobile"
-            class="menu-mobile"
-            hidden
-        >
-
-            <a href="index.html">
-                Accueil
+            <a href="panier.html" id="ouvrir-panier" class="bouton-panier">
+                Panier
+                <span id="nombre-articles">0</span>
             </a>
 
-            <a href="fleur.html">
-                Fleurs
-            </a>
+        </div>
 
-            <a href="resine.html">
-                Résines
-            </a>
+        <nav id="menu-mobile" class="menu-mobile" hidden>
+            <a href="index.html">Accueil</a>
+            <a href="fleur.html">Fleurs</a>
+            <a href="resine.html">Résines</a>
+            <a href="accessoires.html">Accessoires</a>
+            <a href="panier.html">Mon panier</a>
 
-            <a href="accessoires.html">
-                Accessoires
-            </a>
-
-            <a href="panier.html">
-                Mon panier
-            </a>
-
+            <button
+                type="button"
+                id="ouvrir-compte-mobile"
+                class="menu-mobile-compte"
+            >
+                Mon compte
+            </button>
         </nav>
 
     </header>
-
 
     <!-- =================================
          03 - CONTENU PRINCIPAL
@@ -199,239 +155,112 @@
 
     <main id="contenu-principal">
 
-
-        <!-- =================================
-             04 - HERO / BANNIÈRE
-        ================================== -->
-
         <section id="hero" class="hero">
-
             <div class="hero-contenu">
+                <p class="hero-surtitre">OFFRE LIMITÉE</p>
 
-                <p class="hero-surtitre">
-                    SMART COFFEE
-                </p>
-
-                <h1>
-                    SOYEZ LIVRES CHEZ VOUS
-                </h1>
+                <h1>PROMO DU 25 NOVEMBRE AU 1ER DÉCEMBRE</h1>
 
                 <p class="hero-description">
-                    Bienvenue dans l'univers CALI29.
+                    Profitez des offres spéciales CALI29 pendant une durée limitée.
                 </p>
 
-                <a href="#categories" class="bouton-principal">
-                    DÉCOUVRIR NOS OFFRES →
+                <a href="promotions.html" class="bouton-principal">
+                    DÉCOUVRIR LES PROMOS →
                 </a>
-
             </div>
 
-
-            <!-- IMAGE DES MASCOTTES -->
-
             <div class="hero-image">
-
                 <img
                     src="assets/images/hero-cali29.png"
                     alt="Illustration de l'univers CALI29"
                 >
-
             </div>
-
         </section>
 
-
-        <!-- =================================
-             05 - AVANTAGES
-        ================================== -->
-
         <section id="avantages" class="avantages">
-
             <div class="avantages-container">
 
                 <article class="avantage">
-
                     <span class="avantage-icone">✦</span>
-
                     <p>Paiement en main propre</p>
-
                 </article>
 
-
                 <article class="avantage">
-
                     <span class="avantage-icone">◇</span>
-
                     <p>Offres dégressives</p>
-
                 </article>
 
-
                 <article class="avantage">
-
                     <span class="avantage-icone">✧</span>
-
                     <p>Commande simplifiée</p>
-
                 </article>
 
             </div>
-
         </section>
 
-
-        <!-- =================================
-             06 - CATÉGORIES
-        ================================== -->
-
         <section id="categories" class="categories">
-
             <div class="section-titre">
-
-                <p class="section-surtitre">
-                    EXPLORER
-                </p>
-
+                <p class="section-surtitre">EXPLORER</p>
                 <h2>NOS CATÉGORIES</h2>
-
             </div>
-
 
             <div class="categories-container">
 
                 <a href="fleur.html" class="categorie">
-
-                    <img
-                        src="assets/images/weed.png"
-                        alt="Fleurs"
-                    >
-
+                    <img src="assets/images/weed.png" alt="Fleurs">
                     <h3>Fleurs</h3>
-
                 </a>
-
 
                 <a href="resine.html" class="categorie">
-
-                    <img
-                        src="assets/images/resine.png"
-                        alt="Résines"
-                    >
-
+                    <img src="assets/images/resine.png" alt="Résines">
                     <h3>Résines</h3>
-
                 </a>
-
 
                 <a href="accessoires.html" class="categorie">
-
-                    <img
-                        src="assets/images/accessoires.png"
-                        alt="Accessoires"
-                    >
-
+                    <img src="assets/images/accessoires.png" alt="Accessoires">
                     <h3>Produits</h3>
-
                 </a>
 
             </div>
-
         </section>
 
-
-        <!-- =================================
-             07 - CATALOGUE PRODUITS
-        ================================== -->
-
-        <!--
-        <section id="produits" class="produits">
-
-            <div class="section-titre">
-
-                <p class="section-surtitre">
-                    LA SÉLECTION CALI29
-                </p>
-
-                <h2>NOS PRODUITS</h2>
-
-            </div>
-
-            <div
-                id="catalogue-produits"
-                class="produits-container"
-            >
-
-            </div>
-
-        </section>
-        -->
-
-
-        <!-- =================================
-             08 - UNIVERS CALI29
-        ================================== -->
+        
 
         <section id="univers" class="univers">
-
             <div class="univers-image">
-
                 <img
                     src="assets/images/persoFooter.png"
                     alt="Illustration des mascottes CALI29"
                 >
-
             </div>
-
 
             <div class="univers-contenu">
-
-                <p class="section-surtitre">
-                    NOTRE IDENTITÉ
-                </p>
-
+                <p class="section-surtitre">NOTRE IDENTITÉ</p>
                 <h2>L'UNIVERS CALI29</h2>
-
-                <p>
-                    Une identité, une communauté, un univers.
-                </p>
-
+                <p>Une identité, une communauté, un univers.</p>
             </div>
-
         </section>
-
 
     </main>
 
-
     <!-- =================================
-         09 - FOOTER
+         04 - FOOTER
     ================================== -->
 
     <footer id="footer" class="footer">
 
-        <div class="footer-logo">
-            CALI29
-        </div>
-
+        <div class="footer-logo">CALI29</div>
 
         <nav class="footer-liens">
-
             <a href="index.html">Accueil</a>
-
             <a href="fleur.html">Fleurs</a>
-
             <a href="resine.html">Résines</a>
-
             <a href="accessoires.html">Produits</a>
-
             <a href="#">Contact</a>
-
             <a href="#">Mentions légales</a>
-
             <a href="#">Politique de confidentialité</a>
-
         </nav>
-
 
         <p class="footer-copyright">
             © CALI29 - Tous droits réservés
@@ -439,45 +268,298 @@
 
     </footer>
 
-
     <!-- =================================
-         10 - PANIER FIXE MOBILE
+         05 - PANIER FIXE MOBILE
     ================================== -->
 
     <div id="panier-fixe" class="panier-fixe">
-
         <div class="panier-informations">
-
             <span>MON PANIER</span>
-
-            <strong id="panier-total">
-                0,00 €
-            </strong>
-
+            <strong id="panier-total">0,00 €</strong>
         </div>
 
-
-        <a
-            href="panier.html"
-            class="bouton-commander"
-        >
+        <a href="panier.html" class="bouton-commander">
             VOIR MON PANIER →
         </a>
+    </div>
+
+    <!-- =================================
+         06 - FENÊTRE COMPTE CLIENT
+    ================================== -->
+
+    <div id="compte-modal" class="compte-modal" hidden>
+
+        <div
+            class="compte-overlay"
+            data-fermer-compte
+        ></div>
+
+        <section
+            class="compte-fenetre"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="compte-titre"
+        >
+
+            <button
+                type="button"
+                class="compte-fermer"
+                data-fermer-compte
+                aria-label="Fermer"
+            >
+                ×
+            </button>
+
+            <div class="compte-logo">CALI29</div>
+
+            <h2 id="compte-titre">Mon compte</h2>
+
+            <p id="compte-description">
+                Connectez-vous avec votre pseudo et votre mot de passe.
+            </p>
+
+            <div id="compte-auth-vues">
+
+                <div class="compte-onglets">
+                    <button
+                        type="button"
+                        class="compte-onglet actif"
+                        data-vue="connexion"
+                    >
+                        Connexion
+                    </button>
+
+                    <button
+                        type="button"
+                        class="compte-onglet"
+                        data-vue="inscription"
+                    >
+                        Inscription
+                    </button>
+                </div>
+
+                <form id="form-connexion">
+
+                    <label for="connexion-pseudo">Pseudo</label>
+
+                    <input
+                        type="text"
+                        id="connexion-pseudo"
+                        placeholder="Votre pseudo"
+                        minlength="3"
+                        maxlength="24"
+                        autocomplete="username"
+                        required
+                    >
+
+                    <label for="connexion-motdepasse">
+                        Mot de passe
+                    </label>
+
+                    <input
+                        type="password"
+                        id="connexion-motdepasse"
+                        placeholder="Votre mot de passe"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <button type="submit" class="compte-submit">
+                        Se connecter
+                    </button>
+
+                </form>
+
+                <form id="form-inscription" hidden>
+
+                    <label for="inscription-pseudo">Choisir un pseudo</label>
+
+                    <input
+                        type="text"
+                        id="inscription-pseudo"
+                        placeholder="3 à 24 caractères"
+                        minlength="3"
+                        maxlength="24"
+                        pattern="[A-Za-z0-9_.\-]{3,24}"
+                        autocomplete="username"
+                        required
+                    >
+
+                    <label for="inscription-motdepasse">
+                        Mot de passe
+                    </label>
+
+                    <input
+                        type="password"
+                        id="inscription-motdepasse"
+                        placeholder="8 caractères minimum"
+                        minlength="8"
+                        maxlength="72"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                    <label for="inscription-confirmation">
+                        Confirmer le mot de passe
+                    </label>
+
+                    <input
+                        type="password"
+                        id="inscription-confirmation"
+                        placeholder="Confirmer le mot de passe"
+                        minlength="8"
+                        maxlength="72"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                    <button type="submit" class="compte-submit">
+                        Créer mon compte
+                    </button>
+
+                </form>
+
+            </div>
+
+            <!-- ESPACE CLIENT CONNECTÉ -->
+
+            <div id="compte-connecte" hidden>
+
+                <div class="compte-bienvenue">
+                    <span class="compte-avatar">♙</span>
+
+                    <div>
+                        <p>Bienvenue</p>
+                        <strong id="compte-pseudo-connecte">Client</strong>
+                    </div>
+                </div>
+
+                <section class="adresse-client" aria-labelledby="adresse-titre">
+
+                    <div class="adresse-client-entete">
+                        <div>
+                            <span class="adresse-surtitre">LIVRAISON</span>
+                            <h3 id="adresse-titre">Mon adresse habituelle</h3>
+                        </div>
+
+                        <span class="adresse-icone" aria-hidden="true">⌖</span>
+                    </div>
+
+                    <div id="adresse-enregistree" class="adresse-enregistree" hidden>
+                        <strong id="adresse-rue-affichee"></strong>
+                        <span id="adresse-ville-affichee"></span>
+
+                        <button
+                            type="button"
+                            id="modifier-adresse"
+                            class="adresse-modifier"
+                        >
+                            Modifier l'adresse
+                        </button>
+                    </div>
+
+                    <form id="form-adresse" class="form-adresse" hidden>
+
+                        <label for="adresse-rue">Adresse</label>
+
+                        <input
+                            type="text"
+                            id="adresse-rue"
+                            name="delivery_address"
+                            placeholder="Numéro et nom de rue"
+                            maxlength="180"
+                            autocomplete="street-address"
+                            required
+                        >
+
+                        <div class="adresse-champs-ligne">
+
+                            <div>
+                                <label for="adresse-code-postal">Code postal</label>
+
+                                <input
+                                    type="text"
+                                    id="adresse-code-postal"
+                                    name="postal_code"
+                                    placeholder="29200"
+                                    maxlength="10"
+                                    autocomplete="postal-code"
+                                    required
+                                >
+                            </div>
+
+                            <div>
+                                <label for="adresse-ville">Ville</label>
+
+                                <input
+                                    type="text"
+                                    id="adresse-ville"
+                                    name="city"
+                                    placeholder="Brest"
+                                    maxlength="100"
+                                    autocomplete="address-level2"
+                                    required
+                                >
+                            </div>
+
+                        </div>
+
+                        <button
+                            type="submit"
+                            id="enregistrer-adresse"
+                            class="compte-submit"
+                        >
+                            Enregistrer mon adresse
+                        </button>
+
+                        <button
+                            type="button"
+                            id="annuler-adresse"
+                            class="adresse-annuler"
+                            hidden
+                        >
+                            Annuler
+                        </button>
+
+                    </form>
+
+                </section>
+
+                <!-- HISTORIQUE AJOUTÉ DYNAMIQUEMENT PAR auth.js -->
+
+                <button
+                    type="button"
+                    id="bouton-deconnexion"
+                    class="compte-deconnexion"
+                >
+                    Se déconnecter
+                </button>
+
+            </div>
+
+            <p
+                id="compte-message"
+                class="compte-message"
+                aria-live="polite"
+            ></p>
+
+        </section>
 
     </div>
 
-
     <!-- =================================
-         11 - FICHIERS JAVASCRIPT
+         07 - JAVASCRIPT
     ================================== -->
 
-    <script src="js/menu.js?v=20261119-1" defer></script>
-    <script src="js/acces.js?v=20261119-1" defer></script>
-    <script src="js/produits.js?v=20261119-1" defer></script>
-    <script src="js/catalogue.js?v=20261119-1" defer></script>
-    <script src="js/panier.js?v=20261119-1" defer></script>
-    <script src="js/commande.js?v=20261119-1" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase/client.js?v=20261122-2"></script>
+
+    <script src="js/menu.js?v=20261122-2" defer></script>
+    <script src="js/acces.js?v=20261122-2" defer></script>
+    <script src="js/catalogue.js?v=20261122-2" defer></script>
+    <script src="js/panier.js?v=20261122-2" defer></script>
+    <script src="js/commande.js?v=20261122-2" defer></script>
+    <script src="js/auth.js?v=20261122-3" defer></script>
 
 </body>
-
 </html>

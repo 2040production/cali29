@@ -20,14 +20,12 @@
     border-bottom: 1px solid rgba(160, 0, 255, 0.2);
 }
 
-
 /* ==========================================
    LOGO
 ========================================== */
 
 .logo {
     flex-shrink: 0;
-
     color: #ffffff;
     text-decoration: none;
 
@@ -36,7 +34,6 @@
     font-weight: 800;
     letter-spacing: 2px;
 }
-
 
 /* ==========================================
    NAVIGATION ORDINATEUR
@@ -77,7 +74,6 @@
     color: #c56aff;
 }
 
-
 /* ==========================================
    MENU DÉROULANT BOUTIQUE
 ========================================== */
@@ -86,16 +82,12 @@
     position: relative;
 }
 
-/* Bouton Boutique */
-
 .boutique-toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
 }
-
-/* Flèche CSS */
 
 .boutique-toggle::after {
     content: "";
@@ -107,18 +99,12 @@
     border-bottom: 1.8px solid currentColor;
 
     transform: rotate(45deg) translateY(-2px);
-
     transition: transform 0.25s ease;
 }
-
-/* Rotation à l'ouverture */
 
 .boutique-dropdown.ouvert .boutique-toggle::after {
     transform: rotate(225deg) translateY(-2px);
 }
-
-
-/* Sous-menu */
 
 .boutique-sous-menu {
     position: absolute;
@@ -138,18 +124,13 @@
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
 }
 
-/* Affichage du sous-menu */
-
 .boutique-dropdown.ouvert .boutique-sous-menu {
     display: flex;
     flex-direction: column;
 }
 
-/* Liens du sous-menu */
-
 .boutique-sous-menu a {
     display: block;
-
     padding: 11px 13px;
 
     color: #ffffff;
@@ -160,7 +141,6 @@
     font-weight: 600;
 
     border-radius: 7px;
-
     transition: background 0.2s ease, color 0.2s ease;
 }
 
@@ -170,6 +150,57 @@
     background: rgba(160, 0, 255, 0.2);
 }
 
+/* ==========================================
+   ACTIONS HEADER
+========================================== */
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+/* ==========================================
+   BOUTON MON COMPTE
+========================================== */
+
+.bouton-compte {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    min-height: 40px;
+    padding: 9px 14px;
+
+    color: #ffffff;
+    background: rgba(160, 0, 255, 0.08);
+
+    border: 1px solid rgba(160, 0, 255, 0.4);
+    border-radius: 30px;
+
+    font-family: 'Manrope', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+    white-space: nowrap;
+
+    transition: 0.25s ease;
+}
+
+.bouton-compte:hover {
+    background: rgba(160, 0, 255, 0.22);
+    border-color: #A000FF;
+    transform: translateY(-1px);
+}
+
+.compte-icone {
+    font-size: 17px;
+    line-height: 1;
+}
 
 /* ==========================================
    BOUTON PANIER
@@ -205,7 +236,6 @@
     border-color: #A000FF;
 }
 
-
 /* ==========================================
    COMPTEUR PANIER
 ========================================== */
@@ -228,17 +258,14 @@
     border-radius: 50px;
 }
 
-
 /* ==========================================
    BURGER ET MENU MOBILE
-   CACHÉS SUR ORDINATEUR
 ========================================== */
 
 .menu-burger,
 .menu-mobile {
     display: none;
 }
-
 
 /* ==========================================
    ACCESSIBILITÉ
@@ -250,22 +277,18 @@
     outline-offset: 4px;
 }
 
-
 /* ==========================================
    VERSION MOBILE
 ========================================== */
 
 @media (max-width: 768px) {
 
-    /* HEADER */
-
     .header {
         min-height: 70px;
         height: 70px;
-        padding: 0 15px;
-        gap: 12px;
+        padding: 0 12px;
+        gap: 8px;
     }
-
 
     /* BURGER */
 
@@ -276,7 +299,7 @@
         align-items: center;
         justify-content: center;
 
-        width: 38px;
+        width: 35px;
         height: 38px;
         padding: 0;
 
@@ -284,21 +307,17 @@
         background: transparent;
         border: 0;
 
-        font-size: 26px;
-
+        font-size: 25px;
         cursor: pointer;
     }
-
 
     /* LOGO */
 
     .logo {
         margin-right: auto;
-
-        font-size: 22px;
+        font-size: 21px;
         letter-spacing: 1px;
     }
-
 
     /* NAVIGATION ORDINATEUR */
 
@@ -306,14 +325,34 @@
         display: none;
     }
 
+    /* ACTIONS */
 
-    /* PANIER */
-
-    .bouton-panier {
-        padding: 8px 11px;
-        font-size: 11px;
+    .header-actions {
+        gap: 6px;
     }
 
+    .bouton-compte {
+        min-height: 36px;
+        padding: 7px 9px;
+        gap: 4px;
+        font-size: 10px;
+    }
+
+    .compte-icone {
+        font-size: 15px;
+    }
+
+    .bouton-panier {
+        padding: 8px 9px;
+        gap: 5px;
+        font-size: 10px;
+    }
+
+    #nombre-articles {
+        min-width: 19px;
+        height: 19px;
+        font-size: 10px;
+    }
 
     /* MENU MOBILE OUVERT */
 
@@ -337,27 +376,135 @@
         box-shadow: 0 14px 25px rgba(0, 0, 0, 0.35);
     }
 
-
     /* LIENS MOBILE */
 
-    .menu-mobile a {
+    .menu-mobile a,
+    .menu-mobile-compte {
         display: block;
+        width: 100%;
 
         padding: 13px 14px;
 
         color: #ffffff;
+        background: transparent;
+        text-align: left;
         text-decoration: none;
 
         font-family: 'Manrope', sans-serif;
         font-size: 13px;
         font-weight: 700;
 
+        border: 0;
         border-radius: 8px;
+        cursor: pointer;
     }
 
     .menu-mobile a:hover,
-    .menu-mobile a:focus-visible {
+    .menu-mobile a:focus-visible,
+    .menu-mobile-compte:hover {
         background: rgba(160, 0, 255, 0.18);
     }
+}
 
+/* ==========================================
+   BANDEAU PROMOTIONS DÉFILANT
+========================================== */
+
+.bandeau-promo {
+    display: block;
+    position: relative;
+    z-index: 101;
+    width: 100%;
+    overflow: hidden;
+    color: #ffffff;
+    background: linear-gradient(90deg, #2a0752 0%, #5b12a3 50%, #2a0752 100%);
+    border-bottom: 1px solid rgba(197, 106, 255, 0.45);
+    text-decoration: none;
+    font-family: 'Manrope', sans-serif;
+}
+
+.bandeau-promo-piste {
+    display: flex;
+    width: max-content;
+    align-items: center;
+    animation: cali29-defilement-promo 32s linear infinite;
+    will-change: transform;
+}
+
+.bandeau-promo-contenu {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-around;
+    gap: 28px;
+    min-height: 38px;
+    padding: 0 22px;
+    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.bandeau-promo-label {
+    color: #e5c6ff;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.bandeau-promo-separateur {
+    color: #d9a7ff;
+    font-size: 13px;
+}
+
+.bandeau-promo-action {
+    font-weight: 800;
+    letter-spacing: 0.6px;
+}
+
+.bandeau-promo:hover .bandeau-promo-piste,
+.bandeau-promo:focus-visible .bandeau-promo-piste {
+    animation-play-state: paused;
+}
+
+.bandeau-promo:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: -3px;
+}
+
+@keyframes cali29-defilement-promo {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@media (max-width: 768px) {
+    .bandeau-promo-contenu {
+        min-height: 35px;
+        gap: 18px;
+        padding: 0 16px;
+        font-size: 11px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .bandeau-promo-piste {
+        animation: none;
+    }
+
+    .bandeau-promo-contenu[aria-hidden="true"] {
+        display: none;
+    }
+
+    .bandeau-promo-contenu:first-child {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        white-space: normal;
+        text-align: center;
+        gap: 8px 12px;
+        padding: 8px 12px;
+    }
 }

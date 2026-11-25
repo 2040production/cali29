@@ -1,11 +1,11 @@
-
 /* ==========================================
-   AFFICHAGE DU CATALOGUE - CALI29
-   Catalogue synchronisé avec localStorage
+   CATALOGUE PRODUITS - CALI29 V2
+   Source des données : Supabase
 ========================================== */
 
-const VERSION_CATALOGUE = 4;
-const CLE_VERSION_CATALOGUE = "catalogueCali29Version";
+const SLUG_BOUTIQUE = "cali29";
+
+window.produits = [];
 
 
 /* ==========================================
@@ -13,7 +13,25 @@ const CLE_VERSION_CATALOGUE = "catalogueCali29Version";
 ========================================== */
 
 function formaterPrixCatalogue(prix) {
-    return Number(prix).toFixed(2).replace('.', ',') + ' €';
+    return Number(prix).toFixed(2).replace(".", ",") + " €";
+}
+
+
+// Prix affiché sur les cartes : premier tarif disponible si le produit
+// propose des grammages, sinon prix de base.
+function obtenirPrixAfficheCatalogue(produit) {
+
+    const tarifs = Array.isArray(produit.tarifs)
+        ? [...produit.tarifs].sort(
+            (a, b) => Number(a.grammage) - Number(b.grammage)
+        )
+        : [];
+
+    if (tarifs.length > 0) {
+        return "À partir de " + formaterPrixCatalogue(tarifs[0].prix);
+    }
+
+    return formaterPrixCatalogue(produit.prix);
 }
 
 
@@ -22,134 +40,149 @@ function formaterPrixCatalogue(prix) {
 ========================================== */
 
 function echapperHTML(valeur) {
-    return String(valeur ?? '').replace(/[&<>"']/g, caractere => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
+
+    return String(valeur ?? "").replace(/[&<>"']/g, caractere => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
     })[caractere]);
+
 }
 
 
 /* ==========================================
-   3. MIGRATION DU CATALOGUE
+   3. RÉCUPÉRER LE CATALOGUE SUPABASE
 ========================================== */
 
-function obtenirCatalogue() {
+async function obtenirCatalogue() {
 
-    try {
-
-        const donnees = localStorage.getItem('catalogueCali29');
-
-        // Aucun catalogue sauvegardé
-        if (donnees === null) {
-
-            localStorage.setItem(
-                'catalogueCali29',
-                JSON.stringify(produits)
-            );
-
-            localStorage.setItem(
-                CLE_VERSION_CATALOGUE,
-                VERSION_CATALOGUE
-            );
-
-            return [...produits];
-
-        }
-
-        const catalogueSauvegarde = JSON.parse(donnees);
-
-        if (!Array.isArray(catalogueSauvegarde)) {
-            throw new Error("Catalogue sauvegardé invalide.");
-        }
-
-        const versionStockee = Number(
-            localStorage.getItem(CLE_VERSION_CATALOGUE) || 0
-        );
-
-
-        // MIGRATION LORS D'UN CHANGEMENT DE VERSION
-
-        if (versionStockee < VERSION_CATALOGUE) {
-
-            const catalogueFusionne = new Map();
-
-            // Charger les produits présents dans produits.js
-
-            produits.forEach(produit => {
-
-                if (!produit.id) return;
-
-                catalogueFusionne.set(
-                    produit.id,
-                    { ...produit }
-                );
-
-            });
-
-
-            // Conserver les données de l'administration
-
-            catalogueSauvegarde.forEach(produit => {
-
-                if (!produit.id) return;
-
-                const produitExistant =
-                    catalogueFusionne.get(produit.id) || {};
-
-                catalogueFusionne.set(produit.id, {
-
-                    ...produitExistant,
-                    ...produit
-
-                });
-
-            });
-
-
-            const nouveauCatalogue = [
-                ...catalogueFusionne.values()
-            ];
-
-
-            // Sauvegarder le catalogue fusionné
-
-            localStorage.setItem(
-                'catalogueCali29',
-                JSON.stringify(nouveauCatalogue)
-            );
-
-            localStorage.setItem(
-                CLE_VERSION_CATALOGUE,
-                VERSION_CATALOGUE
-            );
-
-
-            return nouveauCatalogue;
-
-        }
-
-
-        // Catalogue déjà à jour
-
-        return catalogueSauvegarde;
-
-
-    } catch (erreur) {
-
-        console.error("Erreur catalogue :", erreur);
-
-        return [...produits];
-
+    if (typeof supabaseClient === "undefined") {
+        throw new Error("Client Supabase non initialisé.");
     }
+
+    const { data: boutique, error: erreurBoutique } =
+        await supabaseClient
+            .from("shops")
+            .select("id")
+            .eq("slug", SLUG_BOUTIQUE)
+            .eq("status", "active")
+            .single();
+
+    if (erreurBoutique) {
+        throw erreurBoutique;
+    }
+
+    const { data: produitsSupabase, error: erreurProduits } =
+        await supabaseClient
+            .from("products")
+            .select(`
+                id,
+                legacy_id,
+                name,
+                slug,
+                description,
+                image_url,
+                video_url,
+                price,
+                popularity,
+                position,
+                categories (
+                    name,
+                    slug
+                ),
+                product_prices (
+                    quantity_min,
+                    quantity_max,
+                    total_price,
+                    city
+                )
+            `)
+            .eq("shop_id", boutique.id)
+            .eq("status", "published")
+            .order("position", { ascending: true });
+
+    if (erreurProduits) {
+        throw erreurProduits;
+    }
+
+    return (produitsSupabase || []).map(produit => {
+
+        // On conserve uniquement les tarifs standards.
+        // Les anciens tarifs spéciaux par ville sont ignorés.
+
+        const tarifsStandards = (produit.product_prices || [])
+            .filter(tarif => tarif.city === null)
+            .map(tarif => ({
+                grammage: Number(tarif.quantity_min),
+                grammageMax: Number(tarif.quantity_max),
+                prix: Number(tarif.total_price)
+            }))
+            .sort((a, b) => a.grammage - b.grammage);
+
+        return {
+
+            id: produit.legacy_id || produit.id,
+
+            uuid: produit.id,
+
+            nom: produit.name,
+
+            slug: produit.slug,
+
+            categorie: produit.categories?.slug || "",
+
+            description: produit.description || "",
+
+            image: produit.image_url || "",
+
+            video: produit.video_url || "",
+
+            prix: Number(produit.price) || 0,
+
+            popularite: Number(produit.popularity) || 0,
+
+            tarifs: tarifsStandards
+
+        };
+
+    });
 
 }
 
 
 /* ==========================================
-   4. CRÉER UNE CARTE PRODUIT
+   4. PROMESSE DE CHARGEMENT DU CATALOGUE
+========================================== */
+
+window.cataloguePret = obtenirCatalogue()
+    .then(catalogue => {
+
+        window.produits = catalogue;
+
+        console.log(
+            "Catalogue CALI29 chargé :",
+            window.produits.length,
+            "produit(s)"
+        );
+
+        return window.produits;
+
+    })
+    .catch(erreur => {
+
+        console.error("Erreur chargement catalogue :", erreur);
+
+        window.produits = [];
+
+        throw erreur;
+
+    });
+
+
+/* ==========================================
+   5. CRÉER UNE CARTE PRODUIT
 ========================================== */
 
 function creerCarteProduit(produit) {
@@ -180,17 +213,10 @@ function creerCarteProduit(produit) {
                 <p>${echapperHTML(produit.description)}</p>
 
                 <div class="prix-produit">
-                    ${formaterPrixCatalogue(produit.prix)}
+                    ${obtenirPrixAfficheCatalogue(produit)}
                 </div>
 
             </a>
-
-            <button
-                class="bouton-ajouter"
-                type="button"
-            >
-                AJOUTER AU PANIER +
-            </button>
 
         </article>
     `;
@@ -199,49 +225,57 @@ function creerCarteProduit(produit) {
 
 
 /* ==========================================
-   5. AFFICHER LE CATALOGUE
+   6. AFFICHER LE CATALOGUE
 ========================================== */
 
-function afficherCatalogue() {
+async function afficherCatalogue() {
 
-    const conteneur = document.getElementById('catalogue-produits');
+    const conteneur = document.getElementById("catalogue-produits");
 
     if (!conteneur) return;
 
-    const catalogue = obtenirCatalogue();
+    conteneur.innerHTML = "<p>Chargement du catalogue...</p>";
 
-    const sectionCategorie = conteneur.closest('[data-categorie]');
+    try {
 
-    const categorie = sectionCategorie?.dataset.categorie;
+        const catalogue = await window.cataloguePret;
 
+        const sectionCategorie = conteneur.closest("[data-categorie]");
 
-    function obtenirProduitsAffiches() {
+        const categorie = sectionCategorie?.dataset.categorie;
 
-        return categorie
+        const produitsAffiches = categorie
             ? catalogue.filter(produit => produit.categorie === categorie)
-            : catalogue.slice(0, 4);
+            : [...catalogue]
+                .sort((a, b) => b.popularite - a.popularite)
+                .slice(0, 4);
+
+        conteneur.innerHTML = produitsAffiches.length
+            ? produitsAffiches.map(creerCarteProduit).join("")
+            : `
+                <p class="catalogue-vide">
+                    Aucun produit dans cette catégorie pour le moment.
+                </p>
+            `;
+
+    } catch (erreur) {
+
+        console.error("Erreur affichage catalogue :", erreur);
+
+        conteneur.innerHTML = `
+            <p class="catalogue-vide">
+                Impossible de charger le catalogue.
+                Veuillez réessayer ultérieurement.
+            </p>
+        `;
 
     }
-
-
-    function rendre() {
-
-        const liste = obtenirProduitsAffiches();
-
-        conteneur.innerHTML = liste.length
-            ? liste.map(creerCarteProduit).join('')
-            : '<p class="catalogue-vide">Aucun produit dans cette catégorie pour le moment.</p>';
-
-    }
-
-
-    rendre();
 
 }
 
 
 /* ==========================================
-   6. INITIALISATION
+   7. INITIALISATION
 ========================================== */
 
-document.addEventListener('DOMContentLoaded', afficherCatalogue);
+document.addEventListener("DOMContentLoaded", afficherCatalogue);

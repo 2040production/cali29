@@ -1,44 +1,62 @@
 
 /* ==========================================
-   MENU CALI29
+   MENU CALI29 V2
    Navigation ordinateur et mobile
 ========================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
+    "use strict";
 
     const boutonBurger = document.getElementById("menu-burger");
     const menuMobile = document.getElementById("menu-mobile");
 
+    const boutonCompteMobile = document.getElementById("ouvrir-compte-mobile");
+
     const boutiqueDropdown = document.getElementById("boutique-dropdown");
     const boutonBoutique = document.getElementById("boutique-toggle");
 
-    /* MENU MOBILE */
+    /* ==========================================
+       MENU MOBILE
+    ========================================== */
 
     function fermerMenuMobile() {
         if (!boutonBurger || !menuMobile) return;
 
         menuMobile.hidden = true;
+
         boutonBurger.setAttribute("aria-expanded", "false");
         boutonBurger.setAttribute("aria-label", "Ouvrir le menu");
 
         const icone = boutonBurger.querySelector(".burger-icone");
-        if (icone) icone.textContent = "☰";
+
+        if (icone) {
+            icone.textContent = "☰";
+        }
+    }
+
+    function ouvrirMenuMobile() {
+        if (!boutonBurger || !menuMobile) return;
+
+        menuMobile.hidden = false;
+
+        boutonBurger.setAttribute("aria-expanded", "true");
+        boutonBurger.setAttribute("aria-label", "Fermer le menu");
+
+        const icone = boutonBurger.querySelector(".burger-icone");
+
+        if (icone) {
+            icone.textContent = "✕";
+        }
     }
 
     function basculerMenuMobile() {
-        if (!boutonBurger || !menuMobile) return;
+        if (!menuMobile) return;
 
-        const ouverture = menuMobile.hidden;
-
-        menuMobile.hidden = !ouverture;
-        boutonBurger.setAttribute("aria-expanded", String(ouverture));
-        boutonBurger.setAttribute(
-            "aria-label",
-            ouverture ? "Fermer le menu" : "Ouvrir le menu"
-        );
-
-        const icone = boutonBurger.querySelector(".burger-icone");
-        if (icone) icone.textContent = ouverture ? "✕" : "☰";
+        if (menuMobile.hidden) {
+            ouvrirMenuMobile();
+        } else {
+            fermerMenuMobile();
+        }
     }
 
     if (boutonBurger && menuMobile) {
@@ -49,7 +67,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    /* SOUS-MENU BOUTIQUE SUR ORDINATEUR */
+    /* ==========================================
+       BOUTON MON COMPTE MOBILE
+    ========================================== */
+
+    if (boutonCompteMobile) {
+        boutonCompteMobile.addEventListener("click", () => {
+            fermerMenuMobile();
+
+            // L'ouverture de la fenêtre compte est gérée par auth.js.
+        });
+    }
+
+    /* ==========================================
+       SOUS-MENU BOUTIQUE ORDINATEUR
+    ========================================== */
 
     function fermerBoutique() {
         if (!boutiqueDropdown || !boutonBoutique) return;
@@ -58,25 +90,32 @@ document.addEventListener("DOMContentLoaded", () => {
         boutonBoutique.setAttribute("aria-expanded", "false");
     }
 
-    if (boutiqueDropdown && boutonBoutique) {
-        boutonBoutique.addEventListener("click", event => {
-            event.stopPropagation();
+    function basculerBoutique(event) {
+        if (!boutiqueDropdown || !boutonBoutique) return;
 
-            const ouverture = !boutiqueDropdown.classList.contains("ouvert");
+        event.stopPropagation();
 
-            boutiqueDropdown.classList.toggle("ouvert", ouverture);
-            boutonBoutique.setAttribute("aria-expanded", String(ouverture));
-        });
+        const ouverture = !boutiqueDropdown.classList.contains("ouvert");
 
-        boutiqueDropdown.querySelectorAll(".boutique-sous-menu a").forEach(lien => {
-            lien.addEventListener("click", fermerBoutique);
-        });
+        boutiqueDropdown.classList.toggle("ouvert", ouverture);
+        boutonBoutique.setAttribute("aria-expanded", String(ouverture));
     }
 
-    /* FERMETURE EN CLIQUANT À L'EXTÉRIEUR */
+    if (boutiqueDropdown && boutonBoutique) {
+        boutonBoutique.addEventListener("click", basculerBoutique);
+
+        boutiqueDropdown
+            .querySelectorAll(".boutique-sous-menu a")
+            .forEach(lien => {
+                lien.addEventListener("click", fermerBoutique);
+            });
+    }
+
+    /* ==========================================
+       FERMETURE EN CLIQUANT À L'EXTÉRIEUR
+    ========================================== */
 
     document.addEventListener("click", event => {
-
         if (
             boutiqueDropdown &&
             !boutiqueDropdown.contains(event.target)
@@ -95,7 +134,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    /* FERMETURE AVEC ÉCHAP */
+    /* ==========================================
+       FERMETURE AVEC ÉCHAP
+    ========================================== */
 
     document.addEventListener("keydown", event => {
         if (event.key === "Escape") {
@@ -104,7 +145,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    /* PASSAGE DE MOBILE À ORDINATEUR */
+    /* ==========================================
+       PASSAGE DE MOBILE À ORDINATEUR
+    ========================================== */
 
     window.addEventListener("resize", () => {
         if (window.innerWidth > 768) {

@@ -1,492 +1,243 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-
-<head>
-
-    <!-- =================================
-         01 - CONFIGURATION
-    ================================== -->
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Produit | CALI29</title>
+    <meta name="description" content="Découvrez notre sélection CALI29." />
 
-    <meta
-        name="description"
-        content="Découvrez notre sélection CALI29."
-    >
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
-    <!-- POLICE MANROPE -->
+    <link rel="stylesheet" href="css/style.css?v=20261119-1" />
+    <link rel="stylesheet" href="css/header.css?v=20261119-1" />
+    <link rel="stylesheet" href="css/produits.css?v=20261119-1" />
+    <link rel="stylesheet" href="css/panier.css?v=20261119-1" />
+    <link rel="stylesheet" href="css/footer.css?v=20261119-1" />
+    <link rel="stylesheet" href="css/ficheProduit.css?v=20261119-1" />
+    <link rel="stylesheet" href="css/responsive.css?v=20261119-1" />
+    <link rel="stylesheet" href="css/compte.css?v=20261120-1" />
+  </head>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet"
-    >
-
-    <!-- FEUILLES DE STYLE -->
-
-    <link rel="stylesheet" href="css/style.css?v=20261119-1">
-    <link rel="stylesheet" href="css/header.css?v=20261119-1">
-    <link rel="stylesheet" href="css/produits.css?v=20261119-1">
-    <link rel="stylesheet" href="css/panier.css?v=20261119-1">
-    <link rel="stylesheet" href="css/footer.css?v=20261119-1">
-    <link rel="stylesheet" href="css/ficheProduit.css?v=20261119-1">
-    <link rel="stylesheet" href="css/responsive.css?v=20261119-1">
-
-</head>
-
-<body>
-
-    <!-- =================================
-         02 - HEADER
-    ================================== -->
-
+  <body>
     <header id="header" class="header">
+      <button id="menu-burger" class="menu-burger" type="button"
+        aria-label="Ouvrir le menu" aria-controls="menu-mobile" aria-expanded="false">
+        <span class="burger-icone">☰</span>
+      </button>
 
-        <!-- BOUTON MENU MOBILE -->
+      <a href="index.html" class="logo">CALI29</a>
 
-        <button
-            id="menu-burger"
-            class="menu-burger"
-            type="button"
-            aria-label="Ouvrir le menu"
-            aria-controls="menu-mobile"
-            aria-expanded="false"
-        >
-            <span class="burger-icone">☰</span>
+      <nav class="navigation-desktop">
+        <a href="index.html" class="lien-navigation">Accueil</a>
+        <div id="boutique-dropdown" class="boutique-dropdown">
+          <button id="boutique-toggle" class="lien-navigation boutique-toggle"
+            type="button" aria-expanded="false" aria-haspopup="true">
+            Boutique
+          </button>
+          <div class="boutique-sous-menu">
+            <a href="fleur.html">Fleurs</a>
+            <a href="resine.html">Résines</a>
+            <a href="accessoires.html">Accessoires</a>
+          </div>
+        </div>
+      </nav>
+
+      <div class="header-actions">
+        <button id="ouvrir-compte" class="bouton-compte" type="button">
+          <span class="compte-icone">♙</span>
+          <span id="libelle-compte">Mon compte</span>
         </button>
-
-
-        <!-- LOGO -->
-
-        <a href="index.html" class="logo">
-            CALI29
+        <a href="panier.html" id="ouvrir-panier" class="bouton-panier">
+          Panier <span id="nombre-articles">0</span>
         </a>
+      </div>
 
-
-        <!-- NAVIGATION ORDINATEUR -->
-
-        <nav class="navigation-desktop">
-
-            <a href="index.html" class="lien-navigation">
-                Accueil
-            </a>
-
-
-            <!-- MENU DÉROULANT BOUTIQUE -->
-
-            <div id="boutique-dropdown" class="boutique-dropdown">
-
-                <button
-                    id="boutique-toggle"
-                    class="lien-navigation boutique-toggle"
-                    type="button"
-                    aria-expanded="false"
-                    aria-haspopup="true"
-                >
-                    Boutique
-                </button>
-
-
-                <!-- SOUS-MENU -->
-
-                <div class="boutique-sous-menu">
-
-                    <a href="fleur.html">
-                        Fleurs
-                    </a>
-
-                    <a href="resine.html">
-                        Résines
-                    </a>
-
-                    <a href="accessoires.html">
-                        Produits
-                    </a>
-
-                </div>
-
-            </div>
-
-        </nav>
-
-
-        <!-- PANIER -->
-
-        <a
-            href="panier.html"
-            id="ouvrir-panier"
-            class="bouton-panier"
-        >
-            Panier
-            <span id="nombre-articles">0</span>
-        </a>
-
-
-        <!-- MENU MOBILE -->
-
-        <nav
-            id="menu-mobile"
-            class="menu-mobile"
-            hidden
-        >
-
-            <a href="index.html">
-                Accueil
-            </a>
-
-            <a href="fleur.html">
-                Fleurs
-            </a>
-
-            <a href="resine.html">
-                Résines
-            </a>
-
-            <a href="accessoires.html">
-                Produits
-            </a>
-
-            <a href="panier.html">
-                Mon panier
-            </a>
-
-        </nav>
-
+      <nav id="menu-mobile" class="menu-mobile" hidden>
+        <a href="index.html">Accueil</a>
+        <a href="fleur.html">Fleurs</a>
+        <a href="resine.html">Résines</a>
+        <a href="accessoires.html">Accessoires</a>
+        <a href="panier.html">Mon panier</a>
+        <button type="button" id="ouvrir-compte-mobile" class="menu-mobile-compte">
+          Mon compte
+        </button>
+      </nav>
     </header>
 
-
-    <!-- =================================
-         03 - CONTENU PRINCIPAL
-    ================================== -->
-
     <main>
+      <section class="fiche-produit">
+        <div class="fiche-produit-container">
+          <div class="fiche-produit-galerie">
+            <div class="fiche-produit-image-principale">
+              <video id="video-produit" controls muted loop playsinline preload="metadata" hidden>
+                Votre navigateur ne prend pas en charge la vidéo.
+              </video>
+            </div>
+          </div>
 
-        <!-- FICHE PRODUIT -->
+          <div class="fiche-produit-informations">
+            <p class="fiche-produit-surtitre">CALI29 COLLECTION</p>
+            <p class="fiche-produit-categorie">FLEURS</p>
+            <h1 class="fiche-produit-titre">Nom du produit</h1>
+            <p class="fiche-produit-prix">15,00 €</p>
 
-        <section class="fiche-produit">
+            <div class="fiche-produit-grammage" id="bloc-grammage" hidden>
+              <label for="grammage-produit">Choisir le grammage</label>
+              <select id="grammage-produit"></select>
+            </div>
 
-            <div class="fiche-produit-container">
+            <div class="fiche-produit-tarifs" id="infos-tarifs" hidden>
+              <div class="fiche-produit-tarif-info">
+                <span class="fiche-produit-tarif-label">PRIX AU GRAMME</span>
+                <strong class="fiche-produit-tarif-valeur" id="prix-au-gramme">0,00 €/g</strong>
+              </div>
 
-                <!-- GALERIE VIDÉO -->
+              <div class="fiche-produit-tarif-info">
+                <span class="fiche-produit-tarif-label">PRIX TOTAL</span>
+                <strong class="fiche-produit-tarif-valeur" id="prix-total-tarif">0,00 €</strong>
+              </div>
 
-                <div class="fiche-produit-galerie">
-
-                    <div class="fiche-produit-image-principale">
-
-                        <video
-                            id="video-produit"
-                            controls
-                            muted
-                            loop
-                            playsinline
-                            preload="metadata"
-                            hidden
-                        >
-                            Votre navigateur ne prend pas en charge la vidéo.
-                        </video>
-
-                    </div>
-
+              <div class="fiche-produit-economie" id="bloc-economie" hidden>
+                <div class="fiche-produit-economie-texte">
+                  <span>Vous économisez</span>
+                  <strong id="economie-realisee">0,00 €</strong>
                 </div>
-
-
-                <!-- INFORMATIONS PRODUIT -->
-
-                <div class="fiche-produit-informations">
-
-                    <p class="fiche-produit-surtitre">
-                        CALI29 COLLECTION
-                    </p>
-
-                    <p class="fiche-produit-categorie">
-                        FLEURS
-                    </p>
-
-                    <h1 class="fiche-produit-titre">
-                        Nom du produit
-                    </h1>
-
-                    <p class="fiche-produit-prix">
-                        15,00 €
-                    </p>
-
-
-                    <!-- SÉLECTION DU GRAMMAGE -->
-
-                    <div
-                        class="fiche-produit-grammage"
-                        id="bloc-grammage"
-                        hidden
-                    >
-
-                        <label for="grammage-produit">
-                            Choisir le grammage
-                        </label>
-
-                        <select id="grammage-produit"></select>
-
-                    </div>
-
-
-                    <!-- INFORMATIONS TARIFAIRES -->
-
-                    <div
-                        class="fiche-produit-tarifs"
-                        id="infos-tarifs"
-                        hidden
-                    >
-
-                        <div class="fiche-produit-tarif-info">
-
-                            <span class="fiche-produit-tarif-label">
-                                PRIX AU GRAMME
-                            </span>
-
-                            <strong
-                                class="fiche-produit-tarif-valeur"
-                                id="prix-au-gramme"
-                            >
-                                0,00 €/g
-                            </strong>
-
-                        </div>
-
-
-                        <div class="fiche-produit-tarif-info">
-
-                            <span class="fiche-produit-tarif-label">
-                                PRIX TOTAL
-                            </span>
-
-                            <strong
-                                class="fiche-produit-tarif-valeur"
-                                id="prix-total-tarif"
-                            >
-                                0,00 €
-                            </strong>
-
-                        </div>
-
-
-                        <!-- ÉCONOMIE RÉALISÉE -->
-
-                        <div
-                            class="fiche-produit-economie"
-                            id="bloc-economie"
-                            hidden
-                        >
-
-                            <div class="fiche-produit-economie-texte">
-
-                                <span>
-                                    Vous économisez
-                                </span>
-
-                                <strong id="economie-realisee">
-                                    0,00 €
-                                </strong>
-
-                            </div>
-
-                            <span
-                                class="fiche-produit-economie-pourcentage"
-                                id="pourcentage-economie"
-                            >
-                                -0 %
-                            </span>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- DESCRIPTION -->
-
-                    <div class="fiche-produit-description">
-
-                        <h2>Description</h2>
-
-                        <p>
-                            Présentation détaillée du produit.
-                            Remplace ce texte par les informations correspondant à ton article.
-                        </p>
-
-                    </div>
-
-
-                    <!-- QUANTITÉ -->
-
-                    <div class="fiche-produit-quantite">
-
-                        <label for="quantite-produit">
-                            Quantité
-                        </label>
-
-                        <input
-                            type="number"
-                            id="quantite-produit"
-                            name="quantite"
-                            value="1"
-                            min="1"
-                        >
-
-                    </div>
-
-
-                    <!-- AJOUT PANIER -->
-
-                    <button
-                        type="button"
-                        class="bouton-ajouter-panier"
-                        id="ajouter-produit-panier"
-                    >
-                        AJOUTER AU PANIER +
-                    </button>
-
-                </div>
-
+                <span class="fiche-produit-economie-pourcentage" id="pourcentage-economie">-0 %</span>
+              </div>
             </div>
 
-        </section>
-
-
-        <!-- =================================
-             PRODUITS SIMILAIRES
-        ================================== -->
-
-        <!--
-        <section class="produits-similaires">
-
-            <div class="section-titre">
-
-                <p class="section-surtitre">
-                    CALI29 COLLECTION
-                </p>
-
-                <h2>VOUS POURRIEZ AUSSI AIMER</h2>
-
+            <div class="fiche-produit-description">
+              <h2>Description</h2>
+              <p>
+                Présentation détaillée du produit. Remplace ce texte par les
+                informations correspondant à ton article.
+              </p>
             </div>
 
-            <div class="produits-similaires-grille">
-
-                <article class="carte-produit">
-
-                    <img
-                        src="assets/images/similaire-1.png"
-                        alt="Produit similaire 1"
-                    >
-
-                    <h3>Nom du produit 1</h3>
-                    <p>12,00 €</p>
-
-                </article>
-
-
-                <article class="carte-produit">
-
-                    <img
-                        src="assets/images/similaire-2.png"
-                        alt="Produit similaire 2"
-                    >
-
-                    <h3>Nom du produit 2</h3>
-                    <p>15,00 €</p>
-
-                </article>
-
-
-                <article class="carte-produit">
-
-                    <img
-                        src="assets/images/similaire-3.png"
-                        alt="Produit similaire 3"
-                    >
-
-                    <h3>Nom du produit 3</h3>
-                    <p>18,00 €</p>
-
-                </article>
-
+            <div class="fiche-produit-quantite">
+              <label for="quantite-produit">Quantité</label>
+              <input type="number" id="quantite-produit" name="quantite" value="1" min="1" />
             </div>
 
-        </section>
-        -->
+            <button type="button" class="bouton-ajouter-panier" id="ajouter-produit-panier">
+              AJOUTER AU PANIER +
+            </button>
+          </div>
+        </div>
+      </section>
 
+      <!-- PRODUITS SIMILAIRES DÉSACTIVÉS POUR LE MOMENT -->
     </main>
 
-
-    <!-- =================================
-         04 - PANIER FIXE MOBILE
-    ================================== -->
-
     <div id="panier-fixe" class="panier-fixe">
-
-        <div class="panier-informations">
-
-            <span>MON PANIER</span>
-
-            <strong id="panier-total">
-                0,00 €
-            </strong>
-
-        </div>
-
-        <a
-            href="panier.html"
-            class="bouton-commander"
-        >
-            VOIR MON PANIER →
-        </a>
-
+      <div class="panier-informations">
+        <span>MON PANIER</span>
+        <strong id="panier-total">0,00 €</strong>
+      </div>
+      <a href="panier.html" class="bouton-commander">VOIR MON PANIER →</a>
     </div>
 
-
-    <!-- =================================
-         05 - FOOTER
-    ================================== -->
-
     <footer class="footer">
-
-        <div class="footer-contenu">
-
-            <a href="index.html" class="logo">
-                CALI29
-            </a>
-
-            <nav class="footer-liens">
-
-                <a href="index.html">Accueil</a>
-                <a href="fleur.html">Fleurs</a>
-                <a href="resine.html">Résines</a>
-                <a href="accessoires.html">Produits</a>
-
-            </nav>
-
-        </div>
-
-        <p class="footer-bas">
-            © CALI29 - Tous droits réservés
-        </p>
-
+      <div class="footer-contenu">
+        <a href="index.html" class="logo">CALI29</a>
+        <nav class="footer-liens">
+          <a href="index.html">Accueil</a>
+          <a href="fleur.html">Fleurs</a>
+          <a href="resine.html">Résines</a>
+          <a href="accessoires.html">Produits</a>
+        </nav>
+      </div>
+      <p class="footer-bas">© CALI29 - Tous droits réservés</p>
     </footer>
 
+    <!-- FENÊTRE COMPTE CLIENT -->
+    <div id="compte-modal" class="compte-modal" hidden>
+      <div class="compte-overlay" data-fermer-compte></div>
 
-    <!-- =================================
-         06 - JAVASCRIPT
-    ================================== -->
+      <section class="compte-fenetre" role="dialog" aria-modal="true" aria-labelledby="compte-titre">
+        <button type="button" class="compte-fermer" data-fermer-compte aria-label="Fermer">×</button>
+        <div class="compte-logo">CALI29</div>
+        <h2 id="compte-titre">Mon compte</h2>
+        <p id="compte-description">Connectez-vous avec votre pseudo et votre mot de passe.</p>
 
-    <script src="js/menu.js?v=20261119-1" defer></script>
-    <script src="js/acces.js?v=20261119-1"></script>
-    <script src="js/produits.js?v=20261119-1" defer></script>
-    <script src="js/produit.js?v=20261119-1" defer></script>
-    <script src="js/panier.js?v=20261119-1" defer></script>
-    <script src="js/commande.js?v=20261119-1" defer></script>
+        <div id="compte-auth-vues">
+          <div class="compte-onglets">
+            <button type="button" class="compte-onglet actif" data-vue="connexion">Connexion</button>
+            <button type="button" class="compte-onglet" data-vue="inscription">Inscription</button>
+          </div>
 
-</body>
+          <form id="form-connexion">
+            <label for="connexion-pseudo">Pseudo</label>
+            <input type="text" id="connexion-pseudo" placeholder="Votre pseudo"
+              minlength="3" maxlength="24" autocomplete="username" required />
 
+            <label for="connexion-motdepasse">Mot de passe</label>
+            <input type="password" id="connexion-motdepasse"
+              placeholder="Votre mot de passe" autocomplete="current-password" required />
+
+            <button type="submit" class="compte-submit">Se connecter</button>
+          </form>
+
+          <form id="form-inscription" hidden>
+            <label for="inscription-pseudo">Choisir un pseudo</label>
+            <input type="text" id="inscription-pseudo" placeholder="3 à 24 caractères"
+              minlength="3" maxlength="24" pattern="[A-Za-z0-9_.\-]{3,24}"
+              autocomplete="username" required />
+
+            <label for="inscription-motdepasse">Mot de passe</label>
+            <input type="password" id="inscription-motdepasse"
+              placeholder="8 caractères minimum" minlength="8" maxlength="72"
+              autocomplete="new-password" required />
+
+            <label for="inscription-confirmation">Confirmer le mot de passe</label>
+            <input type="password" id="inscription-confirmation"
+              placeholder="Confirmer le mot de passe" minlength="8" maxlength="72"
+              autocomplete="new-password" required />
+
+            <button type="submit" class="compte-submit">Créer mon compte</button>
+          </form>
+        </div>
+
+        <div id="compte-connecte" hidden>
+          <div class="compte-bienvenue">
+            <span class="compte-avatar">♙</span>
+            <div>
+              <p>Bienvenue</p>
+              <strong id="compte-pseudo-connecte">Client</strong>
+            </div>
+          </div>
+
+          <div class="compte-informations">
+            <div><span>Prénom</span><strong id="compte-prenom">Non renseigné</strong></div>
+            <div><span>Nom</span><strong id="compte-nom">Non renseigné</strong></div>
+            <div><span>Téléphone</span><strong id="compte-telephone">Non renseigné</strong></div>
+            <div><span>Ville</span><strong id="compte-ville">Non renseignée</strong></div>
+          </div>
+
+          <button type="button" id="bouton-deconnexion" class="compte-deconnexion">
+            Se déconnecter
+          </button>
+        </div>
+
+        <p id="compte-message" class="compte-message" aria-live="polite"></p>
+      </section>
+    </div>
+
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase/client.js"></script>
+
+    <!-- SCRIPTS CALI29 -->
+
+    <script src="js/auth.js?v=20261122-3" defer></script>
+    <script src="js/menu.js?v=20261119-2" defer></script>
+    <script src="js/acces.js?v=20261119-2" defer></script>
+    <script src="js/catalogue.js?v=20261119-2" defer></script>
+    <script src="js/produit.js?v=20261119-3" defer></script>
+    <script src="js/panier.js?v=20261119-3" defer></script>
+    <script src="js/commande.js?v=20261119-2" defer></script>
+    <script src="js/auth.js?v=20261120-1" defer></script>
+  </body>
 </html>
