@@ -1,4 +1,3 @@
-
 /* ==========================================
    HEADER CALI29
    Navigation ordinateur + menu mobile
@@ -10,12 +9,10 @@
     width: 100%;
     min-height: 75px;
     padding: 0 6%;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 28px;
-
     background: #050316;
     border-bottom: 1px solid rgba(160, 0, 255, 0.2);
 }
@@ -28,7 +25,6 @@
     flex-shrink: 0;
     color: #ffffff;
     text-decoration: none;
-
     font-family: 'Manrope', sans-serif;
     font-size: 25px;
     font-weight: 800;
@@ -43,7 +39,6 @@
     display: flex;
     align-items: center;
     gap: 32px;
-
     margin-left: auto;
     margin-right: auto;
 }
@@ -53,18 +48,14 @@
     align-items: center;
     justify-content: center;
     gap: 7px;
-
     padding: 12px 4px;
-
     color: #ffffff;
     background: transparent;
     border: 0;
     text-decoration: none;
-
     font-family: 'Manrope', sans-serif;
     font-size: 15px;
     font-weight: 700;
-
     cursor: pointer;
     transition: color 0.2s ease;
 }
@@ -91,13 +82,10 @@
 
 .boutique-toggle::after {
     content: "";
-
     width: 7px;
     height: 7px;
-
     border-right: 1.8px solid currentColor;
     border-bottom: 1.8px solid currentColor;
-
     transform: rotate(45deg) translateY(-2px);
     transition: transform 0.25s ease;
 }
@@ -110,17 +98,12 @@
     position: absolute;
     top: calc(100% + 8px);
     left: 0;
-
     display: none;
-
     min-width: 185px;
     padding: 8px;
-
     background: #100a25;
-
     border: 1px solid rgba(160, 0, 255, 0.35);
     border-radius: 12px;
-
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
 }
 
@@ -132,14 +115,11 @@
 .boutique-sous-menu a {
     display: block;
     padding: 11px 13px;
-
     color: #ffffff;
     text-decoration: none;
-
     font-family: 'Manrope', sans-serif;
     font-size: 13px;
     font-weight: 600;
-
     border-radius: 7px;
     transition: background 0.2s ease, color 0.2s ease;
 }
@@ -171,23 +151,17 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-
     min-height: 40px;
     padding: 9px 14px;
-
     color: #ffffff;
     background: rgba(160, 0, 255, 0.08);
-
     border: 1px solid rgba(160, 0, 255, 0.4);
     border-radius: 30px;
-
     font-family: 'Manrope', sans-serif;
     font-size: 12px;
     font-weight: 700;
-
     cursor: pointer;
     white-space: nowrap;
-
     transition: 0.25s ease;
 }
 
@@ -208,26 +182,19 @@
 
 .bouton-panier {
     flex-shrink: 0;
-
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
-
     padding: 10px 18px;
-
     color: #ffffff;
     text-decoration: none;
-
     font-family: 'Manrope', sans-serif;
     font-size: 13px;
     font-weight: 700;
-
     background: rgba(160, 0, 255, 0.10);
-
     border: 1px solid rgba(160, 0, 255, 0.4);
     border-radius: 30px;
-
     transition: 0.25s ease;
 }
 
@@ -244,17 +211,13 @@
     min-width: 22px;
     height: 22px;
     padding: 0 5px;
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     color: #ffffff;
     background: #A000FF;
-
     font-size: 11px;
     font-weight: 800;
-
     border-radius: 50px;
 }
 
@@ -282,7 +245,6 @@
 ========================================== */
 
 @media (max-width: 768px) {
-
     .header {
         min-height: 70px;
         height: 70px;
@@ -294,19 +256,15 @@
 
     .menu-burger {
         flex-shrink: 0;
-
         display: inline-flex;
         align-items: center;
         justify-content: center;
-
         width: 35px;
         height: 38px;
         padding: 0;
-
         color: #ffffff;
         background: transparent;
         border: 0;
-
         font-size: 25px;
         cursor: pointer;
     }
@@ -358,21 +316,15 @@
 
     .menu-mobile:not([hidden]) {
         position: absolute;
-
         top: 100%;
         left: 0;
         right: 0;
-
         display: flex;
         flex-direction: column;
         gap: 4px;
-
         padding: 12px 15px 16px;
-
         background: #08051b;
-
         border-bottom: 1px solid rgba(160, 0, 255, 0.3);
-
         box-shadow: 0 14px 25px rgba(0, 0, 0, 0.35);
     }
 
@@ -382,18 +334,14 @@
     .menu-mobile-compte {
         display: block;
         width: 100%;
-
         padding: 13px 14px;
-
         color: #ffffff;
         background: transparent;
         text-align: left;
         text-decoration: none;
-
         font-family: 'Manrope', sans-serif;
         font-size: 13px;
         font-weight: 700;
-
         border: 0;
         border-radius: 8px;
         cursor: pointer;
@@ -475,6 +423,7 @@
     from {
         transform: translateX(0);
     }
+
     to {
         transform: translateX(-50%);
     }

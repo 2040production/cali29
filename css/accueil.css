@@ -1,45 +1,46 @@
+
+
 /* ==========================================
-   02 - HERO / BANNIÈRE PRINCIPALE
+   HERO CALI29 — BLOCS SUPERPOSÉS
 ========================================== */
 
 .hero {
     position: relative;
-
-    width: 100%;
-    min-height: 580px;
-
-    display: flex;
-    align-items: center;
-
-    overflow: hidden;
     isolation: isolate;
 
+    width: 100%;
+    height: 500px;
+    min-height: 0;
+
+    display: block;
+
+    overflow: hidden;
     background: #08051B;
 }
 
-/* IMAGE EN ARRIÈRE-PLAN */
+/* IMAGE : COUCHE DU FOND */
 
 .hero-image {
-    position: absolute;
-    inset: 0;
+    position: absolute !important;
+    inset: 0 !important;
 
-    width: 100%;
-    height: 100%;
+    width: 100% !important;
+    height: 100% !important;
 
-    z-index: -2;
+    z-index: 0 !important;
 }
 
 .hero-image img {
+    display: block;
+
     width: 100%;
     height: 100%;
-
-    display: block;
 
     object-fit: cover;
     object-position: center;
 }
 
-/* DÉGRADÉ POUR LE TEXTE */
+/* DÉGRADÉ : AU-DESSUS DE L'IMAGE */
 
 .hero::before {
     content: "";
@@ -47,103 +48,82 @@
     position: absolute;
     inset: 0;
 
-    z-index: -1;
+    z-index: 1;
+    pointer-events: none;
 
     background: linear-gradient(
         90deg,
-        rgba(5, 3, 22, 0.96) 0%,
-        rgba(5, 3, 22, 0.75) 30%,
-        rgba(5, 3, 22, 0.15) 65%,
+        #050316 0%,
+        rgba(5, 3, 22, 0.96) 12%,
+        rgba(5, 3, 22, 0.82) 25%,
+        rgba(5, 3, 22, 0.58) 40%,
+        rgba(5, 3, 22, 0.25) 55%,
+        rgba(5, 3, 22, 0.05) 72%,
         transparent 100%
     );
 }
 
-/* CONTENU DU HERO */
+/* TEXTE : AU-DESSUS DU DÉGRADÉ */
 
 .hero-contenu {
-    position: relative;
-    z-index: 2;
+    position: absolute !important;
 
-    width: 48%;
-    max-width: 650px;
+    top: 50%;
+    left: 0;
 
-    padding: 40px 35px;
+    transform: translateY(-50%);
 
-    color: white;
-}
+    z-index: 2 !important;
 
-/* PETIT TITRE */
+    width: 52%;
+    max-width: 720px;
 
-.hero-surtitre {
+    padding: 30px 35px 30px 5%;
+
+    box-sizing: border-box;
+
     color: #FFFFFF;
-
-    font-size: 15px;
-    font-weight: 800;
-    letter-spacing: 5px;
-
-    margin-bottom: 20px;
-
-    text-shadow: 0 0 12px #F000D9;
 }
 
-/* GRAND TITRE */
+/* TITRE */
 
 .hero-contenu h1 {
-    color: white;
-
-    font-size: clamp(38px, 5vw, 68px);
-    font-weight: 800;
-
+    font-size: clamp(34px, 4.2vw, 60px);
     line-height: 1.05;
-    letter-spacing: -2px;
-
-    margin: 0 0 20px;
-
-    text-shadow: 0 0 20px #006CFF66;
+    letter-spacing: -1.8px;
+    margin: 0 0 18px;
 }
 
-/* DESCRIPTION */
+/* IMAGE MOBILE */
 
-.hero-description {
-    color: #E3DDF0;
+@media (max-width: 768px) {
+    .hero {
+        height: 430px;
+    }
 
-    font-size: 16px;
-    line-height: 1.6;
+    .hero-image img {
+        object-position: 65% center;
+    }
 
-    margin-bottom: 28px;
-}
+    .hero-contenu {
+        width: 100%;
+        max-width: 520px;
+        padding: 25px 20px;
+    }
 
-/* BOUTON PRINCIPAL */
+    .hero::before {
+        background: linear-gradient(
+            90deg,
+            rgba(5, 3, 22, 0.96) 0%,
+            rgba(5, 3, 22, 0.82) 40%,
+            rgba(5, 3, 22, 0.45) 75%,
+            rgba(5, 3, 22, 0.15) 100%
+        );
+    }
 
-.bouton-principal {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 16px 28px;
-
-    background: linear-gradient(
-        90deg,
-        #D900FF,
-        #FF009D
-    );
-
-    border-radius: 40px;
-
-    color: white;
-    font-size: 15px;
-    font-weight: 800;
-
-    text-decoration: none;
-
-    box-shadow: 0 0 22px #F000D977;
-
-    transition: 0.3s ease;
-}
-
-.bouton-principal:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0 30px #F000D9;
+    .hero-contenu h1 {
+        font-size: clamp(30px, 8vw, 42px);
+    }
 }
 
 /* ==========================================
@@ -152,14 +132,17 @@
 
 .avantages {
     padding: 22px 15px;
+
     background: linear-gradient(
         90deg,
         #100727,
         #09051B,
         #100727
     );
+
     border-top: 1px solid #8D00FF;
     border-bottom: 1px solid #8D00FF;
+
     box-shadow:
         0 0 15px #8D00FF55,
         inset 0 0 15px #8D00FF22;
@@ -168,6 +151,7 @@
 .avantages-container {
     max-width: 1100px;
     margin: auto;
+
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 10px;
@@ -178,8 +162,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+
     text-align: center;
     gap: 8px;
+
     padding: 12px 5px;
 }
 
@@ -191,8 +177,10 @@
 
 .avantage p {
     color: #E8E2F5;
+
     font-size: 12px;
     font-weight: 700;
+
     margin: 0;
 }
 
@@ -202,6 +190,7 @@
 
 .categories {
     padding: 40px 18px;
+
     background:
         radial-gradient(
             ellipse at center,
@@ -214,47 +203,65 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 14px;
+
     max-width: 1100px;
     margin: auto;
 }
 
 .categorie {
     position: relative;
+
     min-height: 150px;
     overflow: hidden;
+
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
+
     border: 1px solid #A000FF;
     border-radius: 14px;
+
     padding: 10px;
+
     text-decoration: none;
+
     background: #100923;
+
     box-shadow: 0 0 12px #8500FF33;
+
     transition: 0.3s ease;
 }
 
 .categorie img {
     display: block;
+
     width: 100%;
     height: 100%;
+
     object-fit: contain;
+
     filter: drop-shadow(0 0 10px #D000FF);
+
     transition: transform 0.3s ease;
 }
 
 .categorie h3 {
     color: white;
+
     font-size: 14px;
     font-weight: 800;
+
     margin: 8px 0 2px;
+
     text-align: center;
 }
 
 .categorie:hover {
     border-color: var(--rose);
+
     box-shadow: 0 0 22px #F000D977;
+
     transform: translateY(-4px);
 }
 
@@ -270,9 +277,12 @@
     display: flex;
     align-items: center;
     gap: 30px;
+
     max-width: 1100px;
     margin: auto;
+
     padding: 50px 25px;
+
     background: radial-gradient(
         ellipse at center,
         #19083A,
@@ -287,9 +297,12 @@
 
 .univers-image img {
     display: block;
+
     width: 100%;
     max-height: 350px;
+
     object-fit: contain;
+
     filter: drop-shadow(0 0 18px #A000FF66);
 }
 
@@ -299,22 +312,32 @@
 
 .univers-contenu h2 {
     color: white;
+
     font-size: clamp(24px, 4vw, 38px);
     font-weight: 800;
+
     line-height: 1.2;
 }
 
 .univers-contenu p:last-child {
     color: var(--gris);
+
     font-size: 15px;
     line-height: 1.7;
 }
 
+/* ==========================================
+   ÉCRAN D'ACCÈS
+========================================== */
+
 .ecran-acces {
     position: fixed;
     inset: 0;
+
     z-index: 99999;
+
     background: #050316;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -323,57 +346,77 @@
 .acces-contenu {
     width: 90%;
     max-width: 360px;
+
     text-align: center;
 }
 
 .acces-logo {
     font-size: 38px;
     font-weight: 800;
+
     color: #A000FF;
+
     margin-bottom: 35px;
 }
 
 .acces-contenu h1 {
     color: white;
+
     font-size: 28px;
+
     margin: 15px 0 25px;
 }
 
 .acces-contenu > p {
     color: #A000FF;
+
     font-size: 12px;
     letter-spacing: 3px;
 }
 
 #code-acces {
     width: 100%;
+    box-sizing: border-box;
+
     padding: 15px;
+
     border: 1px solid #A000FF;
     border-radius: 8px;
+
     background: #100C25;
     color: white;
+
     text-align: center;
     font-family: inherit;
-    box-sizing: border-box;
 }
 
 #valider-acces {
     width: 100%;
+
     margin-top: 15px;
     padding: 15px;
+
     border: none;
     border-radius: 8px;
+
     background: #A000FF;
     color: white;
+
     font-weight: 800;
+
     cursor: pointer;
 }
 
 #message-erreur {
     color: #ff5555;
+
     font-size: 13px;
     letter-spacing: 0;
 }
+
+/* ==========================================
+   DÉFILEMENT
+========================================== */
 
 html {
     scroll-behavior: smooth;
@@ -382,3 +425,253 @@ html {
 #categories {
     scroll-margin-top: 90px;
 }
+
+/* ==========================================
+   VERSION MOBILE
+========================================== */
+
+@media (max-width: 768px) {
+
+    /* HERO MOBILE */
+
+    .hero {
+        height: 430px;
+        min-height: 0;
+        align-items: center;
+    }
+
+    .hero-image img {
+        object-position: 62% center;
+    }
+
+    .hero::before {
+        background: linear-gradient(
+            90deg,
+            rgba(5, 3, 22, 0.88) 0%,
+            rgba(5, 3, 22, 0.68) 45%,
+            rgba(5, 3, 22, 0.25) 100%
+        );
+    }
+
+    .hero-contenu {
+        width: 100%;
+        max-width: 580px;
+
+        padding: 25px 20px;
+    }
+
+    .hero-surtitre {
+        font-size: 11px;
+        letter-spacing: 3px;
+        margin-bottom: 14px;
+    }
+
+    .hero-contenu h1 {
+        font-size: clamp(30px, 8vw, 44px);
+        line-height: 1.08;
+        letter-spacing: -1px;
+        margin-bottom: 15px;
+    }
+
+    .hero-description {
+        max-width: 420px;
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+
+    .bouton-principal {
+        padding: 14px 22px;
+        font-size: 12px;
+    }
+
+    /* AVANTAGES */
+
+    .avantages {
+        padding: 15px 8px;
+    }
+
+    .avantages-container {
+        gap: 5px;
+    }
+
+    .avantage {
+        padding: 10px 3px;
+        gap: 6px;
+    }
+
+    .avantage-icone {
+        font-size: 22px;
+    }
+
+    .avantage p {
+        font-size: 10px;
+    }
+
+    /* CATÉGORIES */
+
+    .categories {
+        padding: 30px 12px;
+    }
+
+    .categories-container {
+        gap: 9px;
+    }
+
+    .categorie {
+        min-height: 125px;
+        padding: 7px;
+    }
+
+    .categorie h3 {
+        font-size: 12px;
+    }
+
+    /* UNIVERS */
+
+    .univers {
+        flex-direction: column;
+        gap: 20px;
+        padding: 35px 18px;
+        text-align: center;
+    }
+
+    .univers-image img {
+        max-height: 260px;
+    }
+
+    .univers-contenu h2 {
+        font-size: 28px;
+    }
+
+    .univers-contenu p:last-child {
+        font-size: 13px;
+    }
+}
+
+/* ==========================================
+   ACCESSIBILITÉ : MOUVEMENTS RÉDUITS
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    .bouton-principal,
+    .categorie,
+    .categorie img {
+        transition: none;
+    }
+
+    .bouton-principal:hover,
+    .categorie:hover {
+        transform: none;
+    }
+}
+
+
+/* ==========================================
+   HERO CALI29 — BOUTON PRINCIPAL
+========================================== */
+
+.hero .bouton-principal {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+
+    padding: 16px 28px;
+
+    background: linear-gradient(
+        90deg,
+        #D900FF,
+        #FF009D
+    ) !important;
+
+    border: none;
+    border-radius: 40px;
+
+    color: #FFFFFF !important;
+
+    font-family: 'Manrope', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+
+    text-decoration: none !important;
+
+    box-shadow: 0 0 22px rgba(240, 0, 217, 0.47);
+
+    cursor: pointer;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.hero .bouton-principal:hover {
+    transform: translateY(-3px);
+
+    box-shadow: 0 0 30px rgba(240, 0, 217, 0.8);
+}
+
+/* ==========================================
+   OFFRE LIMITÉE — BRILLANCE ANIMÉE
+========================================== */
+
+.hero-surtitre {
+    display: inline-block;
+
+    color: #FF7BFF;
+
+    text-shadow:
+        0 0 5px rgba(255, 0, 255, 0.7),
+        0 0 12px rgba(255, 0, 255, 0.5);
+
+    animation: brillance-offre 2.8s ease-in-out infinite;
+}
+
+@keyframes brillance-offre {
+    0%, 100% {
+        color: #FF7BFF;
+
+        text-shadow:
+            0 0 5px rgba(255, 0, 255, 0.5),
+            0 0 12px rgba(255, 0, 255, 0.35);
+    }
+
+    50% {
+        color: #FFFFFF;
+
+        text-shadow:
+            0 0 8px #FFFFFF,
+            0 0 18px #FF00FF,
+            0 0 32px #D900FF;
+    }
+}
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 768px) {
+    .hero .bouton-principal {
+        padding: 14px 22px;
+        font-size: 12px;
+    }
+}
+
+/* ==========================================
+   ACCESSIBILITÉ
+========================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-surtitre {
+        animation: none;
+    }
+
+    .hero .bouton-principal {
+        transition: none;
+    }
+}
+
+

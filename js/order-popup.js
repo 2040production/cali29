@@ -198,7 +198,8 @@ function afficherRecapitulatifPopup() {
     if (Number(details.montantReductionOffres) > 0) {
         ajouterLigneRecapitulatif(
             "Offres spéciales",
-            "-" + formatOrderPrice(details.montantReductionOffres),
+
+                        "-" + formatOrderPrice(details.montantReductionOffres),
             "order-popup-promo"
         );
     }
@@ -412,7 +413,6 @@ function afficherErreurMinimum(message) {
 function effacerErreurMinimum() {
     document.getElementById("order-minimum-error")?.remove();
 }
-
 
 /* ==========================================
    VÉRIFIER LE MINIMUM DE COMMANDE
@@ -636,9 +636,22 @@ async function envoyerCommande(platform) {
     if (!messageInitial) return;
 
     let fenetreContact = null;
+    let telegramOuvert = false;
 
     if (platform === "telegram") {
-        fenetreContact = window.open("about:blank", "_blank");
+        const username = ORDER_CONTACTS.telegram.replace("@", "");
+
+        if (!username) {
+            alert("Configure ton identifiant Telegram dans order-popup.js.");
+            return;
+        }
+
+        const telegramUrl =
+            "https://t.me/" + username + "?text=" +
+            encodeURIComponent(messageInitial);
+
+        // Ouvrir directement le lien Telegram évite de laisser un onglet about:blank.
+        fenetreContact = window.open(telegramUrl, "_blank");
 
         if (!fenetreContact) {
             alert(
@@ -652,9 +665,15 @@ async function envoyerCommande(platform) {
     verrouillerBoutonsContact(true);
 
     try {
-        const session = await recupererSessionClient();
-
         let message = messageInitial;
+
+        // Ouvrir Telegram immédiatement avec le récapitulatif prérempli.
+        // Ne pas attendre Supabase : cela peut empêcher le transfert du texte.
+        if (platform === "telegram") {
+            telegramOuvert = true;
+        }
+
+        const session = await recupererSessionClient();
         let referenceCommande = null;
         let commandeEnregistreeDansCompte = false;
 
@@ -670,21 +689,7 @@ async function envoyerCommande(platform) {
             commandeEnregistreeDansCompte = true;
         }
 
-        if (platform === "telegram") {
-            const username = ORDER_CONTACTS.telegram.replace("@", "");
-
-            if (!username) {
-                throw new Error(
-                    "Configure ton identifiant Telegram dans order-popup.js."
-                );
-            }
-
-            const encodedMessage = encodeURIComponent(message);
-
-            fenetreContact.location.href =
-                "https://t.me/" + username + "?text=" + encodedMessage;
-
-        } else if (platform === "signal") {
+        if (platform === "signal") {
             const lienSignal = ORDER_CONTACTS.signal;
 
             if (!lienSignal || !lienSignal.startsWith("https://signal.me/")) {
@@ -697,7 +702,7 @@ async function envoyerCommande(platform) {
 
             window.open(lienSignal, "_blank");
 
-        } else {
+        } else if (platform !== "telegram") {
             throw new Error("Moyen de contact inconnu.");
         }
 
@@ -727,7 +732,7 @@ async function envoyerCommande(platform) {
         fermerOrderPopup();
 
     } catch (error) {
-        if (fenetreContact && !fenetreContact.closed) {
+        if (fenetreContact && !fenetreContact.closed && !telegramOuvert) {
             fenetreContact.close();
         }
 

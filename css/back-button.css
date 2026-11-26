@@ -1,0 +1,83 @@
+/* Bouton de retour partagé par les pages CALI29 */
+.cali-back-spacer {
+    height: 68px;
+    pointer-events: none;
+}
+
+.cali-back-button {
+    position: fixed;
+    z-index: 900;
+    top: var(--cali-back-top, 122px);
+    left: max(22px, env(safe-area-inset-left));
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 48px;
+    padding: 0 18px 0 14px;
+    border: 1px solid rgba(0, 174, 255, 0.72);
+    border-radius: 999px;
+    background: rgba(13, 9, 37, 0.9);
+    color: #fff;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.34), 0 0 20px rgba(0, 119, 255, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    font: 700 14px/1 'Manrope', sans-serif;
+    cursor: pointer;
+    transition: opacity 220ms ease, transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.cali-back-button:hover {
+    transform: translateY(-2px);
+    border-color: #24baff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 24px rgba(0, 119, 255, 0.42);
+}
+
+.cali-back-button__icon {
+    display: grid;
+    width: 32px;
+    height: 32px;
+    place-items: center;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #20d5ff 0%, #087dff 55%, #1746ff 100%);
+    box-shadow: 0 0 16px rgba(0, 153, 255, 0.62);
+    color: #fff;
+}
+
+.cali-back-button__icon svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+    overflow: visible;
+}
+
+.cali-back-button__icon path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.cali-back-button.is-scrolling {
+    opacity: 0.16;
+    transform: scale(0.96);
+}
+
+@media (max-width: 768px) {
+    .cali-back-button {
+        left: max(14px, env(safe-area-inset-left));
+        min-height: 46px;
+        padding-right: 16px;
+        gap: 9px;
+    }
+
+    .cali-back-spacer {
+        height: 66px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cali-back-button {
+        transition: none;
+    }
+}
