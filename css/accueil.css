@@ -1,5 +1,4 @@
 
-
 /* ==========================================
    HERO CALI29 — BLOCS SUPERPOSÉS
 ========================================== */
@@ -28,6 +27,12 @@
     height: 100% !important;
 
     z-index: 0 !important;
+}
+
+.hero-image picture {
+    display: block;
+    width: 100%;
+    height: 100%;
 }
 
 .hero-image img {
@@ -92,38 +97,6 @@
     line-height: 1.05;
     letter-spacing: -1.8px;
     margin: 0 0 18px;
-}
-
-/* IMAGE MOBILE */
-
-@media (max-width: 768px) {
-    .hero {
-        height: 430px;
-    }
-
-    .hero-image img {
-        object-position: 65% center;
-    }
-
-    .hero-contenu {
-        width: 100%;
-        max-width: 520px;
-        padding: 25px 20px;
-    }
-
-    .hero::before {
-        background: linear-gradient(
-            90deg,
-            rgba(5, 3, 22, 0.96) 0%,
-            rgba(5, 3, 22, 0.82) 40%,
-            rgba(5, 3, 22, 0.45) 75%,
-            rgba(5, 3, 22, 0.15) 100%
-        );
-    }
-
-    .hero-contenu h1 {
-        font-size: clamp(30px, 8vw, 42px);
-    }
 }
 
 /* ==========================================
@@ -427,62 +400,10 @@ html {
 }
 
 /* ==========================================
-   VERSION MOBILE
+   VERSION MOBILE — AUTRES SECTIONS
 ========================================== */
 
 @media (max-width: 768px) {
-
-    /* HERO MOBILE */
-
-    .hero {
-        height: 430px;
-        min-height: 0;
-        align-items: center;
-    }
-
-    .hero-image img {
-        object-position: 62% center;
-    }
-
-    .hero::before {
-        background: linear-gradient(
-            90deg,
-            rgba(5, 3, 22, 0.88) 0%,
-            rgba(5, 3, 22, 0.68) 45%,
-            rgba(5, 3, 22, 0.25) 100%
-        );
-    }
-
-    .hero-contenu {
-        width: 100%;
-        max-width: 580px;
-
-        padding: 25px 20px;
-    }
-
-    .hero-surtitre {
-        font-size: 11px;
-        letter-spacing: 3px;
-        margin-bottom: 14px;
-    }
-
-    .hero-contenu h1 {
-        font-size: clamp(30px, 8vw, 44px);
-        line-height: 1.08;
-        letter-spacing: -1px;
-        margin-bottom: 15px;
-    }
-
-    .hero-description {
-        max-width: 420px;
-        font-size: 13px;
-        margin-bottom: 20px;
-    }
-
-    .bouton-principal {
-        padding: 14px 22px;
-        font-size: 12px;
-    }
 
     /* AVANTAGES */
 
@@ -570,7 +491,6 @@ html {
     }
 }
 
-
 /* ==========================================
    HERO CALI29 — BOUTON PRINCIPAL
 ========================================== */
@@ -650,10 +570,11 @@ html {
 }
 
 /* ==========================================
-   MOBILE
+   HERO — BOUTON MOBILE
 ========================================== */
 
 @media (max-width: 768px) {
+
     .hero .bouton-principal {
         padding: 14px 22px;
         font-size: 12px;
@@ -665,6 +586,7 @@ html {
 ========================================== */
 
 @media (prefers-reduced-motion: reduce) {
+
     .hero-surtitre {
         animation: none;
     }
@@ -674,98 +596,140 @@ html {
     }
 }
 
-
 /* ==========================================
-   HERO MOBILE — IMAGE VERTICALE CALI29
+   CALI29 — HERO MOBILE : HAUTEUR ET CADRAGE
 ========================================== */
-
-.hero-image picture {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
 
 @media (max-width: 600px) {
 
     .hero {
-        height: 620px;
-        min-height: 0;
+        position: relative;
+        height: 430px;
+        min-height: 430px;
+        max-height: 430px;
         overflow: hidden;
     }
 
+    /* Image de fond */
+
     .hero-image {
+        position: absolute !important;
+        inset: 0 !important;
+
+        width: 100% !important;
+        height: 100% !important;
+
+        overflow: hidden;
+        z-index: 0 !important;
+    }
+
+    .hero-image picture {
+        display: block;
         position: absolute;
         inset: 0;
+
         width: 100%;
         height: 100%;
     }
 
-    .hero-image picture,
     .hero-image img {
         display: block;
+        position: absolute;
+        inset: 0;
+
         width: 100%;
         height: 100%;
-    }
 
-    .hero-image img {
         object-fit: cover;
-        object-position: center center;
-    }
+        object-position: center 30%;
 
-    /* Dégradé vertical pour garder le texte lisible */
-    .hero::before {
-        background: linear-gradient(
-            180deg,
-            rgba(5, 3, 22, 0.96) 0%,
-            rgba(5, 3, 22, 0.82) 28%,
-            rgba(5, 3, 22, 0.45) 48%,
-            rgba(5, 3, 22, 0.08) 72%,
-            rgba(5, 3, 22, 0.05) 100%
-        );
-    }
-
-    /* Texte placé en haut de l'image */
-    .hero-contenu {
-        top: 18px;
-        left: 0;
         transform: none;
+    }
 
-        width: 100%;
-        max-width: 100%;
+    /* Bloc texte compact, en haut du hero */
 
-        padding: 20px 18px;
+    .hero-contenu {
+        position: absolute !important;
+
+        top: 18px !important;
+        left: 0 !important;
+
+        transform: none !important;
+
+        z-index: 2 !important;
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        padding: 18px 18px 0 !important;
+        margin: 0 !important;
+
         box-sizing: border-box;
     }
+
+    /* Surtitre */
 
     .hero-surtitre {
-        font-size: 11px;
-        margin-bottom: 12px;
+        font-size: 10px;
+        letter-spacing: 2px;
+        margin-bottom: 9px;
     }
+
+    /* Titre */
 
     .hero-contenu h1 {
-        font-size: clamp(27px, 7.5vw, 35px);
+        font-size: clamp(26px, 7.2vw, 32px);
         line-height: 1.08;
         letter-spacing: -1px;
-        margin-bottom: 12px;
+
+        margin: 0 0 10px;
     }
+
+    /* Description */
 
     .hero-description {
-        max-width: 360px;
-        font-size: 13px;
-        line-height: 1.5;
-        margin-bottom: 16px;
+        max-width: 340px;
+
+        font-size: 12px;
+        line-height: 1.4;
+
+        margin: 0 0 13px;
     }
 
-    .bouton-principal {
-        display: inline-flex;
+    /* Bouton */
+
+    .hero .bouton-principal {
+        display: flex !important;
         align-items: center;
         justify-content: center;
-        max-width: 100%;
+
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: 44px;
+
+        padding: 12px 14px;
+        margin: 0 !important;
         box-sizing: border-box;
-        padding: 14px 18px;
+
         font-size: 11px;
     }
+
+    /* Dégradé : lisibilité en haut, image moins assombrie en bas */
+
+    .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+
+        z-index: 1;
+        pointer-events: none;
+
+        background: linear-gradient(
+            180deg,
+            rgba(5, 3, 22, 0.94) 0%,
+            rgba(5, 3, 22, 0.82) 30%,
+            rgba(5, 3, 22, 0.42) 55%,
+            rgba(5, 3, 22, 0.12) 100%
+        );
+    }
 }
-
-
-
