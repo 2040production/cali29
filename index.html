@@ -16,7 +16,7 @@
     <!-- CSS GÉNÉRAL -->
     <link rel="stylesheet" href="css/style.css?v=20261122-2">
     <link rel="stylesheet" href="css/header.css?v=20261125-2">
-    <link rel="stylesheet" href="css/accueil.css?v=20261126-1">
+    <link rel="stylesheet" href="css/accueil.css?v=20261126-2">
     <link rel="stylesheet" href="css/categories.css?v=20261122-2">
     <link rel="stylesheet" href="css/produits.css?v=20261122-2">
     <link rel="stylesheet" href="css/panier.css?v=20261122-2">
@@ -170,12 +170,21 @@
                 </a>
             </div>
 
-            <div class="hero-image">
-                <img
-                    src="assets/images/hero-cali29.png"
-                    alt="Illustration de l'univers CALI29"
-                >
-            </div>
+            
+<div class="hero-image">
+    <picture>
+        <source
+            media="(max-width: 600px)"
+            srcset="assets/images/hero-cali29-mobile.png"
+        >
+
+        <img
+            src="assets/images/hero-cali29.png"
+            alt="Illustration de l'univers CALI29"
+        >
+    </picture>
+</div>
+
         </section>
 
         <section id="avantages" class="avantages">
